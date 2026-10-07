@@ -1,0 +1,4141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Techoriam – Courses</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800;14..32,900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+    <style>
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg: #05060b;
+            --bg-surface: rgba(11, 20, 40, 0.45);
+            --bg-card: rgba(16, 29, 54, 0.30);
+            --border: rgba(30, 50, 80, 0.30);
+            --border-light: rgba(42, 64, 101, 0.25);
+            --accent: #4f7fff;
+            --accent-bright: #7aa2ff;
+            --accent-glow: rgba(79, 127, 255, 0.20);
+            --accent2: #7c3aed;
+            --accent3: #10b981;
+            --text: #eef1f8;
+            --text-muted: #9aa3ba;
+            --text-dim: #5c6478;
+            --radius: 16px;
+            --radius-sm: 10px;
+            --shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+            --glass: rgba(11, 20, 40, 0.45);
+            --glass-border: rgba(255, 255, 255, 0.05);
+            --nav-height: 70px;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            background:
+                radial-gradient(ellipse 1000px 600px at 10% -10%, rgba(79, 127, 255, 0.07), transparent 60%),
+                radial-gradient(ellipse 800px 600px at 90% 0%, rgba(79, 127, 255, 0.04), transparent 55%),
+                radial-gradient(ellipse 900px 700px at 50% 110%, rgba(42, 82, 214, 0.04), transparent 60%),
+                var(--bg);
+            background-attachment: fixed;
+        }
+
+        a,
+        button {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+            border: none;
+            background: none;
+            font-family: inherit;
+        }
+
+        ::-webkit-scrollbar {
+            width: 4px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--accent);
+        }
+        ::selection {
+            background: var(--accent);
+            color: #04070f;
+        }
+
+        /* ===== TOP NAVBAR ===== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: var(--nav-height);
+            background: rgba(6, 8, 14, 0.55);
+            backdrop-filter: blur(24px) saturate(180%);
+            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            border-bottom: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            z-index: 1000;
+            transition: background 0.3s;
+        }
+        .navbar.scrolled {
+            background: rgba(6, 8, 14, 0.92);
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 800;
+            font-size: 1.2rem;
+            letter-spacing: -0.02em;
+            flex-shrink: 0;
+        }
+        .brand .logo {
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.95rem;
+            font-weight: 900;
+            color: #04070f;
+            box-shadow: 0 4px 20px rgba(79, 127, 255, 0.35);
+        }
+        .brand span {
+            color: var(--accent-bright);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .nav-links a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            transition: all 0.25s;
+        }
+        .nav-links a:hover {
+            color: var(--text);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-links a.active {
+            color: var(--accent-bright);
+            background: rgba(79, 127, 255, 0.12);
+        }
+        .dashboard-link {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 14px 4px 4px;
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            transition: border-color 0.2s;
+        }
+        .user-chip:hover {
+            border-color: rgba(79, 127, 255, 0.35);
+        }
+        .user-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-bright));
+            color: #04070f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 0.78rem;
+        }
+        .user-name {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .btn {
+            font-weight: 600;
+            font-size: 0.78rem;
+            border-radius: 10px;
+            padding: 8px 18px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            color: var(--text-muted);
+            backdrop-filter: blur(12px);
+        }
+        .btn:hover {
+            color: var(--text);
+            border-color: rgba(79, 127, 255, 0.4);
+            background: rgba(79, 127, 255, 0.06);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #fff;
+            border: none;
+            box-shadow: 0 4px 20px rgba(79, 127, 255, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 28px rgba(79, 127, 255, 0.4);
+            color: #fff;
+        }
+        .btn-danger:hover {
+            color: #fb7185;
+            border-color: #fb7185;
+            background: rgba(251, 113, 133, 0.1);
+        }
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 0.72rem;
+        }
+
+        /* ===== MAIN ===== */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: calc(var(--nav-height) + 44px) 24px 90px;
+        }
+
+        .hero {
+            margin-bottom: 38px;
+        }
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(79, 127, 255, 0.06);
+            border: 1px solid rgba(79, 127, 255, 0.12);
+            padding: 5px 16px 5px 14px;
+            border-radius: 100px;
+            font-size: .7rem;
+            font-weight: 600;
+            letter-spacing: .06em;
+            text-transform: uppercase;
+            color: var(--accent-bright);
+            margin-bottom: 12px;
+        }
+        .hero-badge .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--accent3);
+            animation: pulse-dot 1.8s ease-in-out infinite;
+        }
+        @keyframes pulse-dot {
+            0%,
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: .3;
+                transform: scale(.7);
+            }
+        }
+        .hero h1 {
+            font-size: clamp(2.2rem, 4vw, 3.2rem);
+            font-weight: 800;
+            line-height: 1.12;
+            margin-bottom: 12px;
+            background: linear-gradient(135deg, #fff 20%, var(--accent-bright) 95%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .hero p {
+            font-size: 1rem;
+            color: var(--text-muted);
+            max-width: 560px;
+            line-height: 1.7;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        .search-box {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            padding: 0 16px;
+            transition: border .2s, box-shadow .2s;
+        }
+        .search-box:focus-within {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        .search-box svg {
+            flex-shrink: 0;
+            color: var(--text-dim);
+        }
+        .search-box input {
+            flex: 1;
+            border: none;
+            background: none;
+            padding: 13px 0;
+            font-size: .9rem;
+            color: var(--text);
+            outline: none;
+            font-family: inherit;
+        }
+        .count-pill {
+            display: flex;
+            align-items: center;
+            font-size: .8rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            padding: 0 18px;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            white-space: nowrap;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            position: relative;
+            background: var(--glass);
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius);
+            padding: 24px;
+            cursor: pointer;
+            transition: all .3s;
+        }
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: rgba(79, 127, 255, 0.25);
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.2);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2));
+            opacity: 0;
+            transition: opacity .3s;
+            border-radius: var(--radius) var(--radius) 0 0;
+        }
+        .card:hover::before {
+            opacity: 1;
+        }
+
+        .card-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 14px;
+        }
+        .icon-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 11px;
+            background: rgba(79, 127, 255, 0.06);
+            border: 1px solid rgba(79, 127, 255, 0.10);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        .level-tag {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: .72rem;
+            font-weight: 700;
+            padding: 4px 10px;
+            border-radius: 20px;
+            white-space: nowrap;
+            border: 1px solid transparent;
+        }
+        .level-tag .d {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+        }
+        .lvl-beginner {
+            background: rgba(52, 211, 153, 0.12);
+            color: var(--accent3);
+            border-color: rgba(52, 211, 153, 0.25);
+        }
+        .lvl-intermediate {
+            background: rgba(242, 184, 75, 0.12);
+            color: #f2b84b;
+            border-color: rgba(242, 184, 75, 0.25);
+        }
+        .lvl-advanced {
+            background: rgba(251, 113, 133, 0.12);
+            color: #fb7185;
+            border-color: rgba(251, 113, 133, 0.25);
+        }
+        .card h3 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+            line-height: 1.3;
+        }
+        .card p {
+            font-size: .85rem;
+            color: var(--text-muted);
+            line-height: 1.6;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .tag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-bottom: 18px;
+        }
+        .tag {
+            font-size: .7rem;
+            font-weight: 500;
+            color: var(--text-muted);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 4px 10px;
+            border-radius: 6px;
+        }
+
+        .card-foot {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 14px;
+            border-top: 1px solid var(--glass-border);
+        }
+        .stat-row {
+            display: flex;
+            gap: 14px;
+            font-size: .76rem;
+            color: var(--text-dim);
+            font-weight: 500;
+        }
+        .go {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: var(--accent-bright);
+            font-size: .8rem;
+            font-weight: 700;
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: .2s;
+        }
+        .card:hover .go {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .enroll-btn {
+            font-size: .72rem;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            background: rgba(79, 127, 255, 0.08);
+            color: var(--accent-bright);
+            border: 1px solid rgba(79, 127, 255, 0.20);
+            transition: .15s;
+            white-space: nowrap;
+        }
+        .enroll-btn:hover {
+            background: rgba(79, 127, 255, 0.18);
+        }
+        .enroll-btn.enrolled {
+            background: rgba(52, 211, 153, 0.12);
+            color: var(--accent3);
+            border-color: rgba(52, 211, 153, 0.25);
+        }
+
+        .course-progress {
+            margin-top: 14px;
+        }
+        .course-progress-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 7px;
+            font-size: .72rem;
+            color: var(--text-dim);
+            font-weight: 600;
+        }
+        .course-progress-track {
+            height: 6px;
+            border-radius: 999px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--glass-border);
+        }
+        .course-progress-fill {
+            height: 100%;
+            width: 0;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--accent), var(--accent-bright));
+            transition: width .3s ease;
+        }
+
+        .empty {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 70px 20px;
+            color: var(--text-muted);
+        }
+        .empty h4 {
+            font-size: 1.05rem;
+            color: var(--text);
+            margin-bottom: 6px;
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--bg-surface) 25%, rgba(255, 255, 255, 0.04) 50%, var(--bg-surface) 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.3s infinite;
+            border-radius: 6px;
+        }
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+            100% {
+                background-position: 200% 0;
+            }
+        }
+        .skel-line {
+            height: 14px;
+            margin: 0 auto 10px;
+            border-radius: 6px;
+        }
+
+        /* ===== DETAIL VIEW ===== */
+        .detail-view {
+            display: none;
+        }
+        .detail-view.active {
+            display: block;
+            animation: fadeUp .35s ease;
+        }
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            font-size: .85rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            transition: .15s;
+        }
+        .back-link:hover {
+            color: var(--accent-bright);
+        }
+
+        .detail-head h2 {
+            font-size: 1.9rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .detail-head .desc {
+            color: var(--text-muted);
+            font-size: 1rem;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 4px;
+            margin: 28px 0 4px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .tab {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            font-size: .86rem;
+            font-weight: 600;
+            color: var(--text-dim);
+            background: none;
+            border: none;
+            padding: 12px 4px;
+            margin-right: 24px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            transition: .15s;
+        }
+        .tab:hover {
+            color: var(--text-muted);
+        }
+        .tab.active {
+            color: var(--text);
+            border-bottom-color: var(--accent);
+        }
+        .tab .badge {
+            font-size: .72rem;
+            color: var(--text-dim);
+        }
+        .tab.active .badge {
+            color: var(--accent-bright);
+        }
+
+        /* ===== BLOGS ===== */
+        .topic-block {
+            margin: 26px 0 30px;
+        }
+        .topic-title {
+            font-size: .95rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .blog-row {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+            padding: 16px;
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            margin-bottom: 8px;
+            cursor: pointer;
+            background: rgba(5, 6, 11, 0.15);
+            transition: .18s;
+        }
+        .blog-row:hover {
+            border-color: rgba(79, 127, 255, 0.30);
+            transform: translateX(4px);
+            background: rgba(79, 127, 255, 0.03);
+        }
+        .blog-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 9px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            flex-shrink: 0;
+        }
+        .blog-info h4 {
+            font-size: .92rem;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+        .blog-info p {
+            font-size: .8rem;
+            color: var(--text-muted);
+            margin: 0 0 8px;
+        }
+        .blog-meta {
+            display: flex;
+            gap: 14px;
+            flex-wrap: wrap;
+            font-size: .72rem;
+            color: var(--text-dim);
+        }
+        .blog-meta .read-pill {
+            color: var(--accent-bright);
+            font-weight: 700;
+            margin-left: auto;
+        }
+
+        /* ===== VIDEO TUTORIALS (Launching Soon) ===== */
+        .launch-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 14px;
+            margin-top: 22px;
+        }
+        .launch-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-sm);
+            padding: 30px 20px;
+            text-align: center;
+            transition: .2s;
+            opacity: 0.8;
+        }
+        .launch-card:hover {
+            border-color: rgba(79, 127, 255, 0.30);
+            transform: translateY(-3px);
+            opacity: 1;
+        }
+        .launch-card .big-icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+            display: block;
+        }
+        .launch-card h4 {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        .launch-card p {
+            font-size: .8rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+        .launch-card .soon-badge {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 4px 14px;
+            border-radius: 20px;
+            font-size: .65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .06em;
+            background: rgba(251, 113, 133, 0.12);
+            color: #fb7185;
+            border: 1px solid rgba(251, 113, 133, 0.20);
+        }
+
+        /* ===== BLOG READER ===== */
+        .reader {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 999;
+            background: #05060b;
+            flex-direction: column;
+        }
+        .reader.show {
+            display: flex;
+            animation: fadeUp .25s ease;
+        }
+        .reader-progress {
+            height: 3px;
+            background: var(--border);
+            flex-shrink: 0;
+        }
+        .reader-progress-fill {
+            height: 100%;
+            width: 0;
+            background: var(--accent);
+        }
+        .reader-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 22px;
+            border-bottom: 1px solid var(--glass-border);
+            flex-shrink: 0;
+            background: rgba(10, 13, 22, 0.6);
+            backdrop-filter: blur(12px);
+        }
+        .reader-top-left,
+        .reader-top-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .icon-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: none;
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            border-radius: 7px;
+            padding: 7px 12px;
+            cursor: pointer;
+            font-size: .78rem;
+            font-weight: 600;
+            transition: .15s;
+        }
+        .icon-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent-bright);
+        }
+        .reader-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+        .reader-sidebar {
+            width: 290px;
+            flex-shrink: 0;
+            background: rgba(13, 17, 28, 0.80);
+            border-right: 1px solid var(--glass-border);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .sidebar-course {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .sidebar-course .ic {
+            width: 34px;
+            height: 34px;
+            border-radius: 9px;
+            background: rgba(79, 127, 255, 0.06);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+        }
+        .sidebar-course .tt .l1 {
+            font-size: .68rem;
+            color: var(--text-dim);
+            text-transform: uppercase;
+        }
+        .sidebar-course .tt .l2 {
+            font-size: .84rem;
+            font-weight: 700;
+            color: var(--text);
+        }
+        .sidebar-filter {
+            padding: 12px 14px;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .sidebar-filter-box {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            border-radius: 7px;
+            padding: 0 10px;
+        }
+        .sidebar-filter-box input {
+            flex: 1;
+            background: none;
+            border: none;
+            outline: none;
+            color: var(--text);
+            font-size: .78rem;
+            padding: 8px 0;
+            font-family: inherit;
+        }
+        .sidebar-list {
+            flex: 1;
+            overflow-y: auto;
+            padding: 6px 0;
+        }
+        .sb-topic-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 6px;
+            padding: 11px 18px 6px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .sb-topic-head .name {
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--accent-bright);
+            text-transform: uppercase;
+        }
+        .sb-topic-head .cnt {
+            font-size: .66rem;
+            color: var(--text-dim);
+        }
+        .reader-item {
+            padding: 8px 18px 8px 22px;
+            font-size: .82rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-left: 2px solid transparent;
+            transition: .15s;
+            display: flex;
+            align-items: center;
+            gap: 9px;
+        }
+        .reader-item:hover {
+            background: rgba(79, 127, 255, 0.04);
+            color: var(--text);
+        }
+        .reader-item.active {
+            color: var(--accent-bright);
+            border-left-color: var(--accent);
+            background: rgba(79, 127, 255, 0.06);
+        }
+        .reader-main {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .article {
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 46px 44px 100px;
+        }
+        .article-eyebrow {
+            font-size: .78rem;
+            font-weight: 700;
+            color: var(--accent-bright);
+            margin-bottom: 10px;
+        }
+        .article h1 {
+            font-size: 2.05rem;
+            font-weight: 800;
+            line-height: 1.2;
+            margin-bottom: 14px;
+        }
+        .article-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            font-size: .78rem;
+            color: var(--text-dim);
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--glass-border);
+            margin-bottom: 28px;
+        }
+        .article-content {
+            font-size: 1.03rem;
+            line-height: 1.85;
+            color: var(--text);
+        }
+        .article-content h2 {
+            font-size: 1.42rem;
+            font-weight: 800;
+            margin: 34px 0 14px;
+        }
+        .article-content h3 {
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: var(--accent-bright);
+            margin: 26px 0 10px;
+        }
+        .article-content p {
+            margin-bottom: 16px;
+            color: #c7cee0;
+        }
+        .article-content img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 18px 0;
+            border: 1px solid var(--glass-border);
+        }
+        .article-content pre {
+            background: #0a0c14;
+            border-radius: 9px;
+            padding: 16px 18px;
+            overflow: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: .84rem;
+            line-height: 1.6;
+            border: 1px solid var(--glass-border);
+        }
+        .article-content code {
+            font-family: 'JetBrains Mono', monospace;
+            background: rgba(255, 255, 255, 0.04);
+            padding: 2px 6px;
+            border-radius: 5px;
+        }
+        .article-content pre code {
+            background: none;
+            padding: 0;
+        }
+        .article-content blockquote {
+            border-left: 3px solid var(--accent);
+            padding: 10px 18px;
+            margin: 18px 0;
+            background: rgba(79, 127, 255, 0.04);
+        }
+
+        /* ===== SECURE BLOG IMAGES ===== */
+        .article-images {
+            display: grid;
+            gap: 18px;
+            margin-top: 28px;
+        }
+
+        .article-image {
+            margin: 0;
+        }
+
+        .article-image img {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            border: 1px solid var(--glass-border);
+            background: rgba(255, 255, 255, 0.02);
+        }
+
+        .article-image figcaption {
+            margin-top: 7px;
+            color: var(--text-dim);
+            font-size: .68rem;
+            text-align: center;
+        }
+
+        /* ===== TOAST ===== */
+        .toast {
+            display: none;
+            position: fixed;
+            bottom: 28px;
+            right: 28px;
+            z-index: 3000;
+            padding: 14px 22px;
+            border-radius: 10px;
+            font-size: .82rem;
+            font-weight: 600;
+            animation: slideIn .3s ease;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            color: var(--text);
+        }
+        .toast.success {
+            border-color: var(--accent3);
+            color: var(--accent3);
+        }
+        .toast.error {
+            border-color: #fb7185;
+            color: #fb7185;
+        }
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            border-top: 1px solid var(--glass-border);
+            padding: 28px 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        footer .brand {
+            font-size: 1rem;
+        }
+        footer .brand .logo {
+            width: 26px;
+            height: 26px;
+            font-size: .7rem;
+        }
+        footer p {
+            color: var(--text-dim);
+            font-size: .78rem;
+        }
+        .footer-links {
+            display: flex;
+            gap: 24px;
+            align-items: center;
+        }
+        .footer-links a {
+            color: var(--text-dim);
+            font-size: .78rem;
+            transition: color .2s;
+        }
+        .footer-links a:hover {
+            color: var(--accent-bright);
+        }
+        .admin-link {
+            color: var(--text-dim);
+            font-size: .7rem;
+            opacity: 0.3;
+            transition: all .3s;
+            font-family: 'JetBrains Mono', monospace;
+            padding: 4px 10px;
+            border-radius: 4px;
+            border: 1px solid transparent;
+        }
+        .admin-link:hover {
+            opacity: 1;
+            color: #f59e0b;
+            border-color: rgba(245, 158, 11, 0.2);
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        @media (max-width: 900px) {
+            .reader-sidebar {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                padding: 0 16px;
+            }
+            .nav-links a {
+                padding: 8px 12px;
+                font-size: 0.75rem;
+            }
+            .user-name {
+                display: none;
+            }
+            .main-content {
+                padding: calc(var(--nav-height) + 24px) 16px 60px;
+            }
+            .hero h1 {
+                font-size: 1.9rem;
+            }
+            .grid,
+            .launch-grid {
+                grid-template-columns: 1fr;
+            }
+            .article {
+                padding: 30px 20px 60px;
+            }
+            .count-pill {
+                padding: 0 12px;
+                font-size: .72rem;
+            }
+            .search-box {
+                min-width: 200px;
+            }
+            footer {
+                flex-direction: column;
+                text-align: center;
+                padding: 20px;
+            }
+            .footer-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .btn {
+                font-size: .7rem;
+                padding: 7px 14px;
+            }
+            .user-chip {
+                padding: 2px 10px 2px 2px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                padding: 0 12px;
+                height: 60px;
+            }
+            .brand {
+                font-size: 1rem;
+            }
+            .brand .logo {
+                width: 28px;
+                height: 28px;
+                font-size: .7rem;
+            }
+            .btn {
+                font-size: .65rem;
+                padding: 6px 12px;
+            }
+            .main-content {
+                padding: calc(var(--nav-height) + 20px) 14px 40px;
+            }
+            .hero h1 {
+                font-size: 1.6rem;
+            }
+            .hero p {
+                font-size: .9rem;
+            }
+            .footer-links {
+                gap: 12px;
+            }
+            .card {
+                padding: 16px;
+            }
+            .stat-row {
+                gap: 8px;
+                font-size: .7rem;
+            }
+        }
+    
+        .techoriam-version {
+            color: var(--text-dim, #5c6478);
+            font-size: .68rem;
+            letter-spacing: .04em;
+            white-space: nowrap;
+            opacity: .85;
+        }
+
+.reader-open > footer { display:none !important; }
+
+        .ti-float{position:fixed;right:18px;top:50%;bottom:auto;transform:translateY(-50%);z-index:2100;display:flex;align-items:center;gap:8px;padding:10px 14px;border:1px solid rgba(79,127,255,.28);border-radius:999px;background:rgba(10,15,28,.88);color:var(--accent-bright);backdrop-filter:blur(14px);box-shadow:0 10px 30px rgba(0,0,0,.35);font-size:.75rem;font-weight:700}
+        .ti-float:hover{border-color:var(--accent);transform:translateY(-50%) translateX(-1px)}
+        .ti-panel-backdrop{position:fixed;inset:0;z-index:2200;background:rgba(0,0,0,.52);backdrop-filter:blur(4px)}
+        .ti-panel-backdrop[hidden]{display:none}
+        .ti-panel{position:absolute;top:0;right:0;height:100%;width:min(390px,92vw);background:#0b1321;border-left:1px solid var(--border);box-shadow:-24px 0 70px rgba(0,0,0,.5);display:flex;flex-direction:column}
+        .ti-panel-head{display:flex;justify-content:space-between;align-items:flex-start;padding:20px;border-bottom:1px solid var(--border)}
+        .ti-panel-head strong{display:block;font-size:.95rem}.ti-panel-head span{display:block;margin-top:3px;color:var(--text-muted);font-size:.72rem}
+        .ti-close{color:var(--text-muted);font-size:16px;padding:4px}.ti-close:hover{color:var(--text)}
+        .ti-panel-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;color:var(--text-muted)}
+        .ti-icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:rgba(79,127,255,.1);border:1px solid rgba(79,127,255,.25);color:var(--accent-bright);font-size:24px;margin-bottom:16px}
+        .ti-panel-body h3{color:var(--text);font-size:1.05rem;margin-bottom:6px}.ti-panel-body p{max-width:270px;font-size:.8rem;line-height:1.6}
+
+</style>
+</head>
+<body>
+    <nav class="navbar" id="navbar">
+        <a href="dashboard.html" class="brand">
+            <div class="logo">T</div>
+            Tech<span>oriam</span>
+        </a>
+        <div class="nav-links">
+            <a href="dashboard.html" class="dashboard-link">Go to Dashboard</a>
+        </div>
+        <div class="nav-right">
+            <div class="user-chip">
+                <div class="user-avatar" id="userAvatar">U</div>
+                <span class="user-name" id="userNameDisplay">User</span>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="logout()">Sign out</button>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div id="coursesView">
+            <div class="hero">
+                <div class="hero-badge"><span class="dot"></span> Learning Hub</div>
+                <h1>Explore Courses</h1>
+                <p>Structured courses with topic-wise blogs and video tutorials — designed for students who want to learn at their own pace.</p>
+            </div>
+            <div class="search-row">
+                <div class="search-box">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="7" />
+                        <path d="m21 21-4.3-4.3" />
+                    </svg>
+                    <input type="text" placeholder="Search courses, topics, level…" oninput="filterCourses()" id="searchInput" />
+                </div>
+                <div class="count-pill" id="courseCount">Loading…</div>
+            </div>
+            <div class="grid" id="coursesGrid">
+                <div class="empty">
+                    <div class="skeleton skel-line" style="height:20px;width:45%;margin:0 auto 12px"></div>
+                    <div class="skeleton skel-line" style="width:28%;margin:0 auto"></div>
+                </div>
+            </div>
+        </div>
+        <div id="courseDetailView" class="detail-view">
+            <div class="back-link" onclick="goBackToCourses()">← Back to courses</div>
+            <div class="detail-head">
+                <h2 id="detailTitle"></h2>
+                <p class="desc" id="detailDesc"></p>
+            </div>
+            <div class="tabs">
+                <button class="tab active" data-tab="blogs" onclick="switchTab('blogs')">
+                    Blogs <span class="badge" id="blogCount"></span>
+                </button>
+                <button class="tab" data-tab="videos" onclick="switchTab('videos')">
+                    Video Tutorials <span class="badge" id="videoCount">🚀</span>
+                </button>
+            </div>
+            <div id="blogsSection"><div id="blogsContent"></div></div>
+            <div id="videosSection" style="display:none">
+                <div class="launch-grid" id="videosContent">
+                    <div class="launch-card">
+                        <span class="big-icon">🎬</span>
+                        <h4>Video Tutorials</h4>
+                        <p>We're preparing high-quality video content for you. Stay tuned!</p>
+                        <span class="soon-badge">Launching Soon</span>
+                    </div>
+                    <div class="launch-card">
+                        <span class="big-icon">📹</span>
+                        <h4>Interactive Lessons</h4>
+                        <p>Hands-on coding sessions with expert instructors.</p>
+                        <span class="soon-badge">Coming Next</span>
+                    </div>
+                    <div class="launch-card">
+                        <span class="big-icon">🚀</span>
+                        <h4>Full Course Library</h4>
+                        <p>Complete video courses covering all major topics.</p>
+                        <span class="soon-badge">In Production</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <div class="reader" id="blogOverlay">
+        <div class="reader-progress"><div class="reader-progress-fill" id="readerProgressBar"></div></div>
+        <div class="reader-top">
+            <div class="reader-top-left">
+                <button class="icon-btn" onclick="closeBlogReader()">✕ Close</button>
+                <span id="readerCourseTitle" style="color:var(--text-muted);font-size:.82rem"></span>
+            </div>
+            <div class="reader-top-right">
+                <button class="icon-btn" onclick="changeFontSize(-1)">A−</button>
+                <button class="icon-btn" onclick="changeFontSize(1)">A+</button>
+            </div>
+        </div>
+        <div class="reader-body">
+            <aside class="reader-sidebar">
+                <div class="sidebar-course">
+                    <div class="ic" id="sidebarCourseIcon">📘</div>
+                    <div class="tt">
+                        <div class="l1">Course</div>
+                        <div class="l2" id="sidebarCourseTitle"></div>
+                    </div>
+                </div>
+                <div class="sidebar-filter">
+                    <div class="sidebar-filter-box">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="7" />
+                            <path d="m21 21-4.3-4.3" />
+                        </svg>
+                        <input type="text" id="sidebarFilterInput" placeholder="Filter articles…" oninput="buildSidebar(courseBlogs,currentBlogId)" />
+                    </div>
+                </div>
+                <div class="sidebar-list" id="readerSidebarList"></div>
+            </aside>
+            <div class="reader-main" id="blogReaderMain">
+                <div class="article" id="blogReaderContent"></div>
+            </div>
+        </div>
+    </div>
+
+    
+    <button class="ti-float" id="techoriamIntelligenceButton" type="button"
+        aria-label="Open Techoriam Intelligence">✦ <span>Techoriam Intelligence</span></button>
+
+    <div class="ti-panel-backdrop" id="tiPanelBackdrop" hidden>
+        <aside class="ti-panel" role="dialog" aria-modal="true" aria-labelledby="tiTitle">
+            <div class="ti-panel-head">
+                <div>
+                    <strong id="tiTitle">Techoriam Intelligence</strong>
+                    <span>Learning assistant</span>
+                </div>
+                <button type="button" class="ti-close" id="tiClose" aria-label="Close">✕</button>
+            </div>
+            <div class="ti-panel-body">
+                <div class="ti-icon">✦</div>
+                <h3>Coming soon</h3>
+                <p>Techoriam Intelligence is being prepared for the next release.</p>
+            </div>
+        </aside>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <footer>
+        <a href="dashboard.html" class="brand">
+            <div class="logo">T</div>
+            Tech<span>oriam</span>
+        </a>
+        <p>&copy; 2026 Techoriam<span class="techoriam-version">v1.0</span></p>
+        <div class="footer-links">
+            <a href="courses.html">Courses</a>
+            <a href="problems.html">Solve Problems</a>
+            <a href="ide.html">IDE</a>
+            <a href="dashboard.html">Dashboard</a>
+        </div>
+    </footer>
+
+    <script>
+        const navbar = document.getElementById('navbar');
+
+        window.addEventListener('scroll', () => {
+            navbar.classList.toggle('scrolled', window.scrollY > 30);
+        });
+
+        const LOGIN_URL =
+            'authentication.html?tab=login&redirect=' +
+        
+            encodeURIComponent('courses.html');
+            
+const USER_API = 'https://desktop-ubs9kju.tail768c0b.ts.net/api';
+const LEARNING_API = 'https://desktop-ubs9kju.tail768c0b.ts.net/api';
+
+        const COURSES_API =
+            `${LEARNING_API}/courses`;
+
+        const COURSE_CONTENT_API = courseId =>
+            `${LEARNING_API}/courses/${encodeURIComponent(courseId)}/blogs`;
+
+        const BLOG_API = blogId =>
+            `${LEARNING_API}/courses/blogs/${encodeURIComponent(blogId)}`;
+
+        const BLOG_IMAGE_API = imageId =>
+            `${LEARNING_API}/courses/blog-images/${encodeURIComponent(imageId)}`;
+
+        const COURSE_ENROLL_API = courseId =>
+            `${USER_API}/dashboard/courses/${encodeURIComponent(courseId)}/enroll`;
+
+        const COURSE_ENROLLMENTS_API =
+            `${USER_API}/dashboard/enrollments`;
+
+        const COURSE_PROGRESS_API = courseId =>
+            `${USER_API}/dashboard/courses/${encodeURIComponent(courseId)}/progress`;
+
+        const COURSE_ACTIVITY_BLOG_API = (blogId) =>
+            `${LEARNING_API}/course-activity/blogs/${encodeURIComponent(blogId)}/complete`;
+
+        const COURSE_ACTIVITY_COMPLETE_API = courseId =>
+            `${LEARNING_API}/course-activity/courses/${encodeURIComponent(courseId)}/complete`;
+
+        const enrolledCourseIds = new Set();
+        const completedLearningItems = new Set();
+        const completedCourses = new Set();
+
+        let allCourses = [];
+        let currentCourse = null;
+        let currentCourseProgress = null;
+        let courseBlogs = [];
+        let courseNotes = [];
+        let currentBlogId = null;
+        let collapsedTopics = new Set();
+
+        function getToken() {
+            return localStorage.getItem('techoriam_token') ||
+                   sessionStorage.getItem('techoriam_token') ||
+                   '';
+        }
+
+        function clearAuthStorage() {
+            [
+                'techoriam_token',
+                'techoriam_user_id',
+                'techoriam_user_name',
+                'techoriam_user_email',
+                'techoriam_user_role',
+                'techoriam_remember'
+            ].forEach(key => {
+                localStorage.removeItem(key);
+                sessionStorage.removeItem(key);
+            });
+        }
+
+        function redirectToLogin() {
+            window.location.replace(LOGIN_URL);
+        }
+
+        async function readJson(response) {
+            const text = await response.text();
+
+            if (!text) {
+                return null;
+            }
+
+            try {
+                return JSON.parse(text);
+            } catch (error) {
+                console.error('Invalid JSON response:', text);
+                throw new Error('Server returned an invalid response.');
+            }
+        }
+
+        function getErrorMessage(data, fallback) {
+            return data?.message ||
+                   data?.error ||
+                   data?.title ||
+                   fallback;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+
+            if (!toast) {
+                console[type === 'error' ? 'error' : 'log'](message);
+                return;
+            }
+
+            toast.className = `toast ${type}`;
+            toast.textContent = String(message || '');
+            toast.style.display = 'block';
+
+            clearTimeout(showToast.timer);
+
+            showToast.timer = setTimeout(() => {
+                toast.style.display = 'none';
+                toast.className = 'toast';
+                toast.textContent = '';
+            }, 3200);
+        }
+
+        let refreshPromise = null;
+
+        async function refreshAccessToken() {
+            if (refreshPromise) return refreshPromise;
+
+            refreshPromise = (async () => {
+                try {
+                    const response = await fetch(
+                        `${USER_API}/auth/refresh`,
+                        {
+                            method: 'POST',
+                            credentials: 'include',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json'
+                            },
+                            body: JSON.stringify({})
+                        }
+                    );
+
+                    if (!response.ok) return false;
+
+                    const data = await readJson(response);
+                    const token =
+                        data?.token ||
+                        data?.accessToken ||
+                        data?.jwt ||
+                        '';
+
+                    if (!token) return false;
+
+                    const storage =
+                        data?.rememberMe === false
+                            ? sessionStorage
+                            : localStorage;
+
+                    storage.setItem('techoriam_token', token);
+
+                    return true;
+                } catch {
+                    return false;
+                } finally {
+                    refreshPromise = null;
+                }
+            })();
+
+            return refreshPromise;
+        }
+
+        async function userApiFetch(
+            path,
+            options = {},
+            allowRefresh = true
+        ) {
+            let token = getToken();
+
+            if (!token && allowRefresh) {
+                const refreshed = await refreshAccessToken();
+
+                if (refreshed) {
+                    token = getToken();
+                }
+            }
+
+            if (!token) {
+                clearAuthStorage();
+                redirectToLogin();
+                throw new Error('Authentication required.');
+            }
+
+            const headers = new Headers(options.headers || {});
+
+            headers.set('Accept', 'application/json');
+
+            if (
+                options.body &&
+                !(options.body instanceof FormData) &&
+                !headers.has('Content-Type')
+            ) {
+                headers.set('Content-Type', 'application/json');
+            }
+
+            headers.set('Authorization', `Bearer ${token}`);
+
+            let response;
+
+            try {
+                response = await fetch(
+                    `${USER_API}${path}`,
+                    {
+                        ...options,
+                        headers,
+                        credentials: 'include'
+                    }
+                );
+            } catch {
+                throw new Error('Cannot connect to the UserService.');
+            }
+
+            if (
+                (response.status === 401 || response.status === 403) &&
+                allowRefresh
+            ) {
+                const refreshed = await refreshAccessToken();
+
+                if (refreshed) {
+                    return userApiFetch(path, options, false);
+                }
+            }
+
+            if (
+                response.status === 401 ||
+                response.status === 403
+            ) {
+                clearAuthStorage();
+                redirectToLogin();
+                throw new Error('Your session has expired.');
+            }
+
+            return response;
+        }
+
+        async function learningFetch(
+            url,
+            options = {},
+            allowRefresh = true
+        ) {
+            let token = getToken();
+
+            if (!token && allowRefresh) {
+                const refreshed = await refreshAccessToken();
+
+                if (refreshed) {
+                    token = getToken();
+                }
+            }
+
+            if (!token) {
+                clearAuthStorage();
+                redirectToLogin();
+                throw new Error('Authentication required');
+            }
+
+            const headers = new Headers(options.headers || {});
+
+            headers.set('Accept', 'application/json');
+
+            if (
+                options.body &&
+                !(options.body instanceof FormData) &&
+                !headers.has('Content-Type')
+            ) {
+                headers.set('Content-Type', 'application/json');
+            }
+
+            headers.set('Authorization', `Bearer ${token}`);
+
+            try {
+                const response = await fetch(
+                    url,
+                    {
+                        ...options,
+                        headers,
+                        credentials: 'include'
+                    }
+                );
+
+                if (
+                    (response.status === 401 || response.status === 403) &&
+                    allowRefresh
+                ) {
+                    const refreshed = await refreshAccessToken();
+
+                    if (refreshed) {
+                        return learningFetch(url, options, false);
+                    }
+                }
+
+                if (
+                    response.status === 401 ||
+                    response.status === 403
+                ) {
+                    clearAuthStorage();
+                    redirectToLogin();
+                    throw new Error('Session expired');
+                }
+
+                return response;
+            } catch (error) {
+                if (
+                    error.message === 'Session expired' ||
+                    error.message === 'Authentication required'
+                ) {
+                    throw error;
+                }
+
+                console.error('CourseService request failed:', error);
+                throw new Error('Cannot connect to the CourseService.');
+            }
+        }
+
+        async function apiFetch(url, options = {}) {
+            const isUserService =
+                String(url).startsWith(USER_API);
+
+            const isLearningService =
+                String(url).startsWith(LEARNING_API);
+
+            if (isUserService) {
+                const path = String(url).slice(USER_API.length);
+                return userApiFetch(path, options);
+            }
+
+            if (isLearningService) {
+                return learningFetch(url, options);
+            }
+
+            const headers = new Headers(options.headers || {});
+            headers.set('Accept', 'application/json');
+
+            if (
+                options.body &&
+                !(options.body instanceof FormData) &&
+                !headers.has('Content-Type')
+            ) {
+                headers.set('Content-Type', 'application/json');
+            }
+
+            const token = getToken();
+
+            if (token && !headers.has('Authorization')) {
+                headers.set('Authorization', `Bearer ${token}`);
+            }
+
+            let response;
+
+            try {
+                response = await fetch(
+                    url,
+                    {
+                        ...options,
+                        headers,
+                        credentials: 'include'
+                    }
+                );
+            } catch {
+                throw new Error('Cannot connect to the server.');
+            }
+
+            if (response.status === 401 || response.status === 403) {
+                clearAuthStorage();
+                redirectToLogin();
+                throw new Error('Session expired');
+            }
+
+            return response;
+        }
+
+        function setUserIdentity(user) {
+            const name =
+                user?.name ||
+                user?.fullName ||
+                user?.userName ||
+                'User';
+
+            const email = user?.email || '';
+
+            const nameElement =
+                document.getElementById('userNameDisplay');
+
+            const avatarElement =
+                document.getElementById('userAvatar');
+
+            if (nameElement) {
+                nameElement.textContent = name;
+            }
+
+            if (avatarElement) {
+                avatarElement.textContent =
+                    (name.trim().charAt(0) || 'U').toUpperCase();
+            }
+
+            return { name, email };
+        }
+
+        function normalizeArray(data) {
+            if (Array.isArray(data)) {
+                return data;
+            }
+
+            if (Array.isArray(data?.data)) {
+                return data.data;
+            }
+
+            if (Array.isArray(data?.items)) {
+                return data.items;
+            }
+
+            if (Array.isArray(data?.results)) {
+                return data.results;
+            }
+
+            return [];
+        }
+
+        async function checkUser() {
+            try {
+                const response =
+                    await userApiFetch('/auth/me');
+
+                const data =
+                    await readJson(response);
+
+                if (!response.ok || !data) {
+                    throw new Error(
+                        getErrorMessage(
+                            data,
+                            'Unable to verify your session.'
+                        )
+                    );
+                }
+
+                setUserIdentity(data);
+                return true;
+            } catch (error) {
+                console.error(
+                    'Session verification failed:',
+                    error
+                );
+
+                redirectToLogin();
+                return false;
+            }
+        }
+
+        async function logout() {
+            try {
+                await userApiFetch(
+                    '/auth/logout',
+                    { method: 'POST' },
+                    false
+                );
+            } catch (error) {
+                console.warn('Logout request failed:', error);
+            } finally {
+                clearAuthStorage();
+                redirectToLogin();
+            }
+        }
+
+        function normalizeId(value) {
+            return String(value ?? '').trim().toLowerCase();
+        }
+
+        function getLevelClass(level) {
+            const value =
+                String(level ?? '').trim().toLowerCase();
+
+            if (value.includes('begin')) return 'beginner';
+            if (value.includes('inter')) return 'intermediate';
+            if (
+                value.includes('advanced') ||
+                value.includes('expert')
+            ) {
+                return 'advanced';
+            }
+
+            return 'beginner';
+        }
+
+        function esc(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        function setCount(elementId, value) {
+            const element =
+                document.getElementById(elementId);
+
+            if (!element) return;
+
+            element.textContent = value ?? '';
+        }
+
+        async function fetchCourses() {
+            const grid =
+                document.getElementById('coursesGrid');
+
+            grid.innerHTML = `
+                <div class="empty">
+                    <div class="skeleton skel-line"
+                         style="height:20px;width:45%;margin:0 auto 12px"></div>
+                    <div class="skeleton skel-line"
+                         style="width:28%;margin:0 auto"></div>
+                </div>
+            `;
+
+            try {
+                const response =
+                    await learningFetch(COURSES_API);
+
+                if (!response.ok) {
+                    throw new Error(
+                        `Courses API returned ${response.status}`
+                    );
+                }
+
+                const data =
+                    await readJson(response);
+
+                allCourses =
+                    normalizeArray(data);
+
+                setCount(
+                    'courseCount',
+                    `${allCourses.length} course${allCourses.length === 1 ? '' : 's'}`
+                );
+
+                if (!allCourses.length) {
+                    grid.innerHTML = `
+                        <div class="empty">
+                            <h4>No courses yet</h4>
+                            <p>Stay tuned for upcoming courses.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                renderCourses(allCourses);
+
+                await loadCourseBlogCounts(allCourses);
+
+                renderCourses(allCourses);
+
+                await checkEnrollments();
+
+                await handleRecommendationDeepLink();
+
+            } catch (error) {
+                if (
+                    error.message === 'Authentication required' ||
+                    error.message === 'Session expired'
+                ) {
+                    return;
+                }
+
+                console.error(
+                    'Course loading failed:',
+                    error
+                );
+
+                grid.innerHTML = `
+                    <div class="empty">
+                        <h4>Server not reachable</h4>
+                        <p style="margin-top:8px;font-size:.8rem;">
+                            We couldn't load the courses.
+                        </p>
+                        <button class="btn"
+                                style="margin-top:18px"
+                                onclick="fetchCourses()">
+                            Retry
+                        </button>
+                    </div>
+                `;
+
+                setCount(
+                    'courseCount',
+                    'Unavailable'
+                );
+            }
+        }
+
+        async function loadCourseBlogCounts(courses) {
+            if (
+                !Array.isArray(courses) ||
+                !courses.length
+            ) {
+                return;
+            }
+
+            await Promise.all(
+                courses.map(async course => {
+                    if (!course?.id) return;
+
+                    try {
+                        const response =
+                            await learningFetch(
+                                COURSE_CONTENT_API(course.id)
+                            );
+
+                        if (!response.ok) return;
+
+                        const data =
+                            await readJson(response);
+
+                        const root =
+                            data?.data ?? data;
+
+                        let blogs = [];
+
+                        if (Array.isArray(root)) {
+                            blogs = root;
+                        } else if (
+                            Array.isArray(root?.blogs)
+                        ) {
+                            blogs = root.blogs;
+                        } else if (
+                            Array.isArray(root?.items)
+                        ) {
+                            blogs = root.items;
+                        } else if (
+                            Array.isArray(root?.topics)
+                        ) {
+                            root.topics.forEach(topic => {
+                                const items =
+                                    topic?.blogs ||
+                                    topic?.items ||
+                                    topic?.contents ||
+                                    topic?.articles;
+
+                                if (Array.isArray(items)) {
+                                    blogs.push(...items);
+                                }
+                            });
+                        }
+
+                        course.blogCount =
+                            blogs.filter(blog =>
+                                blog &&
+                                (blog.id || blog.Id) &&
+                                (
+                                    blog.isPublished !== false &&
+                                    blog.IsPublished !== false
+                                )
+                            ).length;
+
+                    } catch {
+                        course.blogCount =
+                            course.blogCount ?? 0;
+                    }
+                })
+            );
+        }
+
+        function renderCourses(courses) {
+            const grid =
+                document.getElementById('coursesGrid');
+
+            if (!courses.length) {
+                grid.innerHTML =
+                    `<div class="empty"><h4>No courses found</h4></div>`;
+                return;
+            }
+
+            grid.innerHTML =
+                courses.map((course, index) => {
+                    const topics =
+                        Array.isArray(course.topics)
+                            ? course.topics
+                            : [];
+
+                    const topicNames =
+                        topics.map(topic =>
+                            typeof topic === 'string'
+                                ? topic
+                                : (
+                                    topic?.title ||
+                                    topic?.name ||
+                                    'Topic'
+                                )
+                        );
+
+                    const visibleTopics =
+                        topicNames.slice(0, 4);
+
+                    const extraTopics =
+                        topicNames.length > 4
+                            ? topicNames.length - 4
+                            : 0;
+
+                    const id =
+                        esc(course.id);
+
+                    return `
+                        <div class="card"
+                             style="animation-delay:${Math.min(index * .03, .3)}s"
+                             onclick="openCourse('${id}')">
+
+                            <div class="card-top">
+                                <div class="icon-badge">
+                                    ${esc(course.icon || '📘')}
+                                </div>
+
+                                ${
+                                    course.difficulty
+                                        ? `
+                                            <span class="level-tag ${getLevelClass(course.difficulty)}">
+                                                <span class="d"
+                                                      style="background:currentColor"></span>
+                                                ${esc(course.difficulty)}
+                                            </span>
+                                          `
+                                        : ''
+                                }
+                            </div>
+
+                            <h3>
+                                ${esc(course.title || 'Untitled')}
+                            </h3>
+
+                            <p>
+                                ${esc(course.description || '')}
+                            </p>
+
+                            <div class="tag-row">
+                                ${
+                                    visibleTopics
+                                        .map(topic =>
+                                            `<span class="tag">${esc(topic)}</span>`
+                                        )
+                                        .join('')
+                                }
+
+                                ${
+                                    extraTopics
+                                        ? `<span class="tag">+${extraTopics}</span>`
+                                        : ''
+                                }
+                            </div>
+
+                            <div class="card-foot">
+                                <div class="stat-row">
+                                    <span>
+                                        📚 ${course.topicCount ?? topics.length ?? 0}
+                                    </span>
+
+                                    <span>
+                                        📝 ${course.blogCount ?? 0}
+                                    </span>
+
+                                    <span>
+                                        🎬 ${course.videoCount ?? 0}
+                                    </span>
+                                </div>
+
+                                <div style="display:flex;gap:6px;align-items:center;">
+                                    <button
+                                        class="enroll-btn"
+                                        data-course-id="${id}"
+                                        onclick="event.stopPropagation();handleEnroll('${id}', this)">
+                                        Enroll
+                                    </button>
+
+                                    <span class="go">
+                                        View →
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div
+                                class="course-progress"
+                                data-progress-wrap="${id}"
+                                style="display:none">
+
+                                <div class="course-progress-head">
+                                    <span>Progress</span>
+
+                                    <span data-progress-text="${id}">
+                                        0%
+                                    </span>
+                                </div>
+
+                                <div class="course-progress-track">
+                                    <div
+                                        class="course-progress-fill"
+                                        data-progress-fill="${id}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+        }
+
+        function filterCourses() {
+            const query =
+                (
+                    document.getElementById('searchInput')
+                        .value || ''
+                )
+                .trim()
+                .toLowerCase();
+
+            const filtered =
+                allCourses.filter(course => {
+                    const topics =
+                        Array.isArray(course.topics)
+                            ? course.topics
+                            : [];
+
+                    return (
+                        String(course.title || '')
+                            .toLowerCase()
+                            .includes(query)
+                    ) ||
+                    (
+                        String(course.description || '')
+                            .toLowerCase()
+                            .includes(query)
+                    ) ||
+                    topics.some(t => {
+                        const name =
+                            typeof t === 'string'
+                                ? t
+                                : (
+                                    t?.title ||
+                                    t?.name ||
+                                    ''
+                                );
+
+                        return String(name)
+                            .toLowerCase()
+                            .includes(query);
+                    }) ||
+                    (
+                        String(course.difficulty || '')
+                            .toLowerCase()
+                            .includes(query)
+                    );
+                });
+
+            setCount(
+                'courseCount',
+                `${filtered.length} result${filtered.length === 1 ? '' : 's'}`
+            );
+
+            renderCourses(filtered);
+
+            applyEnrollmentState();
+        }
+
+        async function openCourse(id) {
+            const courseId =
+                normalizeId(id);
+
+            if (!enrolledCourseIds.has(courseId)) {
+                await checkEnrollments();
+            }
+
+            if (!enrolledCourseIds.has(courseId)) {
+                showToast(
+                    'Enroll in this course to view its topics and blogs.',
+                    'error'
+                );
+                return;
+            }
+
+            currentCourse =
+                allCourses.find(
+                    course =>
+                        normalizeId(course.id) ===
+                        courseId
+                );
+
+            if (!currentCourse) {
+                showToast(
+                    'Course could not be found.',
+                    'error'
+                );
+                return;
+            }
+
+            document.getElementById('coursesView')
+                .style.display = 'none';
+
+            document.getElementById('courseDetailView')
+                .classList.add('active');
+
+            document.getElementById('detailTitle')
+                .textContent =
+                    currentCourse.title || 'Course';
+
+            document.getElementById('detailDesc')
+                .textContent =
+                    currentCourse.description || '';
+
+            switchTab('blogs');
+
+            await Promise.all([
+                loadCourseContent(currentCourse.id),
+                loadCourseProgress(currentCourse.id)
+            ]);
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        function extractCourseBlogs(data) {
+            const root =
+                data?.data ?? data;
+
+            const blogs = [];
+
+            const addBlogs =
+                (items, topicFallback = 'General') => {
+                    if (!Array.isArray(items)) return;
+
+                    items.forEach(item => {
+                        if (
+                            !item ||
+                            typeof item !== 'object'
+                        ) {
+                            return;
+                        }
+
+                        if (
+                            item.id &&
+                            (
+                                item.title ||
+                                item.content ||
+                                item.body ||
+                                item.slug
+                            )
+                        ) {
+                            blogs.push({
+                                ...item,
+
+                                topic:
+                                    item.topic ||
+                                    item.topicTitle ||
+                                    item.topicName ||
+                                    topicFallback,
+
+                                topicId:
+                                    item.topicId ||
+                                    item.topicID ||
+                                    item.TopicId ||
+                                    null,
+
+                                topicTitle:
+                                    item.topicTitle ||
+                                    item.TopicTitle ||
+                                    item.topic ||
+                                    topicFallback
+                            });
+                        }
+                    });
+                };
+
+            if (Array.isArray(root)) {
+                addBlogs(root);
+            } else {
+                addBlogs(root?.blogs);
+                addBlogs(root?.items);
+            }
+
+            const topics =
+                Array.isArray(root?.topics)
+                    ? root.topics
+                    : [];
+
+            topics.forEach(topic => {
+                const topicName =
+                    topic?.title ||
+                    topic?.name ||
+                    topic?.topicTitle ||
+                    'General';
+
+                addBlogs(
+                    topic?.blogs ||
+                    topic?.items ||
+                    topic?.contents ||
+                    topic?.articles,
+                    topicName
+                );
+            });
+
+            if (!blogs.length) {
+                addBlogs(root?.content);
+            }
+
+            const seen = new Set();
+
+            return blogs.filter(blog => {
+                const key =
+                    normalizeId(blog.id);
+
+                if (!key || seen.has(key)) {
+                    return false;
+                }
+
+                seen.add(key);
+                return true;
+            });
+        }
+
+        async function loadCourseContent(courseId) {
+            const blogsContent =
+                document.getElementById('blogsContent');
+
+            blogsContent.innerHTML = `
+                <div class="empty">
+                    <div class="skeleton skel-line"
+                         style="width:45%"></div>
+                </div>
+            `;
+
+            setCount('blogCount', '');
+
+            try {
+                const response =
+                    await learningFetch(
+                        COURSE_CONTENT_API(courseId)
+                    );
+
+                if (!response.ok) {
+                    const errorData =
+                        await readJson(response)
+                            .catch(() => null);
+
+                    throw new Error(
+                        getErrorMessage(
+                            errorData,
+                            `Course content API returned ${response.status}`
+                        )
+                    );
+                }
+
+                const data =
+                    await readJson(response);
+
+                courseBlogs =
+                    extractCourseBlogs(data);
+
+                renderBlogs(courseBlogs);
+
+                setCount(
+                    'videoCount',
+                    '🚀'
+                );
+
+            } catch (error) {
+                if (
+                    error.message === 'Authentication required' ||
+                    error.message === 'Session expired'
+                ) {
+                    return;
+                }
+
+                console.error(
+                    'Course content loading failed:',
+                    error
+                );
+
+                courseBlogs = [];
+
+                setCount(
+                    'blogCount',
+                    '0'
+                );
+
+                blogsContent.innerHTML = `
+                    <div class="empty">
+                        <h4>Unable to load course content</h4>
+
+                        <p style="margin-top:8px;font-size:.8rem;">
+                            Check the CourseService and try again.
+                        </p>
+
+                        <button
+                            class="btn"
+                            style="margin-top:18px"
+                            onclick="loadCourseContent('${esc(courseId)}')">
+                            Retry
+                        </button>
+                    </div>
+                `;
+
+                setCount(
+                    'videoCount',
+                    '🚀'
+                );
+            }
+        }
+
+        function groupByTopic(items) {
+            const groups = {};
+
+            items.forEach(item => {
+                const topic =
+                    item.topic ||
+                    item.topicTitle ||
+                    item.topicName ||
+                    'General';
+
+                if (!groups[topic]) {
+                    groups[topic] = [];
+                }
+
+                groups[topic].push(item);
+            });
+
+            return groups;
+        }
+
+        function renderBlogs(blogs) {
+            const container =
+                document.getElementById('blogsContent');
+
+            setCount(
+                'blogCount',
+                blogs.length
+            );
+
+            if (!blogs.length) {
+                container.innerHTML =
+                    `<div class="empty"><h4>No blogs available</h4></div>`;
+                return;
+            }
+
+            const grouped =
+                groupByTopic(blogs);
+
+            container.innerHTML =
+                Object.entries(grouped)
+                    .map(([topic, items]) => `
+                        <div class="topic-block">
+
+                            <div class="topic-title">
+                                ${esc(topic)} (${items.length})
+                            </div>
+
+                            ${
+                                items.map(blog => `
+                                    <div
+                                        class="blog-row"
+                                        onclick="openBlogReader('${esc(blog.id)}')">
+
+                                        <div class="blog-icon">
+                                            ${esc(blog.icon || '📄')}
+                                        </div>
+
+                                        <div class="blog-info">
+                                            <h4>
+                                                ${esc(blog.title)}
+                                            </h4>
+
+                                            <p>
+                                                ${esc(
+                                                    blog.excerpt ||
+                                                    blog.description ||
+                                                    ''
+                                                )}
+                                            </p>
+
+                                            <div class="blog-meta">
+                                                <span>
+                                                    ⏱ ${esc(blog.readTime || '5 min')}
+                                                </span>
+
+                                                ${
+                                                    blog.date
+                                                        ? `<span>📅 ${esc(blog.date)}</span>`
+                                                        : ''
+                                                }
+
+                                                ${
+                                                    blog.author
+                                                        ? `<span>✍ ${esc(blog.author)}</span>`
+                                                        : ''
+                                                }
+
+                                                <span class="read-pill">
+                                                    Read →
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                `).join('')
+                            }
+                        </div>
+                    `)
+                    .join('');
+        }
+
+        function buildSidebar(blogs, activeId) {
+            const list =
+                document.getElementById(
+                    'readerSidebarList'
+                );
+
+            const filterValue =
+                (
+                    document.getElementById(
+                        'sidebarFilterInput'
+                    )?.value || ''
+                )
+                .trim()
+                .toLowerCase();
+
+            const grouped =
+                groupByTopic(blogs);
+
+            list.innerHTML =
+                Object.entries(grouped)
+                    .map(([topic, items]) => {
+                        const filtered =
+                            filterValue
+                                ? items.filter(blog =>
+                                    String(blog.title || '')
+                                        .toLowerCase()
+                                        .includes(filterValue)
+                                )
+                                : items;
+
+                        if (
+                            filterValue &&
+                            !filtered.length
+                        ) {
+                            return '';
+                        }
+
+                        const collapsed =
+                            collapsedTopics.has(topic);
+
+                        return `
+                            <div
+                                class="sb-topic-head"
+                                onclick="toggleTopicGroup('${esc(topic)}')">
+
+                                <span class="name">
+                                    ${esc(topic)}
+                                </span>
+
+                                <span
+                                    style="display:flex;align-items:center;gap:6px">
+
+                                    <span class="cnt">
+                                        ${items.length}
+                                    </span>
+
+                                    <svg
+                                        style="transition:.2s;transform:${collapsed ? 'rotate(-90deg)' : 'rotate(0)'}"
+                                        width="13"
+                                        height="13"
+                                        viewBox="0 0 24 24"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        stroke-width="2.4">
+                                        <path d="m6 9 6 6 6-6"/>
+                                    </svg>
+                                </span>
+                            </div>
+
+                            <div
+                                style="overflow:hidden;max-height:${collapsed ? '0' : '2000px'};transition:max-height .25s ease">
+
+                                ${
+                                    filtered.map(blog => `
+                                        <div
+                                            class="reader-item${normalizeId(blog.id) === normalizeId(activeId) ? ' active' : ''}"
+                                            onclick="loadBlogInReader('${esc(blog.id)}')">
+
+                                            ${esc(blog.title)}
+                                        </div>
+                                    `).join('')
+                                }
+                            </div>
+                        `;
+                    })
+                    .join('')
+                ||
+                `
+                    <div
+                        style="padding:20px;color:var(--text-dim);font-size:.78rem">
+                        No articles
+                    </div>
+                `;
+        }
+
+        function toggleTopicGroup(topic) {
+            if (collapsedTopics.has(topic)) {
+                collapsedTopics.delete(topic);
+            } else {
+                collapsedTopics.add(topic);
+            }
+
+            buildSidebar(
+                courseBlogs,
+                currentBlogId
+            );
+        }
+
+        async function openBlogReader(id) {
+            currentBlogId = id;
+
+            const overlay =
+                document.getElementById('blogOverlay');
+
+            overlay.classList.add('show');
+            document.body.classList.add('reader-open');
+
+            document.getElementById(
+                'readerCourseTitle'
+            ).textContent =
+                currentCourse?.title || '';
+
+            document.getElementById(
+                'sidebarCourseTitle'
+            ).textContent =
+                currentCourse?.title || '';
+
+            document.getElementById(
+                'sidebarCourseIcon'
+            ).textContent =
+                currentCourse?.icon || '📘';
+
+            document.body.style.overflow = 'hidden';
+
+            collapsedTopics = new Set();
+
+            const readerContent =
+                document.getElementById(
+                    'blogReaderContent'
+                );
+
+            readerContent.innerHTML =
+                `
+                    <div style="padding:40px;color:var(--text-muted)">
+                        Loading article…
+                    </div>
+                `;
+
+            try {
+                let blog =
+                    courseBlogs.find(
+                        item =>
+                            normalizeId(item.id) ===
+                            normalizeId(id)
+                    );
+
+                if (!blog) {
+                    const response =
+                        await learningFetch(
+                            BLOG_API(id)
+                        );
+
+                    if (!response.ok) {
+                        const errorData =
+                            await readJson(response)
+                                .catch(() => null);
+
+                        throw new Error(
+                            getErrorMessage(
+                                errorData,
+                                `Blog API returned ${response.status}`
+                            )
+                        );
+                    }
+
+                    const data =
+                        await readJson(response);
+
+                    blog =
+                        data?.data || data;
+                }
+
+                if (!blog) {
+                    throw new Error(
+                        'Invalid blog response'
+                    );
+                }
+
+                blog = { ...blog };
+
+                const rawImages =
+                    Array.isArray(blog.images)
+                        ? blog.images
+                        : Array.isArray(blog.blogImages)
+                            ? blog.blogImages
+                            : [];
+
+                blog.images =
+                    rawImages
+                        .map(image => {
+                            const imageId =
+                                image?.id ||
+                                image?.imageId ||
+                                image?.blogImageId;
+
+                            const url =
+                                image?.url ||
+                                image?.imageUrl ||
+                                image?.imageURL ||
+                                (
+                                    imageId
+                                        ? BLOG_IMAGE_API(imageId)
+                                        : ''
+                                );
+
+                            return {
+                                ...image,
+                                url
+                            };
+                        })
+                        .filter(
+                            image => image.url
+                        );
+
+                buildSidebar(
+                    courseBlogs,
+                    id
+                );
+
+                renderBlogContent(blog);
+
+            } catch (error) {
+                if (
+                    error.message === 'Authentication required' ||
+                    error.message === 'Session expired'
+                ) {
+                    return;
+                }
+
+                console.error(
+                    'Blog loading failed:',
+                    error
+                );
+
+                readerContent.innerHTML =
+                    `
+                        <div
+                            style="padding:60px;color:#fb7185">
+                            Blog could not be loaded.
+                            Please try again.
+                        </div>
+                    `;
+            }
+        }
+
+        function loadBlogInReader(id) {
+            openBlogReader(id);
+        }
+
+        function progressKey(
+            contentType,
+            contentId
+        ) {
+            return `${String(contentType || '').toLowerCase()}:${normalizeId(contentId)}`;
+        }
+
+        function updateCourseProgressCard(
+            courseId,
+            progressPercent
+        ) {
+            const id =
+                String(courseId || '');
+
+            const progress =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        Number(progressPercent ?? 0)
+                    )
+                );
+
+            const wrap =
+                document.querySelector(
+                    `[data-progress-wrap="${id}"]`
+                );
+
+            const fill =
+                document.querySelector(
+                    `[data-progress-fill="${id}"]`
+                );
+
+            const text =
+                document.querySelector(
+                    `[data-progress-text="${id}"]`
+                );
+
+            if (wrap) {
+                wrap.style.display = 'block';
+            }
+
+            if (fill) {
+                fill.style.width =
+                    `${progress}%`;
+            }
+
+            if (text) {
+                text.textContent =
+                    `${progress}%`;
+            }
+        }
+
+        async function getEnrollmentForCourse(
+            courseId
+        ) {
+            try {
+                const response =
+                    await userApiFetch(
+                        '/dashboard/enrollments'
+                    );
+
+                if (!response.ok) {
+                    return null;
+                }
+
+                const data =
+                    await readJson(response);
+
+                const enrollments =
+                    normalizeArray(data);
+
+                return enrollments.find(
+                    enrollment =>
+                        normalizeId(
+                            enrollment.courseId ??
+                            enrollment.CourseId
+                        ) ===
+                        normalizeId(courseId)
+                ) || null;
+
+            } catch (error) {
+                if (
+                    error.message !== 'Authentication required' &&
+                    error.message !== 'Session expired'
+                ) {
+                    console.error(
+                        'Enrollment lookup failed:',
+                        error
+                    );
+                }
+
+                return null;
+            }
+        }
+
+        async function loadCourseProgress(
+            courseId
+        ) {
+            currentCourseProgress = null;
+            completedLearningItems.clear();
+
+            if (!courseId) {
+                return null;
+            }
+
+            try {
+                const enrollment =
+                    await getEnrollmentForCourse(
+                        courseId
+                    );
+
+                if (!enrollment) {
+                    return null;
+                }
+
+                const progress =
+                    Math.max(
+                        0,
+                        Math.min(
+                            100,
+                            Number(
+                                enrollment.progressPercent ??
+                                enrollment.ProgressPercent ??
+                                0
+                            )
+                        )
+                    );
+
+                currentCourseProgress = {
+                    ...enrollment,
+                    progressPercent: progress,
+                    isCompleted:
+                        Boolean(
+                            enrollment.isCompleted ??
+                            enrollment.IsCompleted ??
+                            progress >= 100
+                        )
+                };
+
+                updateCourseProgressCard(
+                    courseId,
+                    progress
+                );
+
+                if (
+                    currentCourseProgress.isCompleted
+                ) {
+                    completedCourses.add(
+                        normalizeId(courseId)
+                    );
+                }
+
+                return currentCourseProgress;
+
+            } catch (error) {
+                if (
+                    error.message === 'Authentication required' ||
+                    error.message === 'Session expired'
+                ) {
+                    return null;
+                }
+
+                console.error(
+                    'Progress loading failed:',
+                    error
+                );
+
+                return null;
+            }
+        }
+async function completeBlogActivity(blog) {
+    if (
+        !currentCourse?.id ||
+        !blog?.id
+    ) {
+        return null;
+    }
+
+    const blogId = blog.id;
+
+    const key = progressKey(
+        'Blog',
+        blogId
+    );
+
+    if (completedLearningItems.has(key)) {
+        return currentCourseProgress;
+    }
+
+    try {
+        const response = await learningFetch(
+            COURSE_ACTIVITY_BLOG_API(blogId),
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    courseId: currentCourse.id,
+                    topicId:
+                        blog.topicId ||
+                        blog.topicID ||
+                        blog.TopicId ||
+                        '',
+                    courseTitle:
+                        currentCourse.title || '',
+                    topicTitle:
+                        blog.topicTitle ||
+                        blog.topic ||
+                        blog.topicName ||
+                        'General',
+                    blogTitle:
+                        blog.title || ''
+                })
+            }
+        );
+
+        const data = await readJson(response);
+
+        if (!response.ok) {
+            if (response.status === 400) {
+                showToast(
+                    getErrorMessage(
+                        data,
+                        'Unable to complete this blog.'
+                    ),
+                    'error'
+                );
+
+                return null;
+            }
+
+            throw new Error(
+                getErrorMessage(
+                    data,
+                    `Blog completion API returned ${response.status}`
+                )
+            );
+        }
+
+        completedLearningItems.add(key);
+
+        const xpEarned =
+            Number(
+                data?.xpEarned ??
+                data?.XpEarned ??
+                0
+            );
+
+        const courseCompleted =
+            data?.courseCompleted === true ||
+            data?.CourseCompleted === true;
+
+        const topicCompleted =
+            data?.topicCompleted === true ||
+            data?.TopicCompleted === true;
+
+        if (data?.success !== false) {
+            if (courseCompleted) {
+                showToast(
+                    xpEarned > 0
+                        ? `🎉 Course completed · +${xpEarned} XP`
+                        : (
+                            data?.message ||
+                            '🎉 Course completed successfully.'
+                        )
+                );
+            }
+            else if (topicCompleted) {
+                showToast(
+                    xpEarned > 0
+                        ? `✓ Topic completed · +${xpEarned} XP`
+                        : (
+                            data?.message ||
+                            '✓ Topic completed successfully.'
+                        )
+                );
+            }
+            else {
+                showToast(
+                    xpEarned > 0
+                        ? `✓ Blog completed · +${xpEarned} XP`
+                        : (
+                            data?.message ||
+                            '✓ Blog completed successfully.'
+                        )
+                );
+            }
+        }
+
+        await checkEnrollments();
+
+        const enrollment =
+            await getEnrollmentForCourse(
+                currentCourse.id
+            );
+
+        if (enrollment) {
+            const progress =
+                Math.max(
+                    0,
+                    Math.min(
+                        100,
+                        Number(
+                            enrollment.progressPercent ??
+                            enrollment.ProgressPercent ??
+                            0
+                        )
+                    )
+                );
+
+            currentCourseProgress = {
+                ...currentCourseProgress,
+                ...enrollment,
+                progressPercent: progress
+            };
+
+            updateCourseProgressCard(
+                currentCourse.id,
+                progress
+            );
+
+            if (
+                !courseCompleted &&
+                (
+                    progress >= 100 ||
+                    enrollment.isCompleted === true ||
+                    enrollment.IsCompleted === true
+                )
+            ) {
+                await completeCourseActivity();
+            }
+        }
+
+        return data;
+
+    } catch (error) {
+        if (
+            error.message === 'Authentication required' ||
+            error.message === 'Session expired'
+        ) {
+            return null;
+        }
+
+        console.error(
+            'Blog completion failed:',
+            error
+        );
+
+        showToast(
+            'Blog completion could not be recorded.',
+            'error'
+        );
+
+        return null;
+    }
+}
+
+async function completeCourseActivity() {
+    if (!currentCourse?.id) {
+        return null;
+    }
+
+    const courseId =
+        normalizeId(
+            currentCourse.id
+        );
+
+    if (
+        completedCourses.has(courseId)
+    ) {
+        return currentCourseProgress;
+    }
+
+    try {
+        const response =
+            await learningFetch(
+                COURSE_ACTIVITY_COMPLETE_API(
+                    currentCourse.id
+                ),
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type':
+                            'application/json'
+                    },
+                    body:
+                        JSON.stringify({
+                            courseTitle:
+                                currentCourse.title ||
+                                ''
+                        })
+                }
+            );
+
+        const data =
+            await readJson(response);
+
+        if (!response.ok) {
+            if (
+                response.status === 400
+            ) {
+                showToast(
+                    getErrorMessage(
+                        data,
+                        'Unable to complete the course.'
+                    ),
+                    'error'
+                );
+
+                return null;
+            }
+
+            throw new Error(
+                getErrorMessage(
+                    data,
+                    `Course completion API returned ${response.status}`
+                )
+            );
+        }
+
+        if (
+            data?.success !== false
+        ) {
+            completedCourses.add(
+                courseId
+            );
+
+            currentCourseProgress = {
+                ...(currentCourseProgress || {}),
+                progressPercent: 100,
+                isCompleted: true
+            };
+
+            updateCourseProgressCard(
+                currentCourse.id,
+                100
+            );
+
+            const xpEarned =
+                Number(
+                    data?.xpEarned ??
+                    data?.XpEarned ??
+                    0
+                );
+
+            showToast(
+                xpEarned > 0
+                    ? `🎉 Course completed · +${xpEarned} XP`
+                    : (
+                        data?.message ||
+                        '🎉 Course completed successfully.'
+                    )
+            );
+
+            await checkEnrollments();
+        }
+
+        return data;
+
+    } catch (error) {
+        if (
+            error.message === 'Authentication required' ||
+            error.message === 'Session expired'
+        ) {
+            return null;
+        }
+
+        console.error(
+            'Course completion failed:',
+            error
+        );
+
+        showToast(
+            'Course completion could not be recorded.',
+            'error'
+        );
+
+        return null;
+    }
+}
+        async function completeLearningItem(
+            contentId,
+            contentType,
+            blog = null
+        ) {
+            if (
+                !currentCourse?.id ||
+                !contentId ||
+                !contentType
+            ) {
+                return null;
+            }
+
+            if (
+                String(contentType).toLowerCase() ===
+                'blog'
+            ) {
+                return completeBlogActivity(
+                    blog || {
+                        id: contentId
+                    }
+                );
+            }
+
+            return null;
+        }
+
+        function renderBlogContent(blog) {
+            const content =
+                document.getElementById(
+                    'blogReaderContent'
+                );
+
+            const progressBar =
+                document.getElementById(
+                    'readerProgressBar'
+                );
+
+            content.innerHTML = `
+                <div class="article-eyebrow">
+                    ${esc(blog.topic || 'General')}
+                </div>
+
+                <h1>
+                    ${esc(blog.title || 'Untitled')}
+                </h1>
+
+                <div class="article-meta">
+                    <span>
+                        ⏱ ${esc(blog.readTime || '5 min')}
+                    </span>
+
+                    ${
+                        blog.date
+                            ? `<span>📅 ${esc(blog.date)}</span>`
+                            : ''
+                    }
+
+                    <span>
+                        ✍ ${esc(blog.author || 'Techoriam')}
+                    </span>
+
+                    <span>
+                        👁 ${Number(blog.viewCount || 0)} views
+                    </span>
+                </div>
+
+                <div class="article-content">
+                    ${
+                        blog.content ||
+                        '<p>No content available.</p>'
+                    }
+                </div>
+
+                ${
+                    Array.isArray(blog.images) &&
+                    blog.images.length
+                        ? `
+                            <div class="article-images">
+                                ${
+                                    blog.images
+                                        .map(image => {
+                                            const url =
+                                                image.url ||
+                                                image.imageUrl ||
+                                                image.imageURL ||
+                                                '';
+
+                                            if (!url) {
+                                                return '';
+                                            }
+
+                                            return `
+                                                <figure class="article-image">
+                                                    <img
+                                                        src="${esc(url)}"
+                                                        alt="${esc(
+                                                            image.fileName ||
+                                                            image.altText ||
+                                                            'Blog image'
+                                                        )}"
+                                                        loading="lazy"
+                                                        decoding="async"
+                                                    />
+
+                                                    ${
+                                                        image.fileName
+                                                            ? `
+                                                                <figcaption>
+                                                                    ${esc(image.fileName)}
+                                                                </figcaption>
+                                                              `
+                                                            : ''
+                                                    }
+                                                </figure>
+                                            `;
+                                        })
+                                        .join('')
+                                }
+                            </div>
+                          `
+                        : ''
+                }
+            `;
+
+            const main =
+                document.getElementById(
+                    'blogReaderMain'
+                );
+
+            main.scrollTop = 0;
+
+            progressBar.style.width =
+                '0%';
+
+            let completionTriggered =
+                completedLearningItems.has(
+                    progressKey(
+                        'Blog',
+                        blog.id
+                    )
+                );
+
+            const tryCompleteBlog =
+                async () => {
+                    if (
+                        completionTriggered
+                    ) {
+                        return;
+                    }
+
+                    completionTriggered =
+                        true;
+
+                    const result =
+                        await completeLearningItem(
+                            blog.id,
+                            'Blog',
+                            blog
+                        );
+
+                    if (!result) {
+                        completionTriggered =
+                            false;
+                    }
+                };
+
+            const checkProgress =
+                () => {
+                    const maxScroll =
+                        main.scrollHeight -
+                        main.clientHeight;
+
+                    const percentage =
+                        maxScroll > 0
+                            ? (
+                                main.scrollTop /
+                                maxScroll
+                              ) * 100
+                            : 100;
+
+                    const safePercentage =
+                        Math.min(
+                            100,
+                            Math.max(
+                                0,
+                                percentage
+                            )
+                        );
+
+                    progressBar.style.width =
+                        `${safePercentage}%`;
+
+                    if (
+                        safePercentage >= 90
+                    ) {
+                        tryCompleteBlog();
+                    }
+                };
+
+            main.onscroll =
+                checkProgress;
+
+            requestAnimationFrame(
+                () => checkProgress()
+            );
+        }
+
+        function closeBlogReader() {
+            const overlay =
+                document.getElementById(
+                    'blogOverlay'
+                );
+
+            if (
+                !overlay.classList.contains('show')
+            ) {
+                return;
+            }
+
+            overlay.classList.remove('show');
+            document.body.classList.remove('reader-open');
+
+            document.body.style.overflow =
+                '';
+
+            currentBlogId =
+                null;
+
+            const progressBar =
+                document.getElementById(
+                    'readerProgressBar'
+                );
+
+            if (progressBar) {
+                progressBar.style.width =
+                    '0%';
+            }
+        }
+
+        function changeFontSize(direction) {
+            const articleContent =
+                document.querySelector(
+                    '#blogReaderContent .article-content'
+                );
+
+            if (!articleContent) {
+                return;
+            }
+
+            const currentSize =
+                parseFloat(
+                    getComputedStyle(
+                        articleContent
+                    ).fontSize
+                ) || 16;
+
+            const nextSize =
+                Math.min(
+                    24,
+                    Math.max(
+                        13,
+                        currentSize +
+                        direction * 2
+                    )
+                );
+
+            articleContent.style.fontSize =
+                `${nextSize}px`;
+        }
+
+        function switchTab(tab) {
+            document
+                .querySelectorAll('.tab')
+                .forEach(
+                    el =>
+                        el.classList.remove(
+                            'active'
+                        )
+                );
+
+            document
+                .querySelector(
+                    `[data-tab="${tab}"]`
+                )
+                ?.classList.add(
+                    'active'
+                );
+
+            document.getElementById(
+                'blogsSection'
+            ).style.display =
+                tab === 'blogs'
+                    ? 'block'
+                    : 'none';
+
+            document.getElementById(
+                'videosSection'
+            ).style.display =
+                tab === 'videos'
+                    ? 'block'
+                    : 'none';
+        }
+
+        function goBackToCourses() {
+            closeBlogReader();
+
+            document.getElementById(
+                'coursesView'
+            ).style.display =
+                'block';
+
+            document.getElementById(
+                'courseDetailView'
+            ).classList.remove(
+                'active'
+            );
+
+            currentCourse =
+                null;
+
+            courseBlogs =
+                [];
+
+            courseNotes =
+                [];
+
+            currentBlogId =
+                null;
+
+            collapsedTopics =
+                new Set();
+
+            currentCourseProgress =
+                null;
+
+            completedLearningItems.clear();
+
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        document.addEventListener(
+            'keydown',
+            event => {
+                if (
+                    event.key === 'Escape' &&
+                    document
+                        .getElementById('blogOverlay')
+                        .classList
+                        .contains('show')
+                ) {
+                    closeBlogReader();
+                }
+            }
+        );
+
+        async function handleEnroll(
+            courseId,
+            button
+        ) {
+            const course =
+                allCourses.find(
+                    item =>
+                        normalizeId(item.id) ===
+                        normalizeId(courseId)
+                );
+
+            if (!course) {
+                showToast(
+                    'Course information not found.',
+                    'error'
+                );
+                return;
+            }
+
+            if (
+                button.classList.contains(
+                    'enrolled'
+                )
+            ) {
+                await openCourse(courseId);
+                return;
+            }
+
+            button.disabled =
+                true;
+
+            const oldText =
+                button.textContent;
+
+            button.textContent =
+                'Enrolling...';
+
+            try {
+                const response =
+                    await userApiFetch(
+                        `/dashboard/courses/${encodeURIComponent(courseId)}/enroll`,
+                        {
+                            method: 'POST',
+
+                            headers: {
+                                'Content-Type':
+                                    'application/json'
+                            },
+
+                            body:
+                                JSON.stringify({
+                                    courseTitle:
+                                        course.title ||
+                                        course.name ||
+                                        'Course'
+                                })
+                        }
+                    );
+
+                const data =
+                    await readJson(response);
+
+                if (response.ok) {
+                    enrolledCourseIds.add(
+                        normalizeId(
+                            course.id
+                        )
+                    );
+
+                    button.textContent =
+                        '✓ Enrolled';
+
+                    button.classList.add(
+                        'enrolled'
+                    );
+
+                    button.dataset.enrolled =
+                        'true';
+
+                    showToast(
+                        data?.message ||
+                        'Enrolled! Start learning.'
+                    );
+
+                    await checkEnrollments();
+
+                    return;
+                }
+
+                button.textContent =
+                    oldText;
+
+                showToast(
+                    getErrorMessage(
+                        data,
+                        'Enrollment failed.'
+                    ),
+                    'error'
+                );
+
+            } catch (error) {
+                if (
+                    error.message ===
+                        'Authentication required' ||
+                    error.message ===
+                        'Session expired'
+                ) {
+                    return;
+                }
+
+                console.error(
+                    'Enrollment failed:',
+                    error
+                );
+
+                button.textContent =
+                    oldText;
+
+                showToast(
+                    error.message ||
+                    'Enrollment service unreachable.',
+                    'error'
+                );
+
+            } finally {
+                button.disabled =
+                    false;
+            }
+        }
+
+        function applyEnrollmentState(
+            enrollments = null
+        ) {
+            document
+                .querySelectorAll('.enroll-btn')
+                .forEach(button => {
+                    const courseId =
+                        normalizeId(
+                            button.dataset.courseId
+                        );
+
+                    if (
+                        enrolledCourseIds.has(
+                            courseId
+                        )
+                    ) {
+                        button.textContent =
+                            '✓ Enrolled';
+
+                        button.classList.add(
+                            'enrolled'
+                        );
+
+                        button.dataset.enrolled =
+                            'true';
+
+                        const enrollment =
+                            Array.isArray(enrollments)
+                                ? enrollments.find(
+                                    e =>
+                                        normalizeId(
+                                            e.courseId ??
+                                            e.CourseId
+                                        ) === courseId
+                                )
+                                : null;
+
+                        const progress =
+                            Math.max(
+                                0,
+                                Math.min(
+                                    100,
+                                    Number(
+                                        enrollment?.progressPercent ??
+                                        enrollment?.ProgressPercent ??
+                                        0
+                                    )
+                                )
+                            );
+
+                        updateCourseProgressCard(
+                            button.dataset.courseId,
+                            progress
+                        );
+
+                    } else {
+                        button.textContent =
+                            'Enroll';
+
+                        button.classList.remove(
+                            'enrolled'
+                        );
+
+                        button.dataset.enrolled =
+                            'false';
+
+                        const wrap =
+                            document.querySelector(
+                                `[data-progress-wrap="${button.dataset.courseId}"]`
+                            );
+
+                        if (wrap) {
+                            wrap.style.display =
+                                'none';
+                        }
+                    }
+                });
+        }
+
+        async function checkEnrollments() {
+            try {
+                const response =
+                    await userApiFetch(
+                        '/dashboard/enrollments'
+                    );
+
+                if (!response.ok) {
+                    return;
+                }
+
+                const data =
+                    await readJson(response);
+
+                const enrollments =
+                    normalizeArray(data);
+
+                enrolledCourseIds.clear();
+
+                enrollments.forEach(
+                    enrollment => {
+                        const id =
+                            normalizeId(
+                                enrollment.courseId ??
+                                enrollment.CourseId
+                            );
+
+                        if (id) {
+                            enrolledCourseIds.add(
+                                id
+                            );
+                        }
+
+                        const isCompleted =
+                            Boolean(
+                                enrollment.isCompleted ??
+                                enrollment.IsCompleted
+                            ) ||
+                            Number(
+                                enrollment.progressPercent ??
+                                enrollment.ProgressPercent ??
+                                0
+                            ) >= 100;
+
+                        if (isCompleted) {
+                            completedCourses.add(id);
+                        }
+                    }
+                );
+
+                applyEnrollmentState(
+                    enrollments
+                );
+
+                if (currentCourse?.id) {
+                    const currentEnrollment =
+                        enrollments.find(
+                            enrollment =>
+                                normalizeId(
+                                    enrollment.courseId ??
+                                    enrollment.CourseId
+                                ) ===
+                                normalizeId(
+                                    currentCourse.id
+                                )
+                        );
+
+                    if (currentEnrollment) {
+                        const progress =
+                            Math.max(
+                                0,
+                                Math.min(
+                                    100,
+                                    Number(
+                                        currentEnrollment.progressPercent ??
+                                        currentEnrollment.ProgressPercent ??
+                                        0
+                                    )
+                                )
+                            );
+
+                        currentCourseProgress =
+                            {
+                                ...currentCourseProgress,
+                                ...currentEnrollment,
+                                progressPercent:
+                                    progress
+                            };
+
+                        updateCourseProgressCard(
+                            currentCourse.id,
+                            progress
+                        );
+                    }
+                }
+
+            } catch (error) {
+                if (
+                    error.message !==
+                        'Authentication required' &&
+                    error.message !==
+                        'Session expired'
+                ) {
+                    console.error(
+                        'Enrollment check failed:',
+                        error
+                    );
+                }
+            }
+        }
+
+        async function handleRecommendationDeepLink() {
+            const params =
+                new URLSearchParams(
+                    window.location.search
+                );
+
+            const courseId =
+                params.get('course');
+
+            const blogId =
+                params.get('blog');
+
+            if (!courseId) {
+                return;
+            }
+
+            const courseExists =
+                allCourses.some(
+                    course =>
+                        normalizeId(course.id) ===
+                        normalizeId(courseId)
+                );
+
+            if (!courseExists) {
+                showToast(
+                    'Recommended course could not be found.',
+                    'error'
+                );
+                return;
+            }
+
+            await openCourse(
+                courseId
+            );
+
+            if (!blogId) {
+                return;
+            }
+
+            const blogExists =
+                courseBlogs.some(
+                    blog =>
+                        normalizeId(blog.id) ===
+                        normalizeId(blogId)
+                );
+
+            if (!blogExists) {
+                showToast(
+                    'Recommended blog could not be found in this course.',
+                    'error'
+                );
+                return;
+            }
+
+            await openBlogReader(
+                blogId
+            );
+        }
+
+        async function initializeLearningHub() {
+            const authenticated =
+                await checkUser();
+
+            if (!authenticated) {
+                return;
+            }
+
+            await fetchCourses();
+        }
+
+        initializeLearningHub();
+    
+        (() => {
+            const open = document.getElementById('techoriamIntelligenceButton');
+            const backdrop = document.getElementById('tiPanelBackdrop');
+            const close = document.getElementById('tiClose');
+            if (!open || !backdrop || !close) return;
+            const show = () => { backdrop.hidden = false; document.body.style.overflow = 'hidden'; };
+            const hide = () => { backdrop.hidden = true; if (!document.getElementById('blogOverlay')?.classList.contains('show')) document.body.style.overflow = ''; };
+            open.addEventListener('click', show);
+            close.addEventListener('click', hide);
+            backdrop.addEventListener('click', e => { if (e.target === backdrop) hide(); });
+        })();
+
+</script>
+</body>
+</html>

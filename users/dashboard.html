@@ -1,0 +1,3121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#060a12">
+<title>Dashboard · Techoriam</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #060a12;
+  --surface: #0b1220;
+  --surface2: #0f1729;
+  --surface3: #131f33;
+  --border: #1a2740;
+  --border2: #243352;
+  --text: #f1f5fb;
+  --muted: #8b9cb8;
+  --dim: #5c6d8a;
+  --accent: #6b8cff;
+  --accent2: #4f73f5;
+  --teal: #2dd4a8;
+  --violet: #a78bfa;
+  --amber: #f0b429;
+  --red: #f07178;
+  --radius: 16px;
+  --radius-sm: 12px;
+  --sidebar-w: 260px;
+  --shadow: 0 20px 50px rgba(0,0,0,.35);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: Inter, system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+}
+a, button { font: inherit; color: inherit; }
+a { text-decoration: none; }
+button { border: none; background: none; cursor: pointer; }
+svg.ic { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; flex-shrink: 0; }
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-thumb { background: #1e2d48; border-radius: 20px; }
+::selection { background: #6b8cff; color: #060a12; }
+
+.sidebar {
+  position: fixed; inset: 0 auto 0 0;
+  width: var(--sidebar-w); z-index: 100;
+  background: rgba(8,12,20,.97);
+  border-right: 1px solid var(--border);
+  display: flex; flex-direction: column;
+  padding: 20px 14px 16px;
+}
+.brand {
+  display: flex; align-items: center; gap: 11px;
+  padding: 4px 10px 22px;
+  font-size: 19px; font-weight: 800; letter-spacing: -0.03em;
+}
+.brand-mark {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: linear-gradient(135deg, #6b8cff, #8b5cf6);
+  display: grid; place-items: center;
+  font-weight: 900; font-size: 15px; color: #fff;
+  box-shadow: 0 8px 20px rgba(107,140,255,.25);
+}
+.brand span em { font-style: normal; color: #8ba4ff; }
+
+.user-chip {
+  display: flex; align-items: center; gap: 11px;
+  padding: 10px 12px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  margin-bottom: 22px;
+}
+.user-chip .av {
+  width: 36px; height: 36px; border-radius: 10px;
+  background: linear-gradient(135deg, #6b8cff, #8b5cf6);
+  display: grid; place-items: center;
+  font-weight: 700; font-size: 14px;
+}
+.user-chip .meta { min-width: 0; }
+.user-chip .meta strong {
+  display: block; font-size: 12.5px; font-weight: 650;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.user-chip .meta span {
+  display: block; font-size: 10.5px; color: var(--dim);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: 1px;
+}
+
+.nav-section { margin-bottom: 20px; }
+.nav-label {
+  font: 650 9px "JetBrains Mono", monospace;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: #4a5d7a; padding: 0 10px 8px;
+}
+.nav a, .nav button {
+  display: flex; align-items: center; gap: 11px;
+  width: 100%; padding: 10px 12px;
+  border-radius: 11px; border: 1px solid transparent;
+  font-size: 13px; font-weight: 550; color: #7a8ba6;
+  text-align: left; transition: 0.15s ease;
+}
+.nav a:hover, .nav button:hover {
+  background: var(--surface); border-color: var(--border); color: #d0daf0;
+}
+.nav a.active {
+  background: linear-gradient(90deg, rgba(107,140,255,.14), transparent);
+  border-color: rgba(107,140,255,.22);
+  color: #a8bcff;
+}
+
+.activity-section {
+  margin-top: 4px;
+  margin-bottom: 14px;
+}
+
+.activity-section .nav-label {
+  padding-bottom: 8px;
+}
+
+.activity-trigger {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 11px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #7a8ba6;
+  font-size: 13px;
+  font-weight: 550;
+  text-align: left;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.activity-trigger:hover {
+  background: var(--surface);
+  border-color: var(--border);
+  color: #d0daf0;
+}
+
+.activity-trigger .activity-trigger-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--teal);
+  flex-shrink: 0;
+}
+
+.activity-trigger .activity-trigger-arrow {
+  margin-left: auto;
+  color: #526683;
+  transition: transform 0.15s ease;
+}
+
+.activity-trigger:hover .activity-trigger-arrow {
+  transform: translateX(2px);
+  color: #8ba4ff;
+}
+
+.activity-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 260;
+  background: rgba(0,0,0,.58);
+  backdrop-filter: blur(4px);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .22s ease, visibility .22s ease;
+}
+
+.activity-drawer-overlay.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.activity-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: min(430px, 92vw);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #0b1321;
+  border-left: 1px solid var(--border2);
+  box-shadow: -24px 0 70px rgba(0,0,0,.42);
+  transform: translateX(100%);
+  transition: transform .26s cubic-bezier(.2,.75,.25,1);
+}
+
+.activity-drawer-overlay.open .activity-drawer {
+  transform: translateX(0);
+}
+
+.activity-drawer-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 24px 22px 18px;
+  border-bottom: 1px solid var(--border);
+}
+
+.activity-drawer-head h2 {
+  font-size: 18px;
+  font-weight: 750;
+  letter-spacing: -0.02em;
+}
+
+.activity-drawer-head p {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.activity-drawer-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.activity-drawer-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 14px;
+  margin-bottom: 9px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 13px;
+}
+
+.activity-drawer-item:last-child {
+  margin-bottom: 0;
+}
+
+.activity-drawer-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  background: rgba(45,212,168,.1);
+  color: var(--teal);
+}
+
+.activity-drawer-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.activity-drawer-content strong {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.activity-drawer-content p {
+  margin-top: 4px;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.activity-drawer-meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 7px;
+}
+
+.activity-drawer-time {
+  font-size: 10px;
+  color: var(--dim);
+}
+
+.activity-drawer-xp {
+  font-size: 10px;
+  font-weight: 750;
+  color: var(--teal);
+}
+
+.activity-drawer-empty {
+  padding: 28px 16px;
+  border: 1px dashed var(--border2);
+  border-radius: 13px;
+  color: var(--dim);
+  font-size: 12px;
+  text-align: center;
+}
+
+.sidebar-footer { margin-top: auto; }
+.streak-box {
+  display: flex; align-items: center; gap: 11px;
+  padding: 12px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 13px;
+  margin-bottom: 12px;
+}
+.streak-box .icon {
+  width: 34px; height: 34px; border-radius: 10px;
+  background: rgba(240,180,41,.1); color: var(--amber);
+  display: grid; place-items: center;
+}
+.streak-box strong { font-size: 12px; font-weight: 650; }
+.streak-box span { display: block; font-size: 10px; color: var(--dim); margin-top: 1px; }
+.copyright { font-size: 10px; color: #3d4e68; padding: 0 6px; }
+
+.main { margin-left: var(--sidebar-w); min-height: 100vh; }
+.wrap { max-width: 1380px; margin: 0 auto; padding: 28px 32px 48px; }
+
+.header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  gap: 20px; margin-bottom: 28px;
+}
+.header .label {
+  font: 650 9px "JetBrains Mono", monospace;
+  letter-spacing: 0.14em; color: #5a6e8c; text-transform: uppercase;
+}
+.header h1 {
+  font-size: 26px; font-weight: 750; letter-spacing: -0.04em;
+  margin: 6px 0 4px; line-height: 1.15;
+}
+.header p { font-size: 13.5px; color: var(--muted); }
+.header-actions { display: flex; gap: 8px; }
+.icon-btn {
+  width: 40px; height: 40px; border-radius: 11px;
+  border: 1px solid var(--border); background: var(--surface);
+  display: grid; place-items: center; color: #7d8fad;
+  position: relative; transition: 0.15s;
+}
+.icon-btn:hover { border-color: var(--border2); color: #c5d0e8; }
+.dot {
+  position: absolute; top: 7px; right: 7px;
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--amber); box-shadow: 0 0 0 2px var(--surface);
+}
+
+.hero {
+  display: grid;
+  grid-template-columns: 340px 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.profile-card {
+  background:
+    radial-gradient(circle at 88% 0%, rgba(124,92,240,.14), transparent 32%),
+    radial-gradient(circle at 0% 100%, rgba(107,140,255,.08), transparent 38%),
+    var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  min-height: 360px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 18px 45px rgba(0,0,0,.16);
+}
+.profile-card::before {
+  content: "";
+  position: absolute;
+  width: 260px;
+  height: 260px;
+  top: -145px;
+  right: -90px;
+  border-radius: 50%;
+  background: rgba(107,140,255,.12);
+  filter: blur(4px);
+  pointer-events: none;
+}
+.profile-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,.025), transparent 35%);
+  pointer-events: none;
+}
+.profile-top {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  position: relative;
+  z-index: 1;
+}
+.av-lg {
+  width: 70px;
+  height: 70px;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #6b8cff, #8b5cf6);
+  display: grid;
+  place-items: center;
+  font-size: 26px;
+  font-weight: 800;
+  box-shadow: 0 14px 32px rgba(107,140,255,.22);
+  border: 1px solid rgba(255,255,255,.1);
+}
+.profile-info { min-width: 0; }
+.profile-info .label {
+  font: 650 9px "JetBrains Mono", monospace;
+  letter-spacing: .14em;
+  color: #6881a6;
+}
+.profile-info h2 {
+  font-size: 19px;
+  font-weight: 750;
+  margin: 3px 0 2px;
+  letter-spacing: -.025em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.profile-info p {
+  font-size: 12px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bio {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #a5b5cd;
+  line-height: 1.6;
+  position: relative;
+  z-index: 1;
+}
+.bio.empty { color: #5a6e8c; font-style: italic; }
+.skills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 13px;
+  position: relative;
+  z-index: 1;
+}
+.skill-tag {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #91a5c5;
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: rgba(15,23,41,.72);
+  border: 1px solid var(--border);
+}
+.social-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 7px;
+  margin-top: 14px;
+  position: relative;
+  z-index: 1;
+}
+.social-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: rgba(15,23,41,.62);
+  color: #8ea2c1;
+  font-size: 11px;
+  font-weight: 650;
+  transition: .18s ease;
+}
+.social-link:hover {
+  color: #d9e3f5;
+  border-color: var(--border2);
+  background: rgba(26,39,64,.72);
+  transform: translateY(-1px);
+}
+.social-link .ic { width: 15px; height: 15px; }
+.profile-foot {
+  margin-top: auto;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+  position: relative;
+  z-index: 1;
+}
+.xp-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+.xp-label {
+  font: 650 9px "JetBrains Mono", monospace;
+  letter-spacing: .12em;
+  color: #5f7393;
+}
+.xp-value {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: -.04em;
+  margin-top: 3px;
+}
+.xp-value span {
+  font-size: 12px;
+  font-weight: 650;
+  color: var(--violet);
+  margin-left: 4px;
+}
+
+.progress-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px 26px;
+  display: flex; flex-direction: column;
+}
+.progress-head {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 16px;
+}
+.progress-head h2 { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; margin-top: 3px; }
+.progress-head p { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.active-count { text-align: right; }
+.active-count strong { font-size: 28px; font-weight: 800; letter-spacing: -0.03em; display: block; }
+.active-count span { font-size: 11px; color: var(--dim); }
+.tabs { display: flex; gap: 6px; margin-bottom: 14px; }
+.tab {
+  font-size: 11px; font-weight: 600; padding: 5px 11px;
+  border-radius: 8px; border: 1px solid var(--border); color: var(--dim);
+}
+.tab.active {
+  background: rgba(107,140,255,.1);
+  border-color: rgba(107,140,255,.25);
+  color: #a8bcff;
+}
+.course-list { flex: 1; overflow-y: auto; max-height: 240px; }
+.course-item {
+  padding: 13px 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+.course-item:last-child { margin-bottom: 0; }
+.course-item-top {
+  display: flex; justify-content: space-between; align-items: center; gap: 10px;
+}
+.course-item-top h4 {
+  font-size: 13.5px; font-weight: 650;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.course-item-top span { font-size: 11px; font-weight: 600; color: var(--accent); white-space: nowrap; }
+.bar { height: 5px; background: #1a2740; border-radius: 99px; margin-top: 9px; overflow: hidden; }
+.bar-fill {
+  height: 100%; border-radius: 99px;
+  background: linear-gradient(90deg, var(--teal), var(--accent));
+  transition: width 0.6s ease;
+}
+.course-item-foot {
+  display: flex; justify-content: space-between;
+  margin-top: 7px; font-size: 11px; color: var(--dim);
+}
+.course-item-foot a { color: var(--accent); font-weight: 600; }
+.course-item-foot a:hover { color: #8ba4ff; }
+.completed-row {
+  margin-top: 12px; padding: 9px 12px;
+  border: 1px dashed var(--border2); border-radius: 10px;
+  display: flex; justify-content: space-between;
+  font-size: 12px; color: var(--muted);
+}
+.completed-row strong { color: #c0cce0; }
+
+.stats {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 12px; margin-bottom: 20px;
+}
+.stat {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  transition: 0.18s;
+}
+.stat:hover { border-color: var(--border2); transform: translateY(-2px); }
+.stat-top { display: flex; justify-content: space-between; align-items: center; }
+.stat-icon {
+  width: 34px; height: 34px; border-radius: 10px;
+  display: grid; place-items: center;
+}
+.stat-icon.blue { background: rgba(107,140,255,.1); color: #8ba4ff; }
+.stat-icon.green { background: rgba(45,212,168,.1); color: var(--teal); }
+.stat-icon.amber { background: rgba(240,180,41,.1); color: var(--amber); }
+.stat-icon.violet { background: rgba(167,139,250,.1); color: var(--violet); }
+.stat .kind {
+  font: 650 8px "JetBrains Mono", monospace;
+  letter-spacing: 0.1em; color: #5a6e8c;
+}
+.stat strong {
+  display: block; font-size: 24px; font-weight: 800;
+  letter-spacing: -0.03em; margin-top: 12px;
+}
+.stat h3 { font-size: 12.5px; font-weight: 600; margin-top: 3px; }
+.stat p { font-size: 11px; color: var(--dim); margin-top: 1px; }
+
+.grid-2 {
+  display: grid; grid-template-columns: 1.35fr 1fr;
+  gap: 14px; margin-bottom: 20px;
+}
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+}
+.panel-head {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--border);
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.panel-head .label {
+  font: 650 9px "JetBrains Mono", monospace;
+  letter-spacing: 0.12em; color: #5a6e8c; text-transform: uppercase;
+}
+.panel-head h2 { font-size: 15px; font-weight: 700; margin-top: 3px; }
+.panel-head .count { font-size: 12px; color: var(--dim); }
+.panel-body { padding: 14px; }
+.scroll-x { overflow-x: auto; }
+.rec-row, .badge-row { display: flex; gap: 10px; width: max-content; min-width: 100%; }
+
+.rec-card {
+  width: 210px; min-width: 210px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px;
+  transition: 0.15s;
+}
+.rec-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+.rec-card .type {
+  font: 650 8px "JetBrains Mono", monospace;
+  letter-spacing: 0.1em; color: #8ba4ff;
+}
+.rec-card h3 { font-size: 13px; font-weight: 650; margin: 6px 0 4px; }
+.rec-card p { font-size: 11.5px; color: var(--muted); line-height: 1.4; }
+.rec-card a {
+  display: inline-flex; align-items: center; gap: 4px;
+  margin-top: 10px; font-size: 12px; font-weight: 600; color: var(--accent);
+}
+.rec-card a:hover { color: #8ba4ff; }
+
+.badge-card {
+  width: 130px; min-width: 130px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 10px;
+  text-align: center;
+}
+.badge-card .medal {
+  width: 36px; height: 36px; margin: 0 auto 8px;
+  border-radius: 10px; background: rgba(167,139,250,.1); color: var(--violet);
+  display: grid; place-items: center;
+}
+.badge-card strong { display: block; font-size: 12px; font-weight: 650; }
+.badge-card p { font-size: 10.5px; color: var(--dim); margin-top: 3px; line-height: 1.35; }
+
+.empty-state {
+  min-height: 130px; display: grid; place-items: center;
+  text-align: center; padding: 20px; color: var(--dim);
+}
+.empty-state strong { display: block; font-size: 13.5px; color: #9aabc4; margin-bottom: 4px; }
+.empty-state span { font-size: 12px; }
+
+.actions {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+}
+.action-card {
+  display: flex; align-items: center; gap: 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  transition: 0.18s;
+}
+.action-card:hover {
+  border-color: var(--border2);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+.action-icon {
+  width: 42px; height: 42px; border-radius: 12px;
+  display: grid; place-items: center; flex-shrink: 0;
+}
+.action-icon.blue { background: rgba(107,140,255,.1); color: #8ba4ff; }
+.action-icon.green { background: rgba(45,212,168,.1); color: var(--teal); }
+.action-icon.violet { background: rgba(167,139,250,.1); color: var(--violet); }
+.action-card strong { display: block; font-size: 14px; font-weight: 650; }
+.action-card span { display: block; font-size: 12px; color: var(--dim); margin-top: 2px; }
+.action-card .arrow { margin-left: auto; color: #6b8cff; }
+
+.overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,.6); backdrop-filter: blur(5px);
+  display: none; align-items: center; justify-content: center;
+  padding: 20px;
+}
+.overlay.open { display: flex; }
+.modal {
+  width: min(480px, 100%); max-height: 90vh; overflow-y: auto;
+  background: #0c1422;
+  border: 1px solid var(--border2);
+  border-radius: 18px;
+  box-shadow: 0 30px 80px rgba(0,0,0,.5);
+  padding: 24px;
+}
+.modal-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 20px;
+}
+.modal-header h2 { font-size: 17px; font-weight: 700; }
+.modal-header p { font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.close-btn {
+  width: 32px; height: 32px; border-radius: 8px;
+  border: 1px solid var(--border); color: #7a8ba6;
+  display: grid; place-items: center;
+}
+.close-btn:hover { border-color: var(--border2); color: #c5d0e8; }
+
+.field { margin-bottom: 14px; }
+.field label {
+  display: block; font-size: 12px; font-weight: 600;
+  color: #8b9cb8; margin-bottom: 5px;
+}
+.field input, .field textarea {
+  width: 100%; padding: 10px 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 10px; color: var(--text); font-size: 13px;
+  outline: none; transition: 0.15s;
+}
+.field textarea { min-height: 90px; resize: vertical; }
+.field input:focus, .field textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(107,140,255,.12);
+}
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.modal-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
+.btn {
+  padding: 9px 16px; border-radius: 9px;
+  font-size: 13px; font-weight: 600;
+  border: 1px solid var(--border); color: #8b9cb8;
+  background: var(--surface); display: inline-flex; align-items: center; gap: 6px;
+}
+.btn.primary {
+  background: linear-gradient(135deg, #5b7cfa, #7c5cf0);
+  border-color: transparent; color: #fff;
+  box-shadow: 0 6px 18px rgba(91,124,250,.2);
+}
+.btn.primary:hover { filter: brightness(1.08); }
+.hint {
+  font-size: 12px; color: var(--dim); line-height: 1.45;
+  padding: 10px 12px; background: var(--surface);
+  border: 1px solid var(--border); border-radius: 10px;
+  margin-bottom: 14px;
+}
+
+.notice-stack {
+  position: fixed; top: 20px; right: 20px; z-index: 300;
+  width: min(360px, calc(100vw - 24px));
+  display: grid; gap: 8px; pointer-events: none;
+}
+.notice {
+  pointer-events: auto;
+  display: grid; grid-template-columns: 32px 1fr auto;
+  gap: 10px; padding: 12px;
+  background: rgba(10,16,28,.97);
+  border: 1px solid var(--border2);
+  border-radius: 13px;
+  box-shadow: 0 16px 40px rgba(0,0,0,.4);
+  animation: slideIn 0.25s ease;
+}
+.notice .n-icon {
+  width: 32px; height: 32px; border-radius: 9px;
+  background: rgba(107,140,255,.1); color: #8ba4ff;
+  display: grid; place-items: center;
+}
+.notice h4 { font-size: 12.5px; font-weight: 600; }
+.notice p { font-size: 11.5px; color: var(--muted); margin-top: 2px; }
+.notice .n-close { color: #6a7c98; }
+.notice .n-action { grid-column: 2 / 4; margin-top: 4px; }
+.notice .n-action button {
+  font-size: 11px; font-weight: 600; color: var(--accent);
+  padding: 4px 8px; border-radius: 6px;
+  border: 1px solid var(--border); background: var(--surface);
+}
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.toast {
+  position: fixed; bottom: 24px; left: 50%; z-index: 400;
+  transform: translateX(-50%) translateY(16px);
+  opacity: 0; pointer-events: none;
+  padding: 11px 18px; border-radius: 10px;
+  background: rgba(10,16,28,.97);
+  border: 1px solid var(--border2);
+  font-size: 13px; font-weight: 550;
+  box-shadow: 0 12px 32px rgba(0,0,0,.4);
+  transition: 0.22s;
+}
+.toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.toast.success { border-color: rgba(45,212,168,.3); color: #5be0bd; }
+.toast.error { border-color: rgba(240,113,120,.3); color: #f18d96; }
+
+.dashboard-footer {
+  margin-top: 30px;
+  padding: 18px 2px 4px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  color: var(--dim);
+  font-size: 10.5px;
+}
+
+.dashboard-footer .footer-brand {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #7183a0;
+  font-weight: 600;
+}
+
+.dashboard-footer .footer-mark {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(135deg, #6b8cff, #8b5cf6);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 800;
+  box-shadow: 0 5px 14px rgba(107,140,255,.16);
+}
+
+.dashboard-footer .footer-links {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.dashboard-footer .footer-links a {
+  color: #5f718d;
+  transition: color .15s ease;
+}
+
+.dashboard-footer .footer-links a:hover {
+  color: #9eb1d0;
+}
+
+.dashboard-footer .footer-copy {
+  color: #43536d;
+}
+
+@media (max-width: 800px) {
+  .dashboard-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding-bottom: 8px;
+  }
+
+  .dashboard-footer .footer-links {
+    flex-wrap: wrap;
+    gap: 10px 14px;
+  }
+}
+
+.mobile-toggle { display: none; }
+@media (max-width: 1100px) {
+  .stats { grid-template-columns: repeat(3, 1fr); }
+  .hero { grid-template-columns: 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+}
+@media (max-width: 800px) {
+  :root { --sidebar-w: 0px; }
+  .sidebar { transform: translateX(-100%); width: 260px; }
+  .sidebar.open { transform: none; }
+  .main { margin-left: 0; }
+  .mobile-toggle {
+    display: grid; place-items: center;
+    position: fixed; top: 12px; left: 12px; z-index: 110;
+    width: 38px; height: 38px; border-radius: 10px;
+    background: var(--surface); border: 1px solid var(--border); color: #8b9cb8;
+  }
+  .wrap { padding: 60px 16px 32px; }
+  .header h1 { font-size: 22px; }
+  .stats { grid-template-columns: repeat(2, 1fr); }
+  .actions { grid-template-columns: 1fr; }
+  .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .stats { grid-template-columns: 1fr 1fr; gap: 8px; }
+  .stat strong { font-size: 20px; }
+}
+
+        .techoriam-version {
+            color: var(--text-dim, #5c6478);
+            font-size: .68rem;
+            letter-spacing: .04em;
+            white-space: nowrap;
+            opacity: .85;
+        }
+
+</style>
+</head>
+<body>
+
+<svg style="display:none">
+  <symbol id="home" viewBox="0 0 24 24"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/></symbol>
+  <symbol id="book" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z"/></symbol>
+  <symbol id="code" viewBox="0 0 24 24"><path d="m8 9-4 3 4 3M16 9l4 3-4 3M14 5l-4 14"/></symbol>
+  <symbol id="term" viewBox="0 0 24 24"><path d="m5 7 5 5-5 5M13 17h6"/></symbol>
+  <symbol id="bell" viewBox="0 0 24 24"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9M10 21h4"/></symbol>
+  <symbol id="award" viewBox="0 0 24 24"><circle cx="12" cy="8" r="5"/><path d="m8 12-1 9 5-3 5 3-1-9"/></symbol>
+  <symbol id="flame" viewBox="0 0 24 24"><path d="M12 22c4.4 0 7-2.8 7-6.8 0-3.3-2.1-5.3-4.3-7.7.1 2.2-1 3.7-2.4 4.5.2-3.8-1.3-6.6-4.2-9-1 4.4-4.1 6.7-4.1 11.4C4 18.8 7 22 12 22Z"/></symbol>
+  <symbol id="star" viewBox="0 0 24 24"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-3-5.6 3 1.1-6.2L3 9.6l6.2-.9L12 3Z"/></symbol>
+  <symbol id="user" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 21a7 7 0 0 1 14 0"/></symbol>
+  <symbol id="lock" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v3"/></symbol>
+  <symbol id="logout" viewBox="0 0 24 24"><path d="M10 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5M16 17l5-5-5-5M21 12H9"/></symbol>
+  <symbol id="arrow" viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></symbol>
+  <symbol id="x" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+  <symbol id="check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+  <symbol id="github" viewBox="0 0 24 24"><path d="M9 19c-4 1.3-4-2-5.5-2.5M14.5 21v-3.3c0-1 .1-1.4-.5-2.2 3.4-.4 7-1.7 7-7.4 0-1.5-.5-2.8-1.3-3.8.1-.4.6-1.9-.1-3.8 0 0-1.1-.4-3.8 1.4a13.2 13.2 0 0 0-6.8 0C6.3 4.1 5.2 4.5 5.2 4.5c-.7 1.9-.2 3.4-.1 3.8C4.3 9.3 3.8 10.6 3.8 12c0 5.7 3.6 7 7 7.4-.6.5-.6 1.2-.6 2.3V21"/></symbol>
+  <symbol id="linkedin" viewBox="0 0 24 24"><path d="M6 9v12M6 5.5v.1M11 21V9m0 4c.5-2.2 1.9-4 4.5-4 2.9 0 4.5 1.8 4.5 5.4V21M3 3h18v18H3Z"/></symbol>
+</svg>
+
+<button class="mobile-toggle" onclick="toggleSidebar()" aria-label="Menu">
+  <svg class="ic"><use href="#home"></use></svg>
+</button>
+
+<aside class="sidebar" id="sidebar">
+  <a class="brand" href="dashboard.html">
+    <div class="brand-mark">T</div>
+    <span>Tech<em>oriam</em></span>
+  </a>
+
+  <div class="user-chip">
+    <div class="av" id="sideAvatar">U</div>
+    <div class="meta">
+      <strong id="sideName">Loading…</strong>
+      <span id="sideEmail">Loading account</span>
+    </div>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Workspace</div>
+    <nav class="nav">
+      <a class="active" href="dashboard.html"><svg class="ic"><use href="#home"></use></svg>Dashboard</a>
+      <a href="courses.html"><svg class="ic"><use href="#book"></use></svg>Courses</a>
+      <a href="problems.html"><svg class="ic"><use href="#code"></use></svg>Solve Problems</a>
+      <a href="ide.html"><svg class="ic"><use href="#term"></use></svg>IDE</a>
+    </nav>
+  </div>
+
+  <div class="nav-section">
+    <div class="nav-label">Account</div>
+    <nav class="nav">
+      <button type="button" onclick="openProfile()"><svg class="ic"><use href="#user"></use></svg>Update Profile</button>
+      <button type="button" id="changePasswordNav" onclick="openPasswordModal()"><svg class="ic"><use href="#lock"></use></svg>Change Password</button>
+      <button type="button" onclick="logout()"><svg class="ic"><use href="#logout"></use></svg>Sign out</button>
+    </nav>
+  </div>
+
+  <div class="activity-section">
+    <div class="nav-label">YOUR ACTIVITIES</div>
+    <button type="button" class="activity-trigger" onclick="openActivities()" aria-label="See your activities">
+      <svg class="ic activity-trigger-icon"><use href="#check"></use></svg>
+      <span>See your activities</span>
+      <svg class="ic activity-trigger-arrow"><use href="#arrow"></use></svg>
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="streak-box">
+      <div class="icon"><svg class="ic"><use href="#flame"></use></svg></div>
+      <div>
+        <strong id="sideStreak">0 day streak</strong>
+        <span>Keep the rhythm going</span>
+      </div>
+    </div>
+    <div class="copyright">Techoriam · 2026</div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="wrap">
+
+    <header class="header">
+      <div>
+        <div class="label">TECHORIAM / DASHBOARD</div>
+        <h1>Welcome, <span id="headerName">there</span>.</h1>
+        <p>Your learning, practice and progress — all in one place.</p>
+      </div>
+      <div class="header-actions">
+        <button class="icon-btn" onclick="showNotifications()" title="Notifications" aria-label="Notifications">
+          <svg class="ic"><use href="#bell"></use></svg>
+          <i class="dot" id="unreadDot" style="display:none"></i>
+        </button>
+      </div>
+    </header>
+
+    <section class="hero">
+      <article class="profile-card">
+        <div class="profile-top">
+          <div class="av-lg" id="profileAvatar">U</div>
+          <div class="profile-info">
+            <div class="label">YOUR PROFILE</div>
+            <h2 id="profileName">There</h2>
+            <p id="profileEmail">—</p>
+          </div>
+        </div>
+        <p class="bio empty" id="profileBio">No bio added yet.</p>
+        <div class="skills" id="skills"></div>
+        <div class="social-links" id="socialLinks"></div>
+        <div class="profile-foot">
+          <div class="xp-row">
+            <div>
+              <div class="xp-label">TOTAL XP</div>
+              <div class="xp-value"><span id="xp">0</span><span>XP</span></div>
+            </div>
+          </div>
+        </div>
+      </article>
+
+      <article class="progress-card">
+        <div class="progress-head">
+          <div>
+            <div class="label">LEARNING IN PROGRESS</div>
+            <h2>Your course progress</h2>
+            <p>Only active courses appear here.</p>
+          </div>
+          <div class="active-count">
+            <strong id="activeCourseCount">0</strong>
+            <span>active</span>
+          </div>
+        </div>
+        <div class="tabs">
+          <span class="tab active">Active courses</span>
+          <span class="tab" id="completedCourseTab">0 completed</span>
+        </div>
+        <div class="course-list" id="courseList">
+          <div class="empty-state">
+            <div>
+              <strong>Loading your learning path</strong>
+              <span>Fetching active courses…</span>
+            </div>
+          </div>
+        </div>
+        <div class="completed-row">
+          <span>Completed courses</span>
+          <strong id="completedCourseCount">0</strong>
+        </div>
+      </article>
+    </section>
+
+    <section class="stats">
+      <div class="stat">
+        <div class="stat-top">
+          <div class="stat-icon blue"><svg class="ic"><use href="#book"></use></svg></div>
+          <span class="kind">LEARNING</span>
+        </div>
+        <strong id="coursesCount">0</strong>
+        <h3>Courses enrolled</h3>
+        <p>Your learning path</p>
+      </div>
+      <div class="stat">
+        <div class="stat-top">
+          <div class="stat-icon green"><svg class="ic"><use href="#code"></use></svg></div>
+          <span class="kind">PRACTICE</span>
+        </div>
+        <strong id="problemsCount">0</strong>
+        <h3>Problems solved</h3>
+        <p>Coding practice done</p>
+      </div>
+      <div class="stat">
+        <div class="stat-top">
+          <div class="stat-icon amber"><svg class="ic"><use href="#flame"></use></svg></div>
+          <span class="kind">STREAK</span>
+        </div>
+        <strong id="streakCount">0</strong>
+        <h3>Day streak</h3>
+        <p>Current consistency</p>
+      </div>
+      <div class="stat">
+        <div class="stat-top">
+          <div class="stat-icon violet"><svg class="ic"><use href="#star"></use></svg></div>
+          <span class="kind">PROGRESS</span>
+        </div>
+        <strong id="xpCount">0</strong>
+        <h3>Total XP</h3>
+        <p>Experience points</p>
+      </div>
+      <div class="stat">
+        <div class="stat-top">
+          <div class="stat-icon violet"><svg class="ic"><use href="#award"></use></svg></div>
+          <span class="kind">BADGES</span>
+        </div>
+        <strong id="badgeCount">0</strong>
+        <h3>Badges earned</h3>
+        <p>Milestones unlocked</p>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="label">RECOMMENDED FOR YOU</div>
+            <h2>Explore next</h2>
+          </div>
+          <span class="count" id="recCount">0 suggestions</span>
+        </div>
+        <div class="panel-body scroll-x" id="recommendationsBox">
+          <div class="empty-state">
+            <div>
+              <strong>Loading recommendations</strong>
+              <span>Personalising your path…</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <div class="panel-head">
+          <div>
+            <div class="label">BADGE COLLECTION</div>
+            <h2>Your achievements</h2>
+          </div>
+          <span class="count" id="badgeCountLabel">0 earned</span>
+        </div>
+        <div class="panel-body scroll-x" id="badgesBox">
+          <div class="empty-state">
+            <div>
+              <strong>Loading badges</strong>
+              <span>Checking achievements…</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="actions">
+      <a class="action-card" href="courses.html">
+        <div class="action-icon blue"><svg class="ic"><use href="#book"></use></svg></div>
+        <div>
+          <strong>Browse Courses</strong>
+          <span>Explore & continue learning</span>
+        </div>
+        <svg class="ic arrow"><use href="#arrow"></use></svg>
+      </a>
+      <a class="action-card" href="problems.html">
+        <div class="action-icon green"><svg class="ic"><use href="#code"></use></svg></div>
+        <div>
+          <strong>Solve Problems</strong>
+          <span>Practice coding skills</span>
+        </div>
+        <svg class="ic arrow"><use href="#arrow"></use></svg>
+      </a>
+      <a class="action-card" href="ide.html">
+        <div class="action-icon violet"><svg class="ic"><use href="#term"></use></svg></div>
+        <div>
+          <strong>Open IDE</strong>
+          <span>Write & test code</span>
+        </div>
+        <svg class="ic arrow"><use href="#arrow"></use></svg>
+      </a>
+    </section>
+
+    
+    <footer class="dashboard-footer">
+      <a href="index.html" class="footer-brand">
+        <span class="footer-mark">T</span>
+        <span>Tech<span style="color:#7aa2ff">oriam</span></span>
+      </a>
+      <nav class="footer-links" aria-label="Footer navigation">
+        <a href="courses.html">Courses</a>
+        <a href="problems.html">Solve Problems</a>
+        <a href="ide.html">IDE</a>
+        <a href="dashboard.html">Dashboard</a>
+      </nav>
+      <div class="footer-copy">© 2026 Techoriam <span class="techoriam-version">v1.0</span></div>
+    </footer>
+
+  </div>
+</main>
+
+<div class="notice-stack" id="noticeStack"></div>
+
+<div class="activity-drawer-overlay" id="activityDrawer" onclick="if(event.target===this)closeActivities()">
+  <aside class="activity-drawer" role="dialog" aria-modal="true" aria-labelledby="activityDrawerTitle">
+    <div class="activity-drawer-head">
+      <div>
+        <div class="label">YOUR ACTIVITIES</div>
+        <h2 id="activityDrawerTitle">Your activity</h2>
+        <p>Everything you have done on Techoriam.</p>
+      </div>
+      <button type="button" class="close-btn" onclick="closeActivities()" aria-label="Close activities">
+        <svg class="ic"><use href="#x"></use></svg>
+      </button>
+    </div>
+    <div class="activity-drawer-body" id="activityDrawerList">
+      <div class="activity-drawer-empty">No recent activity</div>
+    </div>
+  </aside>
+</div>
+
+<div class="overlay" id="profileModal" onclick="if(event.target===this)closeProfile()">
+  <div class="modal" role="dialog" aria-labelledby="profileTitle">
+    <div class="modal-header">
+      <div>
+        <h2 id="profileTitle">Update Profile</h2>
+        <p>Keep your learner profile up to date</p>
+      </div>
+      <button type="button" class="close-btn" onclick="closeProfile()" aria-label="Close">
+        <svg class="ic"><use href="#x"></use></svg>
+      </button>
+    </div>
+
+    <div class="field">
+      <label for="editName">Full name</label>
+      <input id="editName" type="text" maxlength="100" autocomplete="name" placeholder="Your full name">
+    </div>
+    <div class="field">
+      <label for="editBio">Bio</label>
+      <textarea id="editBio" maxlength="280" placeholder="Tell us about yourself…"></textarea>
+    </div>
+    <div class="field">
+      <label for="editSkills">Skills (comma separated)</label>
+      <input id="editSkills" placeholder="C#, ASP.NET Core, PostgreSQL…">
+    </div>
+    <div class="form-row">
+      <div class="field">
+        <label for="editGithub">GitHub URL</label>
+        <input id="editGithub" type="url" placeholder="https://github.com/username">
+      </div>
+      <div class="field">
+        <label for="editLinkedin">LinkedIn URL</label>
+        <input id="editLinkedin" type="url" placeholder="https://linkedin.com/in/username">
+      </div>
+    </div>
+
+    <div style="margin-top:8px;padding-top:14px;border-top:1px solid var(--border);font-size:12px;color:var(--dim)">
+      Email · <strong id="accountEmail" style="color:#c0cce0">—</strong><br>
+      Sign-in method · <strong id="accountProvider" style="color:#c0cce0">Email</strong>
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn primary" onclick="saveProfile()">
+        <svg class="ic"><use href="#check"></use></svg> Save Profile
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="passwordModal" onclick="if(event.target===this)closePasswordModal()">
+  <div class="modal" role="dialog" aria-labelledby="passwordTitle">
+    <div class="modal-header">
+      <div>
+        <h2 id="passwordTitle">Change Password</h2>
+        <p>Update your account password securely</p>
+      </div>
+      <button type="button" class="close-btn" onclick="closePasswordModal()" aria-label="Close">
+        <svg class="ic"><use href="#x"></use></svg>
+      </button>
+    </div>
+
+    <div class="hint">
+      After a successful password change, your current session will be cleared and you’ll need to sign in again with the new password.
+    </div>
+
+    <div class="field">
+      <label for="currentPassword">Current password</label>
+      <input id="currentPassword" type="password" autocomplete="current-password" placeholder="Current password">
+    </div>
+    <div class="field">
+      <label for="newPassword">New password</label>
+      <input id="newPassword" type="password" autocomplete="new-password" placeholder="New password">
+    </div>
+    <div class="field">
+      <label for="confirmPassword">Confirm new password</label>
+      <input id="confirmPassword" type="password" autocomplete="new-password" placeholder="Confirm new password">
+    </div>
+
+    <div class="modal-actions">
+      <button type="button" class="btn primary" onclick="changePassword()">Update Password</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+
+const API = 'https://desktop-ubs9kju.tail768c0b.ts.net/api';
+
+const LOGIN_URL = new URL(
+    'authentication.html?tab=login&redirect=dashboard.html',
+    window.location.href
+).href;
+
+let currentUser = null;
+let enrollments = [];
+let recommendations = [];
+let badges = [];
+let notifications = [];
+let activities = [];
+let refreshPromise = null;
+let toastTimer = null;
+
+function getToken() {
+    return (
+        localStorage.getItem('techoriam_token') ||
+        sessionStorage.getItem('techoriam_token') ||
+        ''
+    );
+}
+
+function clearAuthStorage() {
+
+    const keys = [
+        'techoriam_token',
+        'techoriam_user_id',
+        'techoriam_user_name',
+        'techoriam_user_email',
+        'techoriam_user_role',
+        'techoriam_remember'
+    ];
+
+    keys.forEach(key => {
+        localStorage.removeItem(key);
+        sessionStorage.removeItem(key);
+    });
+}
+
+function saveAuth(data) {
+
+    if (!data) return false;
+
+    const token =
+        data.token ||
+        data.accessToken ||
+        data.jwt ||
+        '';
+
+    if (!token) return false;
+
+    const storage =
+        data.rememberMe === false
+            ? sessionStorage
+            : localStorage;
+
+    storage.setItem('techoriam_token', token);
+
+    const user = data.user || {};
+
+    const values = {
+        id: data.userId || data.id || user.id,
+        name: data.name || user.name,
+        email: data.email || user.email,
+        role: data.role || user.role
+    };
+
+    if (values.id) {
+        storage.setItem(
+            'techoriam_user_id',
+            values.id
+        );
+    }
+
+    if (values.name) {
+        storage.setItem(
+            'techoriam_user_name',
+            values.name
+        );
+    }
+
+    if (values.email) {
+        storage.setItem(
+            'techoriam_user_email',
+            values.email
+        );
+    }
+
+    if (values.role) {
+        storage.setItem(
+            'techoriam_user_role',
+            values.role
+        );
+    }
+
+    storage.setItem(
+        'techoriam_remember',
+        data.rememberMe === false
+            ? 'false'
+            : 'true'
+    );
+
+    return true;
+}
+
+async function readJson(response) {
+
+    try {
+        return await response.json();
+    } catch {
+        return null;
+    }
+}
+
+async function refreshAccessToken() {
+
+    if (refreshPromise) {
+        return refreshPromise;
+    }
+
+    refreshPromise = (async () => {
+
+        try {
+
+            const response = await fetch(
+                `${API}/auth/refresh`,
+                {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: '{}'
+                }
+            );
+
+            if (!response.ok) {
+                return false;
+            }
+
+            const data = await readJson(response);
+
+            return saveAuth(data);
+
+        } catch (error) {
+
+            console.error(
+                'Token refresh failed:',
+                error
+            );
+
+            return false;
+
+        } finally {
+
+            refreshPromise = null;
+        }
+
+    })();
+
+    return refreshPromise;
+}
+
+async function apiFetch(
+    path,
+    options = {},
+    allowRefresh = true
+) {
+
+    let token = getToken();
+
+    if (!token && allowRefresh) {
+
+        const refreshed =
+            await refreshAccessToken();
+
+        if (refreshed) {
+            token = getToken();
+        }
+    }
+
+    if (!token) {
+
+        clearAuthStorage();
+
+        location.replace(LOGIN_URL);
+
+        throw new Error(
+            'Authentication required.'
+        );
+    }
+
+    const headers =
+        new Headers(options.headers || {});
+
+    headers.set(
+        'Accept',
+        'application/json'
+    );
+
+    if (
+        options.body &&
+        !headers.has('Content-Type')
+    ) {
+        headers.set(
+            'Content-Type',
+            'application/json'
+        );
+    }
+
+    headers.set(
+        'Authorization',
+        `Bearer ${token}`
+    );
+
+    const response = await fetch(
+        `${API}${path}`,
+        {
+            ...options,
+            headers,
+            credentials: 'include'
+        }
+    );
+
+    if (
+        (response.status === 401 ||
+         response.status === 403) &&
+        allowRefresh
+    ) {
+
+        const refreshed =
+            await refreshAccessToken();
+
+        if (refreshed) {
+
+            return apiFetch(
+                path,
+                options,
+                false
+            );
+        }
+    }
+
+    return response;
+}
+
+function esc(value) {
+
+    return String(value ?? '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+}
+
+function validUrl(value) {
+
+    try {
+
+        const url = new URL(value);
+
+        return (
+            url.protocol === 'http:' ||
+            url.protocol === 'https:'
+        );
+
+    } catch {
+
+        return false;
+    }
+}
+
+function pick(...values) {
+
+    return values.find(
+        value =>
+            value !== undefined &&
+            value !== null
+    );
+}
+
+function userName() {
+
+    return (
+        currentUser?.name ||
+        localStorage.getItem(
+            'techoriam_user_name'
+        ) ||
+        sessionStorage.getItem(
+            'techoriam_user_name'
+        ) ||
+        'User'
+    );
+}
+
+function userEmail() {
+
+    return (
+        currentUser?.email ||
+        localStorage.getItem(
+            'techoriam_user_email'
+        ) ||
+        sessionStorage.getItem(
+            'techoriam_user_email'
+        ) ||
+        '—'
+    );
+}
+
+function updateIdentity() {
+
+    const name = userName();
+    const email = userEmail();
+
+    const letter =
+        name
+            .trim()
+            .charAt(0)
+            .toUpperCase() || 'U';
+
+    [
+        'sideAvatar',
+        'profileAvatar'
+    ].forEach(id => {
+
+        const element =
+            document.getElementById(id);
+
+        if (element) {
+            element.textContent = letter;
+        }
+    });
+
+    const sideName =
+        document.getElementById('sideName');
+
+    if (sideName) {
+        sideName.textContent = name;
+    }
+
+    [
+        'sideEmail',
+        'profileEmail'
+    ].forEach(id => {
+
+        const element =
+            document.getElementById(id);
+
+        if (element) {
+            element.textContent = email;
+        }
+    });
+
+    const headerName =
+        document.getElementById(
+            'headerName'
+        );
+
+    if (headerName) {
+        headerName.textContent = name;
+    }
+
+    const profileName =
+        document.getElementById(
+            'profileName'
+        );
+
+    if (profileName) {
+        profileName.textContent = name;
+    }
+
+    const accountEmail =
+        document.getElementById(
+            'accountEmail'
+        );
+
+    if (accountEmail) {
+        accountEmail.textContent = email;
+    }
+
+    const provider =
+        document.getElementById(
+            'accountProvider'
+        );
+
+    if (provider) {
+
+        provider.textContent =
+            currentUser?.authProvider ||
+            'Email';
+    }
+}
+
+async function checkUser() {
+
+    try {
+
+        const response =
+            await apiFetch('/auth/me');
+
+        const data =
+            await readJson(response);
+
+        if (!response.ok || !data) {
+
+            throw new Error(
+                data?.message ||
+                'Unable to verify your session.'
+            );
+        }
+
+        currentUser = data;
+
+        updateIdentity();
+
+        configurePasswordUI();
+
+        populateProfileForm();
+
+        return true;
+
+    } catch (error) {
+
+        console.error(
+            'Authentication check failed:',
+            error
+        );
+
+        clearAuthStorage();
+
+        location.replace(LOGIN_URL);
+
+        return false;
+    }
+}
+
+function configurePasswordUI() {
+
+    const hasPassword =
+        currentUser?.hasPassword === true;
+
+    const provider =
+        String(
+            currentUser?.authProvider ||
+            'Email'
+        ).toLowerCase();
+
+    const eligible =
+        hasPassword &&
+        provider === 'email';
+
+    const nav =
+        document.getElementById(
+            'changePasswordNav'
+        );
+
+    if (nav) {
+
+        nav.style.display =
+            eligible
+                ? 'flex'
+                : 'none';
+    }
+}
+
+function populateProfileForm() {
+    if (!currentUser) return;
+
+    const fields = {
+        editName: currentUser.name || currentUser.Name || '',
+        editBio: currentUser.bio || currentUser.Bio || '',
+        editSkills: currentUser.skills || currentUser.Skills || '',
+        editGithub: currentUser.githubUrl || currentUser.GithubUrl || '',
+        editLinkedin: currentUser.linkedinUrl || currentUser.LinkedinUrl || ''
+    };
+
+    Object.entries(fields).forEach(([id, value]) => {
+        const element = document.getElementById(id);
+        if (element) element.value = value;
+    });
+
+    const bio = document.getElementById('profileBio');
+    if (bio) {
+        const value = currentUser.bio || currentUser.Bio || '';
+        bio.textContent = value || 'No bio added yet.';
+        bio.classList.toggle('empty', !value);
+    }
+
+    renderSkills(currentUser.skills || currentUser.Skills || '');
+    renderSocialLinks(
+        currentUser.githubUrl || currentUser.GithubUrl || '',
+        currentUser.linkedinUrl || currentUser.LinkedinUrl || ''
+    );
+}
+
+function renderSkills(value) {
+
+    const box =
+        document.getElementById(
+            'skills'
+        );
+
+    if (!box) return;
+
+    const list =
+        String(value || '')
+            .split(',')
+            .map(skill => skill.trim())
+            .filter(Boolean)
+            .slice(0, 12);
+
+    box.innerHTML =
+        list
+            .map(skill =>
+                `<span class="skill-tag">${esc(skill)}</span>`
+            )
+            .join('');
+}
+
+function renderSocialLinks(githubUrl, linkedinUrl) {
+    const box = document.getElementById('socialLinks');
+    if (!box) return;
+
+    const links = [];
+
+    if (validUrl(githubUrl)) {
+        links.push(
+            `<a class="social-link" href="${esc(githubUrl)}" target="_blank" rel="noopener noreferrer" aria-label="GitHub profile"><svg class="ic"><use href="#github"></use></svg>GitHub</a>`
+        );
+    }
+
+    if (validUrl(linkedinUrl)) {
+        links.push(
+            `<a class="social-link" href="${esc(linkedinUrl)}" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn profile"><svg class="ic"><use href="#linkedin"></use></svg>LinkedIn</a>`
+        );
+    }
+
+    box.innerHTML = links.join('');
+    box.style.display = links.length ? 'flex' : 'none';
+}
+
+async function saveProfile() {
+    const payload = {
+        name: document.getElementById('editName')?.value.trim() || '',
+        bio: document.getElementById('editBio')?.value.trim() || '',
+        skills: document.getElementById('editSkills')?.value.trim() || '',
+        githubUrl: document.getElementById('editGithub')?.value.trim() || '',
+        linkedinUrl: document.getElementById('editLinkedin')?.value.trim() || ''
+    };
+
+    if (!payload.name) {
+        toast('Name is required.', 'error');
+        document.getElementById('editName')?.focus();
+        return;
+    }
+
+    if (payload.name.length > 100) {
+        toast('Name cannot exceed 100 characters.', 'error');
+        return;
+    }
+
+    if (payload.githubUrl && !validUrl(payload.githubUrl)) {
+        toast('Enter a valid GitHub URL.', 'error');
+        return;
+    }
+
+    if (payload.linkedinUrl && !validUrl(payload.linkedinUrl)) {
+        toast('Enter a valid LinkedIn URL.', 'error');
+        return;
+    }
+
+    try {
+        const response = await apiFetch('/dashboard/profile', {
+            method: 'PUT',
+            body: JSON.stringify(payload)
+        });
+
+        const data = await readJson(response);
+
+        if (!response.ok) {
+            throw new Error(data?.message || data?.title || 'Unable to update profile.');
+        }
+
+        currentUser = {
+            ...currentUser,
+            ...payload
+        };
+
+        updateIdentity();
+        populateProfileForm();
+        closeProfile();
+        toast(data?.message || 'Profile updated successfully.', 'success');
+    } catch (error) {
+        console.error('Profile update failed:', error);
+        toast(error.message || 'Unable to update profile.', 'error');
+    }
+}
+
+function openProfile() {
+
+    document
+        .getElementById('profileModal')
+        ?.classList
+        .add('open');
+}
+
+function closeProfile() {
+
+    document
+        .getElementById('profileModal')
+        ?.classList
+        .remove('open');
+}
+
+function openPasswordModal() {
+
+    document
+        .getElementById('passwordModal')
+        ?.classList
+        .add('open');
+
+    setTimeout(() => {
+
+        document
+            .getElementById(
+                'currentPassword'
+            )
+            ?.focus();
+
+    }, 80);
+}
+
+function closePasswordModal() {
+
+    document
+        .getElementById('passwordModal')
+        ?.classList
+        .remove('open');
+}
+
+function toggleSidebar() {
+
+    document
+        .getElementById('sidebar')
+        ?.classList
+        .toggle('open');
+}
+
+async function loadDashboard() {
+
+    try {
+
+        const response =
+            await apiFetch(
+                '/dashboard'
+            );
+
+        const data =
+            await readJson(response);
+
+        if (!response.ok) {
+
+            throw new Error(
+                data?.message ||
+                'Unable to load dashboard.'
+            );
+        }
+
+        const courses =
+            pick(
+                data?.coursesEnrolled,
+                data?.CoursesEnrolled,
+                0
+            );
+
+        const problems =
+            pick(
+                data?.problemsSolved,
+                data?.ProblemsSolved,
+                0
+            );
+
+        const streak =
+            pick(
+                data?.dayStreak,
+                data?.DayStreak,
+                0
+            );
+
+        const xp =
+            pick(
+                data?.totalXp,
+                data?.TotalXp,
+                0
+            );
+
+        const badgeCount =
+            pick(
+                data?.totalBadges,
+                data?.TotalBadges,
+                0
+            );
+
+        document
+            .getElementById(
+                'coursesCount'
+            )
+            .textContent = courses;
+
+        document
+            .getElementById(
+                'problemsCount'
+            )
+            .textContent = problems;
+
+        document
+            .getElementById(
+                'streakCount'
+            )
+            .textContent = streak;
+
+        document
+            .getElementById(
+                'sideStreak'
+            )
+            .textContent =
+                `${streak} day streak`;
+
+        document
+            .getElementById(
+                'xpCount'
+            )
+            .textContent = xp;
+
+        document
+            .getElementById(
+                'xp'
+            )
+            .textContent = xp;
+
+        document
+            .getElementById(
+                'badgeCount'
+            )
+            .textContent = badgeCount;
+
+    } catch (error) {
+
+        console.error(
+            'Dashboard load failed:',
+            error
+        );
+    }
+}
+
+async function loadEnrollments() {
+
+    try {
+
+        const response =
+            await apiFetch(
+                '/dashboard/enrollments'
+            );
+
+        const data =
+            await readJson(response);
+
+        if (!response.ok) {
+
+            throw new Error(
+                data?.message ||
+                'Unable to load enrollments.'
+            );
+        }
+
+        enrollments =
+            Array.isArray(data)
+                ? data
+                : [];
+
+        renderCourseProgress();
+
+    } catch (error) {
+
+        console.error(
+            'Enrollment load failed:',
+            error
+        );
+
+        enrollments = [];
+
+        renderCourseProgress();
+    }
+}
+
+function renderCourseProgress() {
+
+    const box =
+        document.getElementById(
+            'courseList'
+        );
+
+    if (!box) return;
+
+    const active =
+        enrollments.filter(course => {
+
+            const completed =
+                course.isCompleted === true ||
+                course.IsCompleted === true;
+
+            const progress =
+                Number(
+                    course.progressPercent ??
+                    course.ProgressPercent ??
+                    0
+                );
+
+            return !completed &&
+                   progress < 100;
+        });
+
+    const completed =
+        enrollments.length -
+        active.length;
+
+    document
+        .getElementById(
+            'activeCourseCount'
+        )
+        .textContent = active.length;
+
+    document
+        .getElementById(
+            'completedCourseCount'
+        )
+        .textContent = completed;
+
+    document
+        .getElementById(
+            'completedCourseTab'
+        )
+        .textContent =
+            `${completed} completed`;
+
+    document
+        .getElementById(
+            'coursesCount'
+        )
+        .textContent =
+            enrollments.length;
+
+    if (!active.length) {
+
+        box.innerHTML = `
+            <div class="empty-state">
+                <div>
+                    <strong>No active courses right now</strong>
+                    <span>
+                        Browse the catalog and start your next learning path.
+                    </span>
+                    <a
+                        href="courses.html"
+                        style="
+                            display:inline-block;
+                            margin-top:10px;
+                            color:#6b8cff;
+                            font-weight:600
+                        "
+                    >
+                        Browse courses →
+                    </a>
+                </div>
+            </div>
+        `;
+
+        return;
+    }
+
+    box.innerHTML =
+        active
+            .map(course => {
+
+                const progress =
+                    Math.max(
+                        0,
+                        Math.min(
+                            100,
+                            Number(
+                                course.progressPercent ??
+                                course.ProgressPercent ??
+                                0
+                            ) || 0
+                        )
+                    );
+
+                const title =
+                    course.courseTitle ||
+                    course.CourseTitle ||
+                    course.courseName ||
+                    course.CourseName ||
+                    'Course';
+
+                const id =
+                    course.courseId ||
+                    course.CourseId ||
+                    '';
+
+                return `
+                    <div class="course-item">
+
+                        <div class="course-item-top">
+
+                            <h4>
+                                ${esc(title)}
+                            </h4>
+
+                            <span>
+                                ${progress}% complete
+                            </span>
+
+                        </div>
+
+                        <div class="bar">
+
+                            <div
+                                class="bar-fill"
+                                style="width:${progress}%"
+                            ></div>
+
+                        </div>
+
+                        <div class="course-item-foot">
+
+                            <span>
+                                Active course
+                            </span>
+
+                            <a
+                                href="courses.html${
+                                    id
+                                        ? `?courseId=${encodeURIComponent(id)}`
+                                        : ''
+                                }"
+                            >
+                                Continue learning →
+                            </a>
+
+                        </div>
+
+                    </div>
+                `;
+
+            })
+            .join('');
+}
+
+async function loadRecommendations() {
+
+    try {
+
+        const response =
+            await apiFetch(
+                '/dashboard/recommendations'
+            );
+
+        const data =
+            await readJson(response);
+
+        if (!response.ok) {
+
+            throw new Error(
+                data?.message ||
+                'Unable to load recommendations.'
+            );
+        }
+
+        recommendations =
+            Array.isArray(data)
+                ? data
+                : [];
+
+        renderRecommendations();
+
+    } catch (error) {
+
+        console.error(
+            'Recommendations load failed:',
+            error
+        );
+
+        recommendations = [];
+
+        renderRecommendations();
+    }
+}
+
+function recLink(item) {
+
+    const raw =
+        item.link ||
+        item.Link ||
+        '';
+
+    if (!raw) {
+        return 'courses.html';
+    }
+
+    if (
+        raw.startsWith(
+            'learn.html'
+        )
+    ) {
+
+        return (
+            'courses.html' +
+            (
+                raw.includes('?')
+                    ? raw.slice(
+                        raw.indexOf('?')
+                    )
+                    : ''
+            )
+        );
+    }
+
+    if (
+        raw.startsWith(
+            'coding.html'
+        )
+    ) {
+
+        return (
+            'problems.html' +
+            (
+                raw.includes('?')
+                    ? raw.slice(
+                        raw.indexOf('?')
+                    )
+                    : ''
+            )
+        );
+    }
+
+    return raw;
+}
+
+function renderRecommendations() {
+
+    const box =
+        document.getElementById(
+            'recommendationsBox'
+        );
+
+    const count =
+        document.getElementById(
+            'recCount'
+        );
+
+    if (!box || !count) return;
+
+    count.textContent =
+        `${recommendations.length} suggestion${
+            recommendations.length === 1
+                ? ''
+                : 's'
+        }`;
+
+    if (!recommendations.length) {
+
+        box.innerHTML = `
+            <div class="empty-state">
+                <div>
+                    <strong>No recommendations yet</strong>
+                    <span>
+                        Your next learning suggestions will appear here.
+                    </span>
+                </div>
+            </div>
+        `;
+
+        return;
+    }
+
+    box.innerHTML = `
+        <div class="rec-row">
+
+            ${recommendations
+                .map(item => {
+
+                    const type =
+                        item.type ||
+                        item.Type ||
+                        'RECOMMENDED';
+
+                    const title =
+                        item.title ||
+                        item.Title ||
+                        'Recommended for you';
+
+                    const reason =
+                        item.reason ||
+                        item.Reason ||
+                        'A learning step selected for your path.';
+
+                    return `
+                        <div class="rec-card">
+
+                            <div class="type">
+                                ${esc(type)}
+                            </div>
+
+                            <h3>
+                                ${esc(title)}
+                            </h3>
+
+                            <p>
+                                ${esc(reason)}
+                            </p>
+
+                            <a
+                                href="${esc(
+                                    recLink(item)
+                                )}"
+                            >
+                                Explore
+                                <svg class="ic">
+                                    <use href="#arrow"></use>
+                                </svg>
+                            </a>
+
+                        </div>
+                    `;
+
+                })
+                .join('')}
+
+        </div>
+    `;
+}
+
+async function loadBadges() {
+
+    try {
+
+        const response =
+            await apiFetch(
+                '/dashboard/badges'
+            );
+
+        const data =
+            await readJson(response);
+
+        if (!response.ok) {
+
+            throw new Error(
+                data?.message ||
+                'Unable to load badges.'
+            );
+        }
+
+        badges =
+            Array.isArray(data)
+                ? data
+                : [];
+
+        renderBadges();
+
+    } catch (error) {
+
+        console.error(
+            'Badges load failed:',
+            error
+        );
+
+        badges = [];
+
+        renderBadges();
+    }
+}
+
+function renderBadges() {
+
+    const box =
+        document.getElementById(
+            'badgesBox'
+        );
+
+    const label =
+        document.getElementById(
+            'badgeCountLabel'
+        );
+
+    if (!box || !label) return;
+
+    label.textContent =
+        `${badges.length} earned`;
+
+    if (!badges.length) {
+
+        box.innerHTML = `
+            <div class="empty-state">
+                <div>
+                    <strong>No badges earned yet</strong>
+                    <span>
+                        Keep learning to unlock your first achievement.
+                    </span>
+                </div>
+            </div>
+        `;
+
+        return;
+    }
+
+    box.innerHTML = `
+        <div class="badge-row">
+
+            ${badges
+                .map(badge => {
+
+                    const icon =
+                        badge.badgeIcon ||
+                        badge.BadgeIcon;
+
+                    const name =
+                        badge.badgeName ||
+                        badge.BadgeName ||
+                        'Badge';
+
+                    const description =
+                        badge.description ||
+                        badge.Description ||
+                        'Achievement earned';
+
+                    return `
+                        <div class="badge-card">
+
+                            <div class="medal">
+
+                                ${
+                                    icon
+                                        ? esc(icon)
+                                        : `
+                                            <svg class="ic">
+                                                <use href="#award"></use>
+                                            </svg>
+                                        `
+                                }
+
+                            </div>
+
+                            <strong>
+                                ${esc(name)}
+                            </strong>
+
+                            <p>
+                                ${esc(description)}
+                            </p>
+
+                        </div>
+                    `;
+
+                })
+                .join('')}
+
+        </div>
+    `;
+}
+
+async function loadActivities() {
+    try {
+        const response = await apiFetch('/dashboard/activities');
+        const data = await readJson(response);
+
+        if (!response.ok) {
+            throw new Error(data?.message || 'Unable to load activities.');
+        }
+
+        activities = Array.isArray(data) ? data : [];
+        renderActivities();
+    } catch (error) {
+        console.error('Activities load failed:', error);
+        activities = [];
+        renderActivities();
+    }
+}
+
+function renderActivities() {
+    const box = document.getElementById('activityDrawerList');
+    if (!box) return;
+
+    if (!activities.length) {
+        box.innerHTML = `
+            <div class="activity-drawer-empty">
+                No recent activity
+            </div>
+        `;
+        return;
+    }
+
+    box.innerHTML = activities.map(item => {
+        const title = item?.title || item?.Title || 'Activity';
+        const message = item?.message || item?.Message || '';
+        const xp = Number(item?.xpEarned ?? item?.XpEarned ?? 0);
+        const createdAt = item?.createdAt || item?.CreatedAt;
+
+        return `
+            <div class="activity-drawer-item">
+                <div class="activity-drawer-icon">
+                    <svg class="ic"><use href="#check"></use></svg>
+                </div>
+                <div class="activity-drawer-content">
+                    <strong>${esc(title)}</strong>
+                    <p>${esc(message)}</p>
+                    <div class="activity-drawer-meta">
+                        ${xp > 0 ? `<span class="activity-drawer-xp">+${xp} XP</span>` : ''}
+                        <span class="activity-drawer-time">${esc(timeAgo(createdAt))}</span>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function openActivities() {
+    const drawer = document.getElementById('activityDrawer');
+    if (!drawer) return;
+
+    renderActivities();
+    drawer.classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeActivities() {
+    const drawer = document.getElementById('activityDrawer');
+    if (!drawer) return;
+
+    drawer.classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+function timeAgo(value) {
+
+    if (!value) {
+        return '';
+    }
+
+    const date =
+        new Date(value);
+
+    if (
+        Number.isNaN(
+            date.getTime()
+        )
+    ) {
+        return '';
+    }
+
+    const seconds =
+        Math.max(
+            0,
+            Math.floor(
+                (
+                    Date.now() -
+                    date.getTime()
+                ) / 1000
+            )
+        );
+
+    if (seconds < 60) {
+        return 'just now';
+    }
+
+    if (seconds < 3600) {
+        return `${Math.floor(seconds / 60)}m ago`;
+    }
+
+    if (seconds < 86400) {
+        return `${Math.floor(seconds / 3600)}h ago`;
+    }
+
+    if (seconds < 604800) {
+        return `${Math.floor(seconds / 86400)}d ago`;
+    }
+
+    return date.toLocaleDateString();
+}
+
+function notificationId(item) {
+
+    return (
+        item?.id ||
+        item?.Id ||
+        item?.notificationId ||
+        item?.NotificationId ||
+        ''
+    );
+}
+
+function isUnread(item) {
+
+    return !(
+        item?.isRead === true ||
+        item?.IsRead === true ||
+        item?.read === true ||
+        item?.Read === true
+    );
+}
+
+async function loadNotifications() {
+
+    try {
+
+        const response =
+            await apiFetch(
+                '/dashboard/notifications'
+            );
+
+        const data =
+            await readJson(response);
+
+        if (!response.ok) {
+
+            throw new Error(
+                data?.message ||
+                'Unable to load notifications.'
+            );
+        }
+
+        notifications =
+            Array.isArray(data)
+                ? data
+                : [];
+
+        renderNotifications();
+
+    } catch (error) {
+
+        console.error(
+            'Notifications load failed:',
+            error
+        );
+
+        notifications = [];
+
+        renderNotifications();
+    }
+}
+
+function renderNotifications() {
+
+    const unreadItems =
+        notifications.filter(
+            isUnread
+        );
+
+    const dot =
+        document.getElementById(
+            'unreadDot'
+        );
+
+    if (dot) {
+
+        dot.style.display =
+            unreadItems.length
+                ? 'block'
+                : 'none';
+    }
+
+    const box =
+        document.getElementById(
+            'noticeStack'
+        );
+
+    if (!box) return;
+
+    box.innerHTML =
+        unreadItems
+            .slice(0, 4)
+            .map(item => {
+
+                const id =
+                    notificationId(item);
+
+                const title =
+                    item.title ||
+                    item.Title ||
+                    item.type ||
+                    item.Type ||
+                    'Notification';
+
+                const message =
+                    item.message ||
+                    item.Message ||
+                    'You have a new update.';
+
+                return `
+                    <div
+                        class="notice"
+                        data-id="${esc(id)}"
+                    >
+
+                        <div class="n-icon">
+                            <svg class="ic">
+                                <use href="#bell"></use>
+                            </svg>
+                        </div>
+
+                        <div>
+
+                            <h4>
+                                ${esc(title)}
+                            </h4>
+
+                            <p>
+                                ${esc(message)}
+                            </p>
+
+                        </div>
+
+                        <button
+                            type="button"
+                            class="n-close"
+                            onclick="dismissNotification(this)"
+                            aria-label="Close"
+                        >
+                            <svg class="ic">
+                                <use href="#x"></use>
+                            </svg>
+                        </button>
+
+                        <div class="n-action">
+
+                            <button
+                                type="button"
+                                onclick="markNotification('${encodeURIComponent(
+                                    String(id)
+                                )}')"
+                            >
+                                Mark as read
+                            </button>
+
+                        </div>
+
+                    </div>
+                `;
+
+            })
+            .join('');
+}
+
+function dismissNotification(button) {
+
+    button
+        .closest('.notice')
+        ?.remove();
+}
+
+async function markNotification(encoded) {
+
+    const id =
+        decodeURIComponent(
+            encoded || ''
+        );
+
+    if (!id) return;
+
+    try {
+
+        const response =
+            await apiFetch(
+                `/dashboard/notifications/${encodeURIComponent(id)}/read`,
+                {
+                    method: 'PUT'
+                }
+            );
+
+        const data =
+            await readJson(response);
+
+        if (!response.ok) {
+
+            throw new Error(
+                data?.message ||
+                'Unable to mark notification as read.'
+            );
+        }
+
+        notifications =
+            notifications.filter(
+                item =>
+                    String(
+                        notificationId(item)
+                    ) !== String(id)
+            );
+
+        renderNotifications();
+
+        toast(
+            data?.message ||
+            'Notification marked as read.',
+            'success'
+        );
+
+    } catch (error) {
+
+        toast(
+            error.message ||
+            'Unable to update notification.',
+            'error'
+        );
+    }
+}
+
+function showNotifications() {
+
+    const unreadItems =
+        notifications.filter(
+            isUnread
+        );
+
+    if (!unreadItems.length) {
+
+        toast(
+            "You're all caught up.",
+            'success'
+        );
+
+        return;
+    }
+
+    const first =
+        document.querySelector(
+            '#noticeStack .notice'
+        );
+
+    first?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+
+function toast(
+    message,
+    type = 'success'
+) {
+
+    const element =
+        document.getElementById(
+            'toast'
+        );
+
+    if (!element) return;
+
+    element.textContent =
+        message;
+
+    element.className =
+        `toast show ${type}`;
+
+    clearTimeout(
+        toastTimer
+    );
+
+    toastTimer =
+        setTimeout(() => {
+
+            element.classList.remove(
+                'show'
+            );
+
+        }, 3600);
+}
+
+function handleOAuthCallback() {
+
+    const params =
+        new URLSearchParams(
+            window.location.search
+        );
+
+    const token =
+        params.get('token');
+
+    if (!token) {
+        return;
+    }
+
+    localStorage.setItem(
+        'techoriam_token',
+        token
+    );
+
+    [
+        ['user_id', 'userId'],
+        ['user_name', 'name'],
+        ['user_email', 'email'],
+        ['user_role', 'role']
+    ].forEach(
+        ([storageKey, queryKey]) => {
+
+            const value =
+                params.get(queryKey);
+
+            if (value) {
+
+                localStorage.setItem(
+                    `techoriam_${storageKey}`,
+                    value
+                );
+            }
+        }
+    );
+
+    localStorage.setItem(
+        'techoriam_remember',
+        'true'
+    );
+
+    history.replaceState(
+        {},
+        document.title,
+        window.location.pathname
+    );
+}
+
+async function logout() {
+    const token = getToken();
+
+    try {
+        if (token) {
+            await fetch(`${API}/auth/logout`, {
+                method: 'POST',
+                credentials: 'include',
+                headers: {
+                    Accept: 'application/json',
+                    Authorization: `Bearer ${token}`
+                }
+            });
+        }
+    } catch (error) {
+        console.warn('Logout request failed:', error);
+    } finally {
+        clearAuthStorage();
+        location.replace(LOGIN_URL);
+    }
+}
+
+async function initializeDashboard() {
+
+    handleOAuthCallback();
+
+    const authenticated =
+        await checkUser();
+
+    if (!authenticated) {
+        return;
+    }
+
+    
+
+    await Promise.allSettled([
+
+        loadDashboard(),
+
+        loadEnrollments(),
+
+        loadRecommendations(),
+
+        loadBadges(),
+
+        loadNotifications(),
+
+        loadActivities()
+
+    ]);
+}
+
+document.addEventListener(
+    'DOMContentLoaded',
+    initializeDashboard
+);
+
+document.addEventListener(
+    'keydown',
+    event => {
+
+        if (event.key !== 'Escape') {
+            return;
+        }
+
+
+        closeProfile();
+
+        closePasswordModal();
+
+        closeActivities();
+    }
+);
+</script>
+</body>
+</html>

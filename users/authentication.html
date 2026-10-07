@@ -1,0 +1,2570 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Techoriam - Authentication · v1.0</title>
+
+    <style>
+
+        :root {
+
+            --bg: #070b14;
+
+            --card: #0d1422;
+
+            --input: #111a2b;
+
+            --border: rgba(255,255,255,.09);
+
+            --text: #f4f7fb;
+
+            --muted: #8995a8;
+
+            --accent: #6d7cff;
+
+            --accent2: #8d6dff;
+
+            --danger: #ff6875;
+
+            --success: #35d49a;
+
+        }
+
+        * {
+
+            box-sizing: border-box;
+
+            margin: 0;
+
+            padding: 0;
+
+        }
+
+        html,
+
+        body {
+
+            width: 100%;
+
+            min-height: 100%;
+
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            padding: 16px;
+
+            overflow-x: hidden;
+
+            background:
+
+                radial-gradient(
+
+                    circle at 15% 15%,
+
+                    rgba(109,124,255,.14),
+
+                    transparent 30%
+
+                ),
+
+                radial-gradient(
+
+                    circle at 85% 85%,
+
+                    rgba(141,109,255,.12),
+
+                    transparent 30%
+
+                ),
+
+                var(--bg);
+
+            color: var(--text);
+
+            font-family:
+
+                Inter,
+
+                system-ui,
+
+                -apple-system,
+
+                BlinkMacSystemFont,
+
+                "Segoe UI",
+
+                sans-serif;
+
+            -webkit-font-smoothing: antialiased;
+
+        }
+
+        .page {
+
+            width: 100%;
+
+            max-width: 430px;
+
+        }
+
+        .brand {
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            gap: 9px;
+
+            margin-bottom: 18px;
+
+            color: white;
+
+            text-decoration: none;
+
+        }
+
+        .brand-mark {
+
+            width: 36px;
+
+            height: 36px;
+
+            border-radius: 10px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            background: linear-gradient(
+
+                135deg,
+
+                var(--accent),
+
+                var(--accent2)
+
+            );
+
+            font-size: 17px;
+
+            font-weight: 900;
+
+            box-shadow:
+
+                0 8px 25px rgba(109,124,255,.22);
+
+        }
+
+        .brand-name {
+
+            font-size: 21px;
+
+            font-weight: 800;
+
+            letter-spacing: -.5px;
+
+        }
+
+        .card {
+
+            width: 100%;
+
+            padding: 27px;
+
+            border-radius: 18px;
+
+            background: rgba(13,20,34,.96);
+
+            border: 1px solid var(--border);
+
+            box-shadow:
+
+                0 25px 70px rgba(0,0,0,.42);
+
+            backdrop-filter: blur(18px);
+
+        }
+
+        .heading {
+
+            text-align: center;
+
+            margin-bottom: 18px;
+
+        }
+
+        .heading h1 {
+
+            font-size: 24px;
+
+            line-height: 1.2;
+
+            letter-spacing: -.6px;
+
+            margin-bottom: 6px;
+
+        }
+
+        .heading p {
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+            line-height: 1.4;
+
+        }
+
+        .tabs {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 4px;
+
+            padding: 4px;
+
+            margin-bottom: 19px;
+
+            background: rgba(255,255,255,.04);
+
+            border: 1px solid var(--border);
+
+            border-radius: 10px;
+
+        }
+
+        .tab {
+
+            height: 34px;
+
+            border: 0;
+
+            border-radius: 7px;
+
+            background: transparent;
+
+            color: var(--muted);
+
+            font-size: 13px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+        }
+
+        .tab.active {
+
+            color: white;
+
+            background: linear-gradient(
+
+                135deg,
+
+                var(--accent),
+
+                var(--accent2)
+
+            );
+
+        }
+
+        .form {
+
+            display: none;
+
+        }
+
+        .form.active {
+
+            display: block;
+
+        }
+
+        .field {
+
+            margin-bottom: 12px;
+
+        }
+
+        .field label {
+
+            display: block;
+
+            margin-bottom: 5px;
+
+            color: #cbd4e3;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+        }
+
+        .input {
+
+            width: 100%;
+
+            height: 41px;
+
+            padding: 0 12px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 8px;
+
+            outline: none;
+
+            background: var(--input);
+
+            color: white;
+
+            font-size: 13px;
+
+            transition: .15s ease;
+
+        }
+
+        .input::placeholder {
+
+            color: #657187;
+
+        }
+
+        .input:focus {
+
+            border-color: rgba(109,124,255,.7);
+
+            box-shadow:
+
+                0 0 0 3px rgba(109,124,255,.09);
+
+        }
+
+        .forgot {
+
+            display: flex;
+
+            justify-content: flex-end;
+
+            margin: -2px 0 13px;
+
+        }
+
+        .text-button {
+
+            border: 0;
+
+            background: transparent;
+
+            color: #9da8ff;
+
+            font-size: 12px;
+
+            font-weight: 650;
+
+            cursor: pointer;
+
+        }
+
+        .primary-button {
+
+            width: 100%;
+
+            height: 42px;
+
+            border: 0;
+
+            border-radius: 8px;
+
+            background: linear-gradient(
+
+                135deg,
+
+                var(--accent),
+
+                var(--accent2)
+
+            );
+
+            color: white;
+
+            font-size: 13px;
+
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: .15s ease;
+
+        }
+
+        .primary-button:hover {
+
+            filter: brightness(1.06);
+
+            transform: translateY(-1px);
+
+        }
+
+        .primary-button:disabled {
+
+            opacity: .55;
+
+            cursor: not-allowed;
+
+            transform: none;
+
+        }
+
+        .secondary-button {
+
+            margin-top: 8px;
+
+            background: var(--input);
+
+            border: 1px solid var(--border);
+
+        }
+
+        .divider {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 10px;
+
+            margin: 16px 0;
+
+            color: #69758a;
+
+            font-size: 10px;
+
+        }
+
+        .divider::before,
+
+        .divider::after {
+
+            content: "";
+
+            flex: 1;
+
+            height: 1px;
+
+            background: var(--border);
+
+        }
+
+        .socials {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 8px;
+
+        }
+
+        .social-button {
+
+            height: 38px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            gap: 7px;
+
+            border: 1px solid var(--border);
+
+            border-radius: 8px;
+
+            background: var(--input);
+
+            color: #dce2ed;
+
+            font-size: 12px;
+
+            font-weight: 700;
+
+            cursor: pointer;
+
+        }
+
+        .social-button:hover {
+
+            background: rgba(255,255,255,.07);
+
+        }
+
+        .social-icon {
+
+            font-size: 12px;
+
+            font-weight: 900;
+
+        }
+
+        .footer {
+
+            margin-top: 16px;
+
+            text-align: center;
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+        }
+
+        .footer button {
+
+            border: 0;
+
+            background: transparent;
+
+            color: #a2acff;
+
+            cursor: pointer;
+
+            font-weight: 700;
+
+        }
+
+        .message {
+
+            display: none;
+
+            padding: 9px 11px;
+
+            margin-bottom: 12px;
+
+            border-radius: 7px;
+
+            font-size: 11px;
+
+            line-height: 1.4;
+
+        }
+
+        .message.error {
+
+            color: #ff9da5;
+
+            background: rgba(255,104,117,.08);
+
+            border: 1px solid rgba(255,104,117,.18);
+
+        }
+
+        .message.success {
+
+            color: #72e7ba;
+
+            background: rgba(53,212,154,.08);
+
+            border: 1px solid rgba(53,212,154,.18);
+
+        }
+
+        .reset-title {
+
+            text-align: center;
+
+            margin-bottom: 17px;
+
+        }
+
+        .reset-title h2 {
+
+            font-size: 21px;
+
+            margin-bottom: 5px;
+
+        }
+
+        .reset-title p {
+
+            color: var(--muted);
+
+            font-size: 12px;
+
+            line-height: 1.4;
+
+        }
+
+        .password-strength {
+
+            display: flex;
+
+            gap: 4px;
+
+            margin-top: 5px;
+
+        }
+
+        .password-strength span {
+
+            flex: 1;
+
+            height: 3px;
+
+            border-radius: 4px;
+
+            background: rgba(255,255,255,.08);
+
+        }
+
+        .password-strength span.active {
+
+            background: var(--accent);
+
+        }
+
+        @media (min-height: 720px) and (min-width: 600px) {
+
+            .card {
+
+                padding: 30px;
+
+            }
+
+        }
+
+        @media (max-width: 480px) {
+
+            body {
+
+                align-items: flex-start;
+
+                padding-top: 24px;
+
+            }
+
+            .card {
+
+                padding: 22px 18px;
+
+            }
+
+            .brand {
+
+                margin-bottom: 14px;
+
+            }
+
+        }
+
+        @media (max-height: 700px) and (min-width: 600px) {
+
+            body {
+
+                padding: 10px;
+
+            }
+
+            .brand {
+
+                margin-bottom: 10px;
+
+            }
+
+            .brand-mark {
+
+                width: 31px;
+
+                height: 31px;
+
+            }
+
+            .brand-name {
+
+                font-size: 18px;
+
+            }
+
+            .card {
+
+                padding: 20px 24px;
+
+            }
+
+            .heading {
+
+                margin-bottom: 13px;
+
+            }
+
+            .heading h1 {
+
+                font-size: 21px;
+
+            }
+
+            .tabs {
+
+                margin-bottom: 14px;
+
+            }
+
+            .field {
+
+                margin-bottom: 9px;
+
+            }
+
+            .input {
+
+                height: 37px;
+
+            }
+
+            .primary-button {
+
+                height: 38px;
+
+            }
+
+            .divider {
+
+                margin: 11px 0;
+
+            }
+
+            .social-button {
+
+                height: 34px;
+
+            }
+
+            .footer {
+
+                margin-top: 11px;
+
+            }
+
+        }
+
+    
+        .techoriam-version {
+            color: var(--text-dim, #5c6478);
+            font-size: .68rem;
+            letter-spacing: .04em;
+            white-space: nowrap;
+            opacity: .85;
+        }
+
+</style>
+
+</head>
+
+<body>
+
+<div class="page">
+
+    <a href="../index.html" class="brand">
+
+        <span class="brand-mark">T</span>
+
+        <span class="brand-name">Techoriam <small class="techoriam-version">v1.0</small></span>
+
+    </a>
+
+    <div class="card">
+
+        <div class="heading">
+
+            <h1 id="headingTitle">Welcome back</h1>
+
+            <p id="headingSubtitle">
+
+                Sign in to continue to your account.
+
+            </p>
+
+        </div>
+
+        <div class="tabs" id="tabs">
+
+            <button
+
+                id="loginTab"
+
+                class="tab active"
+
+                type="button"
+
+                onclick="showForm('login')">
+
+                Sign in
+
+            </button>
+
+            <button
+
+                id="registerTab"
+
+                class="tab"
+
+                type="button"
+
+                onclick="showForm('register')">
+
+                Sign up
+
+            </button>
+
+        </div>
+
+        <div id="loginForm" class="form active">
+
+            <div id="loginError" class="message error"></div>
+
+            <div id="loginSuccess" class="message success"></div>
+
+            <div class="field">
+
+                <label for="loginEmail">Email</label>
+
+                <input
+
+                    id="loginEmail"
+
+                    class="input"
+
+                    type="email"
+
+                    autocomplete="email"
+
+                    placeholder="you@example.com">
+
+            </div>
+
+            <div class="field">
+
+                <label for="loginPassword">Password</label>
+
+                <input
+
+                    id="loginPassword"
+
+                    class="input"
+
+                    type="password"
+
+                    autocomplete="current-password"
+
+                    placeholder="Enter your password">
+
+            </div>
+
+            <div class="forgot">
+
+                <button
+
+                    class="text-button"
+
+                    type="button"
+
+                    onclick="showForm('forgot')">
+
+                    Forgot password?
+
+                </button>
+
+            </div>
+
+            <button
+
+                id="loginButton"
+
+                class="primary-button"
+
+                type="button"
+
+                onclick="login(event)">
+
+                Sign in
+
+            </button>
+
+            <div class="divider">OR</div>
+
+            <div class="socials">
+
+                <button
+
+                    class="social-button"
+
+                    type="button"
+
+                    onclick="googleLogin()">
+
+                    <span class="social-icon">G</span>
+
+                    Google
+
+                </button>
+
+                <button
+
+                    class="social-button"
+
+                    type="button"
+
+                    onclick="githubLogin()">
+
+                    <span class="social-icon">GH</span>
+
+                    GitHub
+
+                </button>
+
+            </div>
+
+            <div class="footer">
+
+                Don't have an account?
+
+                <button
+
+                    type="button"
+
+                    onclick="showForm('register')">
+
+                    Create one
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <div id="registerForm" class="form">
+
+            <div id="registerError" class="message error"></div>
+
+            <div id="registerSuccess" class="message success"></div>
+
+            <div class="field">
+
+                <label for="registerName">Full name</label>
+
+                <input
+
+                    id="registerName"
+
+                    class="input"
+
+                    type="text"
+
+                    autocomplete="name"
+
+                    placeholder="Your name">
+
+            </div>
+
+            <div class="field">
+
+                <label for="registerEmail">Email</label>
+
+                <input
+
+                    id="registerEmail"
+
+                    class="input"
+
+                    type="email"
+
+                    autocomplete="email"
+
+                    placeholder="you@example.com">
+
+            </div>
+
+            <div class="field">
+
+                <label for="registerPassword">Password</label>
+
+                <input
+
+                    id="registerPassword"
+
+                    class="input"
+
+                    type="password"
+
+                    autocomplete="new-password"
+
+                    placeholder="At least 8 characters"
+
+                    oninput="updateStrength()">
+
+                <div class="password-strength">
+
+                    <span></span>
+
+                    <span></span>
+
+                    <span></span>
+
+                    <span></span>
+
+                    <span></span>
+
+                </div>
+
+            </div>
+
+            <div class="field">
+
+                <label for="registerConfirmPassword">
+
+                    Confirm password
+
+                </label>
+
+                <input
+
+                    id="registerConfirmPassword"
+
+                    class="input"
+
+                    type="password"
+
+                    autocomplete="new-password"
+
+                    placeholder="Repeat your password">
+
+            </div>
+
+            <button
+
+                id="registerButton"
+
+                class="primary-button"
+
+                type="button"
+
+                onclick="register(event)">
+
+                Create account
+
+            </button>
+
+            <div class="divider">OR</div>
+
+            <div class="socials">
+
+                <button
+
+                    class="social-button"
+
+                    type="button"
+
+                    onclick="googleLogin()">
+
+                    <span class="social-icon">G</span>
+
+                    Google
+
+                </button>
+
+                <button
+
+                    class="social-button"
+
+                    type="button"
+
+                    onclick="githubLogin()">
+
+                    <span class="social-icon">GH</span>
+
+                    GitHub
+
+                </button>
+
+            </div>
+
+            <div class="footer">
+
+                Already have an account?
+
+                <button
+
+                    type="button"
+
+                    onclick="showForm('login')">
+
+                    Sign in
+
+                </button>
+
+            </div>
+
+        </div>
+
+        <div id="forgotForm" class="form">
+
+            <div class="reset-title">
+
+                <h2>Forgot password?</h2>
+
+                <p>
+
+                    Enter your email to reset your password.
+
+                </p>
+
+            </div>
+
+            <div id="forgotError" class="message error"></div>
+
+            <div id="forgotSuccess" class="message success"></div>
+
+            <div class="field">
+
+                <label for="forgotEmail">Email</label>
+
+                <input
+
+                    id="forgotEmail"
+
+                    class="input"
+
+                    type="email"
+
+                    autocomplete="email"
+
+                    placeholder="you@example.com">
+
+            </div>
+
+            <button
+
+                id="forgotButton"
+
+                class="primary-button"
+
+                type="button"
+
+                onclick="forgotPassword(event)">
+
+                Continue
+
+            </button>
+
+            <button
+
+                class="primary-button secondary-button"
+
+                type="button"
+
+                onclick="showForm('login')">
+
+                Back to sign in
+
+            </button>
+
+        </div>
+
+        <div id="resetForm" class="form">
+
+            <div class="reset-title">
+
+                <h2>Reset password</h2>
+
+                <p>
+
+                    Enter the 6-digit OTP sent to your email.
+
+                </p>
+
+            </div>
+
+            <div id="resetError" class="message error"></div>
+
+            <div id="resetSuccess" class="message success"></div>
+
+            <div class="field">
+
+                <label for="resetEmail">Email</label>
+
+                <input
+
+                    id="resetEmail"
+
+                    class="input"
+
+                    type="email"
+
+                    autocomplete="email"
+
+                    placeholder="you@example.com">
+
+            </div>
+
+            <div class="field">
+
+                <label for="resetToken">Verification code</label>
+
+                <input
+
+                    id="resetToken"
+
+                    class="input"
+
+                    type="text"
+
+                    inputmode="numeric"
+
+                    autocomplete="one-time-code"
+
+                    maxlength="6"
+
+                    pattern="[0-9]{6}"
+
+                    placeholder="Enter 6-digit OTP">
+
+            </div>
+
+            <div class="field">
+
+                <label for="resetPassword">New password</label>
+
+                <input
+
+                    id="resetPassword"
+
+                    class="input"
+
+                    type="password"
+
+                    autocomplete="new-password"
+
+                    placeholder="At least 8 characters">
+
+            </div>
+
+            <div class="field">
+
+                <label for="resetConfirmPassword">Confirm password</label>
+
+                <input
+
+                    id="resetConfirmPassword"
+
+                    class="input"
+
+                    type="password"
+
+                    autocomplete="new-password"
+
+                    placeholder="Repeat your new password">
+
+            </div>
+
+            <button
+
+                id="resetButton"
+
+                class="primary-button"
+
+                type="button"
+
+                onclick="resetPassword(event)">
+
+                Reset password
+
+            </button>
+
+            <button
+
+                class="primary-button secondary-button"
+
+                type="button"
+
+                onclick="showForm('login')">
+
+                Back to sign in
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const API = 'https://desktop-ubs9kju.tail768c0b.ts.net/api';
+
+const params =
+
+    new URLSearchParams(
+
+        window.location.search
+
+    );
+
+const redirectUrl =
+
+    getSafeRedirect(
+
+        params.get("redirect") ||
+
+        "dashboard.html"
+
+    );
+
+function getSafeRedirect(value) {
+
+    if (!value) {
+
+        return "dashboard.html";
+
+    }
+
+    if (
+
+        value.startsWith("http://") ||
+
+        value.startsWith("https://") ||
+
+        value.startsWith("//") ||
+
+        value.toLowerCase().startsWith("javascript:") ||
+
+        value.toLowerCase().startsWith("data:")
+
+    ) {
+
+        return "dashboard.html";
+
+    }
+
+    return value;
+
+}
+
+function showForm(name) {
+
+    document
+
+        .querySelectorAll(".form")
+
+        .forEach(form => {
+
+            form.classList.remove("active");
+
+        });
+
+    document
+
+        .querySelectorAll(".tab")
+
+        .forEach(tab => {
+
+            tab.classList.remove("active");
+
+        });
+
+    clearMessages();
+
+    const tabs =
+
+        document.getElementById("tabs");
+
+    const title =
+
+        document.getElementById("headingTitle");
+
+    const subtitle =
+
+        document.getElementById("headingSubtitle");
+
+    if (name === "login") {
+
+        document
+
+            .getElementById("loginForm")
+
+            .classList.add("active");
+
+        document
+
+            .getElementById("loginTab")
+
+            .classList.add("active");
+
+        tabs.style.display = "grid";
+
+        title.textContent = "Welcome back";
+
+        subtitle.textContent =
+
+            "Sign in to continue to your account.";
+
+    }
+
+    if (name === "register") {
+
+        document
+
+            .getElementById("registerForm")
+
+            .classList.add("active");
+
+        document
+
+            .getElementById("registerTab")
+
+            .classList.add("active");
+
+        tabs.style.display = "grid";
+
+        title.textContent = "Create your account";
+
+        subtitle.textContent =
+
+            "Start learning with Techoriam.";
+
+    }
+
+    if (name === "forgot") {
+
+        document
+
+            .getElementById("forgotForm")
+
+            .classList.add("active");
+
+        tabs.style.display = "none";
+
+        title.textContent = "Reset access";
+
+        subtitle.textContent =
+
+            "Recover your Techoriam account.";
+
+    }
+
+    if (name === "reset") {
+
+        document
+
+            .getElementById("resetForm")
+
+            .classList.add("active");
+
+        tabs.style.display = "none";
+
+        title.textContent = "New password";
+
+        subtitle.textContent =
+
+            "Set a new password for your account.";
+
+    }
+
+}
+
+function clearMessages() {
+
+    document
+
+        .querySelectorAll(".message")
+
+        .forEach(element => {
+
+            element.style.display = "none";
+
+            element.textContent = "";
+
+        });
+
+}
+
+function showError(id, message) {
+
+    const element =
+
+        document.getElementById(id);
+
+    if (!element) {
+
+        return;
+
+    }
+
+    element.textContent =
+
+        message || "Something went wrong.";
+
+    element.style.display = "block";
+
+}
+
+function showSuccess(id, message) {
+
+    const element =
+
+        document.getElementById(id);
+
+    if (!element) {
+
+        return;
+
+    }
+
+    element.textContent =
+
+        message || "Success.";
+
+    element.style.display = "block";
+
+}
+
+function setLoading(id, loading, text) {
+
+    const button =
+
+        document.getElementById(id);
+
+    if (!button) {
+
+        return;
+
+    }
+
+    if (loading) {
+
+        button.disabled = true;
+
+        button.dataset.original =
+
+            button.textContent;
+
+        button.textContent = text;
+
+    } else {
+
+        button.disabled = false;
+
+        button.textContent =
+
+            button.dataset.original ||
+
+            button.textContent;
+
+    }
+
+}
+
+async function readError(response) {
+
+    try {
+
+        const data =
+
+            await response.json();
+
+        return (
+
+            data?.message ||
+
+            data?.title ||
+
+            `Request failed (${response.status}).`
+
+        );
+
+    } catch {
+
+        return `Request failed (${response.status}).`;
+
+    }
+
+}
+
+function saveAuth(data) {
+
+    if (!data?.token) {
+
+        throw new Error(
+
+            "Authentication token was not returned."
+
+        );
+
+    }
+
+    localStorage.setItem(
+
+        "techoriam_token",
+
+        data.token
+
+    );
+
+    if (data.userId) {
+
+        localStorage.setItem(
+
+            "techoriam_user_id",
+
+            data.userId
+
+        );
+
+    }
+
+    if (data.name) {
+
+        localStorage.setItem(
+
+            "techoriam_user_name",
+
+            data.name
+
+        );
+
+    }
+
+    if (data.email) {
+
+        localStorage.setItem(
+
+            "techoriam_user_email",
+
+            data.email
+
+        );
+
+    }
+
+    if (data.role) {
+
+        localStorage.setItem(
+
+            "techoriam_user_role",
+
+            data.role
+
+        );
+
+    }
+
+}
+
+async function login(event) {
+
+    event.preventDefault();
+
+    clearMessages();
+
+    const email =
+
+        document
+
+            .getElementById("loginEmail")
+
+            .value
+
+            .trim();
+
+    const password =
+
+        document
+
+            .getElementById("loginPassword")
+
+            .value;
+
+    if (!email || !password) {
+
+        showError(
+
+            "loginError",
+
+            "Email and password are required."
+
+        );
+
+        return;
+
+    }
+
+    setLoading(
+
+        "loginButton",
+
+        true,
+
+        "Signing in..."
+
+    );
+
+    try {
+
+        const response =
+
+            await fetch(
+
+                `${API}/auth/login`,
+
+                {
+
+                    method: "POST",
+
+                    credentials: "include",
+
+                    headers: {
+
+                        "Content-Type":
+
+                            "application/json",
+
+                        "Accept":
+
+                            "application/json"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        email,
+
+                        password,
+
+                        rememberMe: true
+
+                    })
+
+                }
+
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                await readError(response)
+
+            );
+
+        }
+
+        const data =
+
+            await response.json();
+
+        saveAuth(data);
+
+        showSuccess(
+
+            "loginSuccess",
+
+            "Signed in successfully."
+
+        );
+
+        setTimeout(() => {
+
+            window.location.href =
+
+                redirectUrl;
+
+        }, 500);
+
+    } catch (error) {
+
+        showError(
+
+            "loginError",
+
+            error.message ||
+
+            "Unable to sign in."
+
+        );
+
+    } finally {
+
+        setLoading(
+
+            "loginButton",
+
+            false
+
+        );
+
+    }
+
+}
+
+async function register(event) {
+
+    event.preventDefault();
+
+    clearMessages();
+
+    const name =
+
+        document
+
+            .getElementById("registerName")
+
+            .value
+
+            .trim();
+
+    const email =
+
+        document
+
+            .getElementById("registerEmail")
+
+            .value
+
+            .trim();
+
+    const password =
+
+        document
+
+            .getElementById("registerPassword")
+
+            .value;
+
+    const confirmPassword =
+
+        document
+
+            .getElementById("registerConfirmPassword")
+
+            .value;
+
+    if (
+
+        !name ||
+
+        !email ||
+
+        !password ||
+
+        !confirmPassword
+
+    ) {
+
+        showError(
+
+            "registerError",
+
+            "Please fill in all fields."
+
+        );
+
+        return;
+
+    }
+
+    if (password.length < 8) {
+
+        showError(
+
+            "registerError",
+
+            "Password must be at least 8 characters."
+
+        );
+
+        return;
+
+    }
+
+    if (password !== confirmPassword) {
+
+        showError(
+
+            "registerError",
+
+            "Passwords do not match."
+
+        );
+
+        return;
+
+    }
+
+    setLoading(
+
+        "registerButton",
+
+        true,
+
+        "Creating account..."
+
+    );
+
+    try {
+
+        const response =
+
+            await fetch(
+
+                `${API}/auth/register`,
+
+                {
+
+                    method: "POST",
+
+                    credentials: "include",
+
+                    headers: {
+
+                        "Content-Type":
+
+                            "application/json",
+
+                        "Accept":
+
+                            "application/json"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        name,
+
+                        email,
+
+                        password
+
+                    })
+
+                }
+
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                await readError(response)
+
+            );
+
+        }
+
+        showSuccess(
+
+            "registerSuccess",
+
+            "Account created successfully."
+
+        );
+
+        document
+
+            .getElementById("loginEmail")
+
+            .value = email;
+
+        document
+
+            .getElementById("registerName")
+
+            .value = "";
+
+        document
+
+            .getElementById("registerEmail")
+
+            .value = "";
+
+        document
+
+            .getElementById("registerPassword")
+
+            .value = "";
+
+        document
+
+            .getElementById("registerConfirmPassword")
+
+            .value = "";
+
+        setTimeout(() => {
+
+            showForm("login");
+
+        }, 900);
+
+    } catch (error) {
+
+        showError(
+
+            "registerError",
+
+            error.message ||
+
+            "Unable to create account."
+
+        );
+
+    } finally {
+
+        setLoading(
+
+            "registerButton",
+
+            false
+
+        );
+
+    }
+
+}
+
+async function forgotPassword(event) {
+
+    event.preventDefault();
+
+    clearMessages();
+
+    const email =
+
+        document
+
+            .getElementById("forgotEmail")
+
+            .value
+
+            .trim();
+
+    if (!email) {
+
+        showError(
+
+            "forgotError",
+
+            "Please enter your email."
+
+        );
+
+        return;
+
+    }
+
+    setLoading(
+
+        "forgotButton",
+
+        true,
+
+        "Sending OTP..."
+
+    );
+
+    try {
+
+        const response =
+
+            await fetch(
+
+                `${API}/auth/forgot-password`,
+
+                {
+
+                    method: "POST",
+
+                    credentials: "include",
+
+                    headers: {
+
+                        "Content-Type":
+
+                            "application/json",
+
+                        "Accept":
+
+                            "application/json"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        email
+
+                    })
+
+                }
+
+            );
+
+        const data =
+
+            await response.json()
+
+                .catch(() => ({}));
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                data.message ||
+
+                "Unable to send OTP."
+
+            );
+
+        }
+
+        document
+
+            .getElementById("resetEmail")
+
+            .value = email;
+
+        showForm("reset");
+
+        showSuccess(
+
+            "resetSuccess",
+
+            data.message ||
+
+            "If the account exists, a password reset OTP has been sent."
+
+        );
+
+        document
+
+            .getElementById("resetToken")
+
+            .focus();
+
+    } catch (error) {
+
+        showError(
+
+            "forgotError",
+
+            error.message ||
+
+            "Unable to send OTP."
+
+        );
+
+    } finally {
+
+        setLoading(
+
+            "forgotButton",
+
+            false
+
+        );
+
+    }
+
+}
+
+async function resetPassword(event) {
+
+    event.preventDefault();
+
+    clearMessages();
+
+    const email =
+
+        document
+
+            .getElementById("resetEmail")
+
+            .value
+
+            .trim();
+
+    const token =
+
+        document
+
+            .getElementById("resetToken")
+
+            .value
+
+            .trim();
+
+    const password =
+
+        document
+
+            .getElementById("resetPassword")
+
+            .value;
+
+    const confirmPassword =
+
+        document
+
+            .getElementById("resetConfirmPassword")
+
+            .value;
+
+    if (!email || !token || !password || !confirmPassword) {
+
+        showError(
+
+            "resetError",
+
+            "Please fill in all fields."
+
+        );
+
+        return;
+
+    }
+
+    if (!/^d{6}$/.test(token)) {
+
+        showError(
+
+            "resetError",
+
+            "Please enter the 6-digit OTP."
+
+        );
+
+        return;
+
+    }
+
+    if (password.length < 8) {
+
+        showError(
+
+            "resetError",
+
+            "Password must be at least 8 characters."
+
+        );
+
+        return;
+
+    }
+
+    if (password !== confirmPassword) {
+
+        showError(
+
+            "resetError",
+
+            "Passwords do not match."
+
+        );
+
+        return;
+
+    }
+
+    setLoading(
+
+        "resetButton",
+
+        true,
+
+        "Resetting..."
+
+    );
+
+    try {
+
+        const response =
+
+            await fetch(
+
+                `${API}/auth/reset-password`,
+
+                {
+
+                    method: "POST",
+
+                    credentials: "include",
+
+                    headers: {
+
+                        "Content-Type":
+
+                            "application/json",
+
+                        "Accept":
+
+                            "application/json"
+
+                    },
+
+                    body: JSON.stringify({
+
+                        email,
+
+                        token,
+
+                        newPassword: password
+
+                    })
+
+                }
+
+            );
+
+        if (!response.ok) {
+
+            throw new Error(
+
+                await readError(response)
+
+            );
+
+        }
+
+        showSuccess(
+
+            "resetSuccess",
+
+            "Password reset successfully. You can sign in now."
+
+        );
+
+        document
+
+            .getElementById("loginEmail")
+
+            .value = email;
+
+        document
+
+            .getElementById("resetToken")
+
+            .value = "";
+
+        document
+
+            .getElementById("resetPassword")
+
+            .value = "";
+
+        document
+
+            .getElementById("resetConfirmPassword")
+
+            .value = "";
+
+        setTimeout(() => {
+
+            showForm("login");
+
+            showSuccess(
+
+                "loginSuccess",
+
+                "Password reset successfully. Sign in with your new password."
+
+            );
+
+        }, 1100);
+
+    } catch (error) {
+
+        showError(
+
+            "resetError",
+
+            error.message ||
+
+            "Unable to reset password."
+
+        );
+
+    } finally {
+
+        setLoading(
+
+            "resetButton",
+
+            false
+
+        );
+
+    }
+
+}
+
+function googleLogin() {
+
+    window.location.href =
+
+        `${API}/auth/google?returnUrl=${encodeURIComponent('users/dashboard.html')}`;
+
+}
+
+function githubLogin() {
+
+    window.location.href =
+
+        `${API}/auth/github?returnUrl=${encodeURIComponent('users/dashboard.html')}`;
+
+}
+
+function updateStrength() {
+
+    const password =
+
+        document
+
+            .getElementById("registerPassword")
+
+            .value;
+
+    const bars =
+
+        document.querySelectorAll(
+
+            ".password-strength span"
+
+        );
+
+    let score = 0;
+
+    if (password.length >= 8) score++;
+
+    if (/[A-Z]/.test(password)) score++;
+
+    if (/[a-z]/.test(password)) score++;
+
+    if (/[0-9]/.test(password)) score++;
+
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    bars.forEach(bar => {
+
+        bar.classList.remove("active");
+
+    });
+
+    for (
+
+        let i = 0;
+
+        i < score;
+
+        i++
+
+    ) {
+
+        bars[i].classList.add("active");
+
+    }
+
+}
+
+function handleOAuthError() {
+
+    const error = params.get("error");
+
+    if (!error) {
+
+        return;
+
+    }
+
+    const messages = {
+
+        external_login_failed:
+
+            "External login failed. Please try again.",
+
+        email_required:
+
+            "Your Google/GitHub account did not provide an email address.",
+
+        unsupported_provider:
+
+            "This sign-in provider is not supported."
+
+    };
+
+    showForm("login");
+
+    showError(
+
+        "loginError",
+
+        messages[error] || "External sign-in failed. Please try again."
+
+    );
+
+}
+
+document.addEventListener(
+
+    "DOMContentLoaded",
+
+    () => {
+
+        const tab =
+
+            params.get("tab");
+
+        if (tab === "register") {
+
+            showForm("register");
+
+        } else if (tab === "forgot") {
+
+            showForm("forgot");
+
+        } else {
+
+            showForm("login");
+
+        }
+
+        handleOAuthError();
+
+    }
+
+);
+
+</script>
+
+</body>
+
+</html>
