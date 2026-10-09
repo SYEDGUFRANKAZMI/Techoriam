@@ -2426,22 +2426,19 @@ async function resetPassword(event) {
     }
 
 }
+const DASHBOARD_URL =
+    'https://syedgufrankazmi.github.io/Techoriam/users/dashboard.html';
 
 function googleLogin() {
-
     window.location.href =
-
-        `${API}/auth/google?returnUrl=${encodeURIComponent('users/dashboard.html')}`;
-
+        `${API}/auth/google?returnUrl=${encodeURIComponent(DASHBOARD_URL)}`;
 }
 
 function githubLogin() {
-
     window.location.href =
-
-        `${API}/auth/github?returnUrl=${encodeURIComponent('users/dashboard.html')}`;
-
+        `${API}/auth/github?returnUrl=${encodeURIComponent(DASHBOARD_URL)}`;
 }
+
 
 function updateStrength() {
 
