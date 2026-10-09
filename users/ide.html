@@ -2680,9 +2680,133 @@
         .ti-panel-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:30px;color:var(--text-muted)}
         .ti-icon{width:52px;height:52px;border-radius:14px;display:grid;place-items:center;background:var(--accent-dim);border:1px solid rgba(88,166,255,.25);color:var(--accent);font-size:24px;margin-bottom:16px}
         .ti-panel-body h3{color:var(--text);font-size:16px;margin-bottom:6px}.ti-panel-body p{max-width:270px;font-size:12px;line-height:1.6}
-</style>
+
+        /* Mobile access notice: IDE and problem solving require a desktop/laptop viewport. */
+        .mobile-unavailable {
+            display: none;
+        }
+
+        @media (max-width: 767px) {
+            body.auth-pending {
+                visibility: visible !important;
+            }
+
+            html, body {
+                min-height: 100%;
+                height: 100%;
+                overflow: auto !important;
+            }
+
+            body > :not(#mobileUnavailable) {
+                display: none !important;
+            }
+
+            #mobileUnavailable {
+                position: fixed;
+                inset: 0;
+                z-index: 2147483647;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 24px;
+                overflow-y: auto;
+                background:
+                    radial-gradient(ellipse at top, rgba(88, 166, 255, 0.16), transparent 55%),
+                    #0d1117;
+                color: #e6edf3;
+                font-family: Inter, -apple-system, BlinkMacSystemFont, sans-serif;
+                text-align: center;
+            }
+
+            #mobileUnavailable .mobile-notice-card {
+                width: 100%;
+                max-width: 420px;
+                padding: 32px 24px;
+                border: 1px solid rgba(139, 148, 158, 0.24);
+                border-radius: 18px;
+                background: rgba(22, 27, 34, 0.92);
+                box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+            }
+
+            #mobileUnavailable .mobile-notice-icon {
+                display: grid;
+                place-items: center;
+                width: 64px;
+                height: 64px;
+                margin: 0 auto 20px;
+                border-radius: 18px;
+                background: rgba(88, 166, 255, 0.12);
+                border: 1px solid rgba(88, 166, 255, 0.25);
+                font-size: 30px;
+            }
+
+            #mobileUnavailable h1 {
+                margin: 0 0 12px;
+                color: #f0f6fc;
+                font-size: 24px;
+                line-height: 1.25;
+                letter-spacing: -0.03em;
+            }
+
+            #mobileUnavailable p {
+                margin: 0 auto 22px;
+                max-width: 330px;
+                color: #9da7b5;
+                font-size: 14px;
+                line-height: 1.7;
+            }
+
+            #mobileUnavailable .mobile-notice-label {
+                display: inline-block;
+                margin-bottom: 14px;
+                padding: 5px 10px;
+                border: 1px solid rgba(88, 166, 255, 0.24);
+                border-radius: 999px;
+                color: #79c0ff;
+                background: rgba(88, 166, 255, 0.08);
+                font-size: 11px;
+                font-weight: 700;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+            }
+
+            #mobileUnavailable .mobile-home-link {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-height: 44px;
+                padding: 0 18px;
+                border-radius: 10px;
+                background: linear-gradient(135deg, #58a6ff, #a371f7);
+                color: #07111f;
+                font-size: 13px;
+                font-weight: 800;
+                text-decoration: none;
+            }
+
+            #mobileUnavailable .mobile-notice-footnote {
+                margin-top: 18px;
+                margin-bottom: 0;
+                color: #6e7681;
+                font-size: 11px;
+            }
+        }
+
+    </style>
 </head>
 <body>
+
+    <section id="mobileUnavailable" class="mobile-unavailable" role="status" aria-labelledby="mobileUnavailableTitle">
+        <div class="mobile-notice-card">
+            <div class="mobile-notice-icon" aria-hidden="true">⌘</div>
+            <span class="mobile-notice-label">Desktop experience</span>
+            <h1 id="mobileUnavailableTitle">IDE is available on desktop</h1>
+            <p>The Techoriam code editor needs a larger screen for a reliable coding experience. Please switch to a desktop or laptop to write, run, and compile code.</p>
+            <a class="mobile-home-link" href="dashboard.html">← Back to Dashboard</a>
+            <p class="mobile-notice-footnote">Open Techoriam on a desktop or laptop to continue.</p>
+        </div>
+    </section>
+
 <div class="ide-boot-screen" id="ideBootScreen" aria-live="polite">
         <div class="ide-boot-mark">T</div>
         <div class="ide-boot-title">Welcome to Techoriam IDE</div>
