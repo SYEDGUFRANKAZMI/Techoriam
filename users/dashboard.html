@@ -1327,6 +1327,7 @@ let badges = [];
 let notifications = [];
 let activities = [];
 let refreshPromise = null;
+let lastRefreshStatus = null;
 let toastTimer = null;
 
 function getToken() {
@@ -1431,14 +1432,15 @@ async function readJson(response) {
 
 async function refreshAccessToken() {
 
+    // Share one refresh request across concurrent dashboard API calls.
     if (refreshPromise) {
         return refreshPromise;
     }
 
     refreshPromise = (async () => {
+        lastRefreshStatus = null;
 
         try {
-
             const response = await fetch(
                 `${API}/auth/refresh`,
                 {
@@ -1452,28 +1454,31 @@ async function refreshAccessToken() {
                 }
             );
 
+            lastRefreshStatus = response.status;
+
             if (!response.ok) {
                 return false;
             }
 
             const data = await readJson(response);
+            const saved = saveAuth(data);
 
-            return saveAuth(data);
+            // A 2xx without an access token is not a usable refresh.
+            if (!saved) {
+                console.error('Token refresh returned no usable access token.');
+            }
+
+            return saved;
 
         } catch (error) {
-
-            console.error(
-                'Token refresh failed:',
-                error
-            );
-
+            // 0 means a network failure / aborted request, not an invalid session.
+            lastRefreshStatus = 0;
+            console.error('Token refresh failed:', error);
             return false;
 
         } finally {
-
             refreshPromise = null;
         }
-
     })();
 
     return refreshPromise;
@@ -1488,24 +1493,23 @@ async function apiFetch(
     let token = getToken();
 
     if (!token && allowRefresh) {
-
-        const refreshed =
-            await refreshAccessToken();
-
+        const refreshed = await refreshAccessToken();
         if (refreshed) {
             token = getToken();
+        } else if (lastRefreshStatus !== 401 && lastRefreshStatus !== 403) {
+            // Keep the session data on 499, 5xx, timeout, or network failure.
+            // Those indicate a temporary service problem, not proof of logout.
+            const error = new Error('Authentication service is temporarily unavailable. Please retry.');
+            error.transientAuthFailure = true;
+            error.status = lastRefreshStatus;
+            throw error;
         }
     }
 
     if (!token) {
-
         clearAuthStorage();
-
         location.replace(LOGIN_URL);
-
-        throw new Error(
-            'Authentication required.'
-        );
+        throw new Error('Authentication required.');
     }
 
     const headers =
@@ -1540,22 +1544,20 @@ async function apiFetch(
         }
     );
 
-    if (
-        (response.status === 401 ||
-         response.status === 403) &&
-        allowRefresh
-    ) {
-
-        const refreshed =
-            await refreshAccessToken();
+    // Refresh only on 401. A 403 usually means the user lacks permission,
+    // so refreshing credentials would hide the actual authorization failure.
+    if (response.status === 401 && allowRefresh) {
+        const refreshed = await refreshAccessToken();
 
         if (refreshed) {
+            return apiFetch(path, options, false);
+        }
 
-            return apiFetch(
-                path,
-                options,
-                false
-            );
+        if (lastRefreshStatus !== 401 && lastRefreshStatus !== 403) {
+            const error = new Error('Session verification is temporarily unavailable. Please retry.');
+            error.transientAuthFailure = true;
+            error.status = lastRefreshStatus;
+            throw error;
         }
     }
 
@@ -1739,16 +1741,17 @@ async function checkUser() {
         return true;
 
     } catch (error) {
+        console.error('Authentication check failed:', error);
 
-        console.error(
-            'Authentication check failed:',
-            error
-        );
+        // Do not log users out because the gateway/service timed out or returned
+        // 5xx/499. Only clear auth when the session is actually rejected.
+        if (error?.transientAuthFailure) {
+            toast('Authentication service is temporarily unavailable. Please retry.', 'error');
+            return false;
+        }
 
         clearAuthStorage();
-
         location.replace(LOGIN_URL);
-
         return false;
     }
 }
