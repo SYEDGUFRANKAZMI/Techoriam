@@ -3209,8 +3209,16 @@
         let runInputHistory = [];
         let runInputHistoryIndex = -1;
 
+        // Keep this key aligned with the main Techoriam login page.
+        // Browser storage is isolated by origin (scheme + host + port).
         function getToken() {
-            return localStorage.getItem('techoriam_token') || sessionStorage.getItem('techoriam_token');
+            try {
+                return localStorage.getItem('techoriam_token') ||
+                       sessionStorage.getItem('techoriam_token') || null;
+            } catch (error) {
+                console.error('[Techoriam IDE] Unable to read auth storage:', error);
+                return null;
+            }
         }
 
         function getName() {
@@ -3218,16 +3226,23 @@
         }
 
         function clearAuth() {
-            ['techoriam_token','techoriam_user_id','techoriam_user_name','techoriam_user_email','techoriam_remember']
-                .forEach(k => { localStorage.removeItem(k); sessionStorage.removeItem(k); });
+            const keys = ['techoriam_token','techoriam_user_id','techoriam_user_name','techoriam_user_email','techoriam_remember'];
+            keys.forEach(k => {
+                try { localStorage.removeItem(k); } catch (error) { console.warn('[Techoriam IDE] localStorage cleanup failed:', error); }
+                try { sessionStorage.removeItem(k); } catch (error) { console.warn('[Techoriam IDE] sessionStorage cleanup failed:', error); }
+            });
         }
 
-        function isExpired(t) {
+        function isExpired(token) {
+            if (typeof token !== 'string' || !token.trim()) return true;
             try {
-                let p = t.split('.')[1].replace(/-/g,'+').replace(/_/g,'/');
-                while (p.length % 4) p += '=';
-                const d = JSON.parse(atob(p));
-                return d.exp ? Date.now() >= d.exp * 1000 : false;
+                const parts = token.split('.');
+                if (parts.length !== 3 || !parts[1]) return true;
+                let payload = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+                while (payload.length % 4) payload += '=';
+                const claims = JSON.parse(atob(payload));
+                // JWTs without exp are not rejected client-side; the API remains authoritative.
+                return typeof claims.exp === 'number' && Date.now() >= claims.exp * 1000;
             } catch {
                 return true;
             }
@@ -3395,37 +3410,50 @@
             pre.scrollLeft = ta.scrollLeft;
         }
 
+        let authRedirectStarted = false;
+        function redirectToLogin(reason) {
+            if (authRedirectStarted) return;
+            authRedirectStarted = true;
+            console.warn('[Techoriam IDE] Redirecting to login:', reason);
+            location.href = LOGIN_URL;
+        }
+
         async function api(path, opts) {
             opts = opts || {};
-            const t = getToken();
+            const token = getToken();
 
-            if (!t || isExpired(t)) {
+            if (!token || isExpired(token)) {
                 clearAuth();
-                location.href = LOGIN_URL;
-                throw new Error('Auth');
+                redirectToLogin(!token ? 'No token found in this origin storage' : 'JWT is expired or invalid');
+                throw new Error(!token ? 'Login required. No Techoriam token was found for this website origin.' : 'Your session has expired. Please sign in again.');
             }
 
             const headers = new Headers(opts.headers || {});
-            headers.set('Authorization', 'Bearer ' + t);
+            headers.set('Authorization', 'Bearer ' + token);
+            if (opts.body != null && !headers.has('Content-Type')) headers.set('Content-Type', 'application/json');
 
-            if (opts.body && !headers.has('Content-Type'))
-                headers.set('Content-Type', 'application/json');
-
-            let res;
-
+            let response;
             try {
-                res = await fetch(API + path, Object.assign({}, opts, { headers }));
-            } catch {
-                throw new Error('Cannot reach IDEService at ' + API);
+                response = await fetch(new URL(path, API.replace(/\/$/, '') + '/').toString(), {
+                    ...opts,
+                    headers,
+                    credentials: 'omit'
+                });
+            } catch (error) {
+                console.error('[Techoriam IDE] API network/CORS failure:', path, error);
+                throw new Error('Cannot reach the IDE API. Check the browser Network tab for CORS, DNS, TLS, or server errors.');
             }
 
-            if (res.status === 401 || res.status === 403) {
+            if (response.status === 401) {
                 clearAuth();
-                location.href = LOGIN_URL;
-                throw new Error('Session expired');
+                redirectToLogin('API returned 401 Unauthorized for ' + path);
+                throw new Error('Your session was rejected (401). Please sign in again.');
             }
-
-            return res;
+            if (response.status === 403) {
+                // A 403 can mean insufficient permission, not an expired login; don't erase a valid session.
+                throw new Error('Access denied (403) for ' + path + '. Check account permissions and backend authorization.');
+            }
+            return response;
         }
 
         async function json(res) {
@@ -4426,7 +4454,10 @@
         async function loadLanguages() {
             try {
                 const res = await api('/languages');
-                if (!res.ok) return;
+                if (!res.ok) {
+                    console.warn('[Techoriam IDE] /languages returned HTTP', res.status);
+                    return;
+                }
 
                 const list = await json(res);
                 if (!Array.isArray(list) || !list.length) return;
@@ -4448,7 +4479,8 @@
 
                 populateLanguageControls();
                 populateProjectLanguage();
-            } catch {
+            } catch (error) {
+                console.warn('[Techoriam IDE] Could not load language catalogue; using built-in languages.', error);
             }
         }
 
@@ -4485,7 +4517,8 @@
                 panelVisible = false;
 
                 localStorage.setItem(FONT_K, fontSize);
-            } catch {
+            } catch (error) {
+                console.warn('[Techoriam IDE] Could not load settings; using local defaults.', error);
             }
         }
 
@@ -4642,16 +4675,16 @@
 
 
 function runWsUrl() {
-    const token = getToken() || '';
+    const token = getToken();
+    if (!token || isExpired(token)) throw new Error('Your login session is missing or expired. Sign in again.');
+
     const base = new URL(API);
-
-    const protocol = base.protocol === 'https:' ? 'wss:' : 'ws:';
-
-    return protocol +
-        '//' +
-        base.host +
-        '/api/ide/run/ws?access_token=' +
-        encodeURIComponent(token);
+    const wsUrl = new URL('/api/ide/run/ws', base.origin);
+    wsUrl.protocol = base.protocol === 'https:' ? 'wss:' : 'ws:';
+    // Browser WebSocket does not support custom Authorization headers. This preserves the
+    // existing backend contract; production should replace query tokens with a short-lived one-time ticket.
+    wsUrl.searchParams.set('access_token', token);
+    return wsUrl.toString();
 }
 
         function showCompileError(error) {
@@ -4955,14 +4988,19 @@ function runWindowInputKey(e) {
         }
     };
 
-    ws.onerror = () => {
-        appendRunOutput('Run WebSocket connection failed.', 'stderr');
-        document.getElementById('runWindowStatus').textContent = 'Error';
+    ws.onerror = event => {
+        console.error('[Techoriam IDE] WebSocket error:', event);
+        appendRunOutput('Run WebSocket connection failed. Check DevTools → Network → WS for handshake status and server logs.', 'stderr');
+        document.getElementById('runWindowStatus').textContent = 'Connection Error';
         document.getElementById('runWindowInput').disabled = true;
         setStatus('Error');
     };
 
-    ws.onclose = () => {
+    ws.onclose = event => {
+        console.warn('[Techoriam IDE] WebSocket closed:', { code: event.code, reason: event.reason, wasClean: event.wasClean });
+        if (event.code !== 1000 && event.code !== 1001) {
+            appendRunOutput('WebSocket closed (code ' + event.code + ')' + (event.reason ? ': ' + event.reason : '') + '.', 'stderr');
+        }
         runSocket = null;
         document.getElementById('runWindowInput').disabled = true;
 
@@ -5218,6 +5256,7 @@ function runWindowInputKey(e) {
                 setStatus('Ready');
                 toast('IDE connected');
             } catch (e) {
+                console.error('[Techoriam IDE] Startup failed:', e);
                 setStatus('Offline');
                 document.getElementById('outOutput').innerHTML =
                     '<span class="err">⚠️ ' + esc(e.message) + '</span>';
@@ -5225,7 +5264,7 @@ function runWindowInputKey(e) {
                 renderTabs();
                 showEditor(false);
                 showWelcome();
-                toast('IDE backend connection failed', 'err');
+                toast(e.message || 'IDE backend connection failed', 'err');
             }
         }
 
