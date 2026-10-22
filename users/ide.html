@@ -3434,7 +3434,12 @@
 
             let response;
             try {
-                response = await fetch(new URL(path, API.replace(/\/$/, '') + '/').toString(), {
+                // A leading slash in URL() resets the path to the domain root.
+                // Strip leading slashes so '/settings' resolves to '/api/ide/settings'.
+                const apiPath = String(path || '').replace(/^\/+/, '');
+                const apiBase = API.replace(/\/+$/, '') + '/';
+                const requestUrl = new URL(apiPath, apiBase).toString();
+                response = await fetch(requestUrl, {
                     ...opts,
                     headers,
                     credentials: 'omit'
@@ -5045,6 +5050,7 @@ function runWindowInputKey(e) {
 
             if (id) {
                 const el = document.getElementById(id);
+                if (!el) return;
                 if (currentPanel === 'console') {
                     el.innerHTML = '<div class="ide-console-info"><span class="ide-console-dot"></span><div><strong>Output cleared</strong><span>Run opens in a floating window.</span></div></div>';
                 } else {
@@ -5258,8 +5264,12 @@ function runWindowInputKey(e) {
             } catch (e) {
                 console.error('[Techoriam IDE] Startup failed:', e);
                 setStatus('Offline');
-                document.getElementById('outOutput').innerHTML =
-                    '<span class="err">⚠️ ' + esc(e.message) + '</span>';
+                const startupOutput = document.getElementById('outOutput')
+                    || document.getElementById('outConsole')
+                    || document.getElementById('runWindowOutput');
+                if (startupOutput) {
+                    startupOutput.textContent = '⚠️ ' + (e && e.message ? e.message : 'IDE backend connection failed.');
+                }
                 renderTree();
                 renderTabs();
                 showEditor(false);
