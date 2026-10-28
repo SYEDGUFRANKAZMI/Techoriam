@@ -1618,6 +1618,250 @@ footer{max-width:1540px;margin:0 auto;padding:25px clamp(18px,3.5vw,58px);paddin
 #blogsContent,.topic-block{scroll-margin-top:calc(var(--nav-height,70px) + 110px)!important}
 @media(max-width:760px){.course-content-intro{top:4px!important;min-height:78px!important;padding:10px 2px 11px!important}.course-content-intro .hero-badge{margin-bottom:4px!important}.course-content-intro h3{font-size:1.05rem!important}}
 
+
+        /* ===== Responsive refinement: phones, tablets, laptops and touch ===== */
+        :root {
+            --mobile-gutter: clamp(12px, 3.8vw, 24px);
+            --mobile-nav-height: 64px;
+        }
+        html { width: 100%; max-width: 100%; overflow-x: clip; }
+        body { width: 100%; min-width: 0; overflow-x: clip; }
+        img, video, iframe, canvas, svg { max-width: 100%; }
+        button, input, select, textarea { font: inherit; }
+        button, a, select, input { -webkit-tap-highlight-color: transparent; }
+        :where(button, a, input, select, textarea, [tabindex]):focus-visible {
+            outline: 2px solid var(--accent-bright);
+            outline-offset: 3px;
+        }
+        .main-content, #coursesView, #courseDetailView, .grid,
+        .detail-view, .reader, .reader-body, .reader-main, .article { min-width: 0; }
+        .grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); }
+        .card { min-width: 0; }
+        .card h3, .card p, .blog-info h4, .blog-info p,
+        .detail-head h2, .article h1 { overflow-wrap: anywhere; }
+        .search-row > *, .catalog-controls > * { min-width: 0; }
+        .catalog-controls .search-box { min-width: 0; }
+        .catalog-controls input { min-width: 0; }
+        .sort-control { display: flex; align-items: center; gap: 9px; }
+        .sort-control select { min-width: 0; max-width: 100%; }
+        .reader-sidebar { min-height: 0; }
+        .reader-item, .sb-topic-head { overflow-wrap: anywhere; }
+        .article-content { overflow-wrap: anywhere; }
+        .article-content pre { max-width: 100%; white-space: pre; overscroll-behavior-x: contain; }
+        .article-content table { display: block; max-width: 100%; overflow-x: auto; }
+        .article-content iframe { width: 100%; aspect-ratio: 16 / 9; height: auto; }
+        .article-content video { width: 100%; height: auto; }
+        .ti-float { max-width: calc(100vw - 24px); }
+        .ti-panel { max-width: 100%; }
+
+        @media (min-width: 1500px) {
+            .main-content { max-width: 1440px; padding-inline: 32px; }
+            .grid { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; }
+        }
+
+        @media (max-width: 1024px) {
+            :root { --nav-height: 64px; }
+            .navbar { padding-inline: 20px; gap: 12px; }
+            .nav-links a { padding-inline: 10px; }
+            .main-content { padding-inline: 20px; }
+            .catalog-toolbar { top: calc(var(--nav-height) + 4px); }
+            .reader-top { padding: 10px 14px; gap: 10px; }
+            .reader-top-left, .reader-top-right { gap: 7px; }
+            .reader-sidebar { width: 270px; }
+            .article { padding: 34px clamp(22px, 4vw, 42px) 80px; }
+        }
+
+        @media (max-width: 760px) {
+            :root { --nav-height: 60px; }
+            .navbar {
+                height: var(--nav-height);
+                padding: 0 var(--mobile-gutter);
+                gap: 8px;
+            }
+            .brand { gap: 7px; font-size: 1rem; }
+            .brand .logo { width: 30px; height: 30px; border-radius: 9px; }
+            .nav-links { display: none; }
+            .nav-right { margin-left: auto; gap: 8px; }
+            .user-chip { padding: 2px 8px 2px 2px; gap: 5px; }
+            .user-avatar { width: 29px; height: 29px; }
+            .user-name { display: none; }
+            .nav-right .btn { min-height: 36px; padding: 7px 10px; font-size: .72rem; }
+            .main-content {
+                padding: calc(var(--nav-height) + 16px) var(--mobile-gutter) 44px;
+            }
+            .hero { margin-bottom: 18px; padding: clamp(20px, 5vw, 30px); border-radius: 20px; }
+            .hero-badge { font-size: .62rem; padding: 6px 10px; letter-spacing: .045em; }
+            .hero h1 { font-size: clamp(2rem, 8.5vw, 3.2rem); line-height: 1.04; }
+            .hero p { font-size: .91rem; line-height: 1.65; }
+            .hero-highlights { gap: 9px 13px; margin-top: 17px; font-size: .72rem; }
+            .catalog-toolbar {
+                position: relative;
+                top: auto;
+                z-index: 2;
+                margin: 0 0 18px;
+                padding: 16px 0 0;
+                background: transparent;
+                border-bottom: 0;
+                backdrop-filter: none;
+                -webkit-backdrop-filter: none;
+            }
+            .catalog-heading { align-items: flex-start; gap: 10px; margin-bottom: 13px; }
+            .catalog-heading h2 { font-size: clamp(1.35rem, 5vw, 1.7rem); }
+            .catalog-heading p { font-size: .78rem; }
+            .catalog-live { flex-shrink: 0; padding: 7px 9px; font-size: .64rem; }
+            .search-row, .catalog-controls {
+                display: grid;
+                grid-template-columns: minmax(0, 1fr) auto;
+                gap: 9px;
+                margin: 0 0 18px;
+            }
+            .catalog-controls .search-box { grid-column: 1 / -1; width: 100%; min-height: 48px; }
+            .catalog-controls .search-box input { font-size: 16px; }
+            .search-shortcut { display: none; }
+            .sort-control { min-height: 43px; padding: 0 10px; border: 1px solid var(--learn-border); border-radius: 12px; background: rgba(13,20,36,.9); font-size: .75rem; }
+            .sort-control select { flex: 1; width: 100%; min-height: 40px; background: transparent; color: var(--text); border: 0; outline: 0; font-size: 16px; }
+            .sort-control select option { background: #101827; color: #fff; }
+            .clear-search { min-height: 43px; padding: 0 12px; border: 1px solid var(--learn-border); border-radius: 12px; background: rgba(148,163,184,.06); font-size: .75rem; }
+            .count-pill { min-height: 43px; justify-content: center; padding: 0 11px; font-size: .72rem; }
+            .grid, .launch-grid { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+            .card { border-radius: 18px; padding: 0 0 2px; }
+            .course-thumbnail { height: clamp(150px, 43vw, 220px); }
+            .card .card-top, .card > h3, .card > p, .card .tag-row,
+            .card .card-foot, .card .course-progress { margin-left: 16px; margin-right: 16px; }
+            .card .card-top { margin-top: 14px; }
+            .card > h3 { font-size: 1.05rem; margin-top: 12px; }
+            .card > p { font-size: .82rem; min-height: 0; }
+            .card .card-foot { padding: 13px 0 15px; margin-top: 14px; }
+            .go { opacity: 1; transform: none; }
+            .detail-head { padding: 22px 18px; margin-bottom: 16px; }
+            .detail-head h2 { font-size: clamp(1.5rem, 6vw, 2.1rem); }
+            .detail-head .desc { font-size: .9rem; }
+            .tabs { width: 100%; display: flex; flex-wrap: nowrap; overflow-x: auto; overscroll-behavior-x: contain; padding: 5px; gap: 4px; margin: 16px 0; }
+            .tab { flex: 0 0 auto; margin: 0; padding: 10px 12px; font-size: .8rem; white-space: nowrap; }
+            .topic-block { border-radius: 15px; }
+            .topic-title { padding: 13px 12px; gap: 8px; }
+            .topic-title .topic-number { width: 30px; height: 30px; flex-basis: 30px; }
+            .topic-title .topic-count { font-size: .68rem; }
+            .topic-blogs { padding: 7px; gap: 6px; }
+            .blog-row { padding: 11px; gap: 10px; border-radius: 12px; }
+            .blog-icon { flex: 0 0 34px; height: 34px; font-size: 1rem; border-radius: 10px; }
+            .blog-info h4 { font-size: .9rem; }
+            .blog-info p { font-size: .78rem; }
+            .blog-meta { gap: 7px 10px; font-size: .69rem; }
+            .read-pill { margin-left: 0; }
+            .back-link { min-height: 42px; padding: 10px 12px; }
+            footer { padding: 22px var(--mobile-gutter); gap: 12px; }
+            .ti-float { right: 12px; top: auto; bottom: 12px; transform: none; padding: 10px 12px; font-size: .72rem; }
+            .ti-float:hover { transform: none; }
+            .toast { left: 12px; right: 12px; bottom: 70px; padding: 12px 14px; text-align: center; }
+            .reader { height: 100dvh; height: 100svh; }
+            .reader-top { align-items: flex-start; flex-wrap: wrap; padding: 9px 10px; gap: 8px; }
+            .reader-top-left { min-width: 0; flex: 1 1 100%; flex-wrap: wrap; }
+            .reader-top-right { margin-left: auto; }
+            .reader-top .icon-btn { min-height: 36px; padding: 7px 9px; font-size: .72rem; }
+            #readerCourseTitle { min-width: 0; flex: 1 1 100%; font-size: .72rem !important; overflow-wrap: anywhere; }
+            .reader-body { position: relative; min-height: 0; overflow: hidden; }
+            .reader-sidebar {
+                display: flex;
+                position: absolute;
+                inset: 0 auto 0 0;
+                z-index: 5;
+                width: min(88vw, 340px);
+                max-width: 100%;
+                height: 100%;
+                transform: translateX(-105%);
+                transition: transform .22s ease;
+                box-shadow: 18px 0 48px rgba(0,0,0,.35);
+            }
+            .reader.sidebar-open .reader-sidebar { transform: translateX(0); }
+            .reader.sidebar-collapsed .reader-sidebar { display: flex; transform: translateX(-105%); }
+            .reader.sidebar-open .reader-sidebar { display: flex; }
+            .reader-main { width: 100%; min-width: 0; }
+            .article { max-width: 100%; padding: 25px 18px 80px; }
+            .article-eyebrow { font-size: .72rem; }
+            .article h1 { font-size: clamp(1.6rem, 7vw, 2.15rem); line-height: 1.16; }
+            .article-meta { gap: 8px 12px; font-size: .7rem; }
+            .article-content { font-size: .96rem; line-height: 1.8; }
+            .article-content h2 { font-size: 1.25rem; margin-top: 27px; }
+            .article-content h3 { font-size: 1.08rem; }
+            .article-content pre { padding: 12px; font-size: .76rem; border-radius: 8px; }
+            .article-content img, .article-images img { height: auto; }
+        }
+
+        @media (max-width: 390px) {
+            .catalog-heading { display: block; }
+            .catalog-live { display: inline-flex; margin-top: 10px; }
+            .hero-highlights { display: grid; grid-template-columns: 1fr; }
+            .catalog-controls { grid-template-columns: minmax(0, 1fr); }
+            .sort-control, .clear-search, .count-pill { width: 100%; }
+            .sort-control { justify-content: space-between; }
+            .sort-control select { max-width: 68%; text-align: right; }
+            .card .card-top { gap: 7px; }
+            .level-tag { white-space: normal; text-align: right; }
+            .stat-row { flex-wrap: wrap; }
+            .reader-top-left { gap: 6px; }
+            .reader-top-right { width: 100%; justify-content: flex-end; }
+            .reader-top-right .icon-btn { flex: 0 0 auto; }
+            .ti-float span:last-child { max-width: 145px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        }
+
+        @media (max-width: 320px) {
+            .brand { font-size: .9rem; }
+            .brand .logo { width: 27px; height: 27px; }
+            .nav-right .btn { padding-inline: 7px; font-size: .65rem; }
+            .main-content { padding-inline: 10px; }
+            .hero { padding: 17px 14px; }
+            .hero h1 { font-size: 1.85rem; }
+            .course-thumbnail { height: 140px; }
+            .card .card-top, .card > h3, .card > p, .card .tag-row,
+            .card .card-foot, .card .course-progress { margin-left: 12px; margin-right: 12px; }
+            .blog-row { padding: 9px; }
+            .article { padding-inline: 13px; }
+        }
+
+        @media (hover: none) and (pointer: coarse) {
+            .card:hover, .blog-row:hover, .launch-card:hover { transform: none; }
+            .card:hover::before { opacity: 0; }
+            .go { opacity: 1; transform: none; }
+            .back-link, .tab, .icon-btn, .enroll-btn, .clear-search { min-height: 40px; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+        }
+
+    
+/* Techoriam Intelligence is available ONLY inside the open blog reader. */
+.ti-float { display:none !important; }
+#blogOverlay.show .ti-float {
+    display:flex !important;
+    position:absolute !important;
+    right:0 !important;
+    top:46% !important;
+    bottom:auto !important;
+    left:auto !important;
+    transform:none !important;
+    z-index:30 !important;
+    width:42px !important;
+    min-height:190px !important;
+    max-width:42px !important;
+    padding:14px 7px !important;
+    border-radius:13px 0 0 13px !important;
+    writing-mode:vertical-rl !important;
+    box-shadow:-8px 8px 26px rgba(0,0,0,.32) !important;
+}
+#blogOverlay.show .ti-float:hover { width:42px !important; transform:none !important; }
+#blogOverlay.show .reader-main { padding-right:0 !important; }
+@media (max-width:760px) {
+    #blogOverlay.show .ti-float {
+        top:42% !important;
+        width:34px !important;
+        min-height:158px !important;
+        max-width:34px !important;
+        padding:11px 5px !important;
+        font-size:.6rem !important;
+    }
+}
 </style>
 </head>
 <body>
@@ -1748,11 +1992,12 @@ footer{max-width:1540px;margin:0 auto;padding:25px clamp(18px,3.5vw,58px);paddin
                 <div class="article" id="blogReaderContent"></div>
             </div>
         </div>
+        <button class="ti-float" id="techoriamIntelligenceButton" type="button"
+            aria-label="Open Techoriam Intelligence" title="Open Techoriam Intelligence"><span aria-hidden="true">✦</span><span>Techoriam Intelligence</span></button>
     </div>
 
     
-    <button class="ti-float" id="techoriamIntelligenceButton" type="button"
-        aria-label="Open Techoriam Intelligence" title="Open Techoriam Intelligence"><span aria-hidden="true">✦</span><span>Techoriam Intelligence</span></button>
+
 
     <div class="ti-panel-backdrop" id="tiPanelBackdrop" hidden>
         <aside class="ti-panel" role="dialog" aria-modal="true" aria-labelledby="tiTitle">
@@ -3854,6 +4099,10 @@ async function completeCourseActivity() {
             overlay.classList.remove('show');
             document.body.classList.remove('reader-open');
 
+            // Intelligence belongs to the blog reader only: close it with the reader.
+            const intelligenceBackdrop = document.getElementById('tiPanelBackdrop');
+            if (intelligenceBackdrop) intelligenceBackdrop.hidden = true;
+
             document.body.style.overflow =
                 '';
 
@@ -4618,8 +4867,19 @@ async function completeCourseActivity() {
             const backdrop = document.getElementById('tiPanelBackdrop');
             const close = document.getElementById('tiClose');
             if (!open || !backdrop || !close) return;
-            const show = () => { backdrop.hidden = false; document.body.style.overflow = 'hidden'; };
-            const hide = () => { backdrop.hidden = true; if (!document.getElementById('blogOverlay')?.classList.contains('show')) document.body.style.overflow = ''; };
+            const show = () => {
+                // Prevent opening the assistant outside an active blog-reading session.
+                const reader = document.getElementById('blogOverlay');
+                if (!reader || !reader.classList.contains('show')) return;
+                backdrop.hidden = false;
+                document.body.style.overflow = 'hidden';
+            };
+            const hide = () => {
+                backdrop.hidden = true;
+                if (!document.getElementById('blogOverlay')?.classList.contains('show')) {
+                    document.body.style.overflow = '';
+                }
+            };
             open.addEventListener('click', show);
             close.addEventListener('click', hide);
             backdrop.addEventListener('click', e => { if (e.target === backdrop) hide(); });
