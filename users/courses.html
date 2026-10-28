@@ -1558,6 +1558,24 @@ footer{max-width:1540px;margin:0 auto;padding:25px clamp(18px,3.5vw,58px);paddin
 
 
 
+
+/* Reader sidebar: reliable hide/show on desktop and slide-in drawer on mobile. */
+.reader-body{display:grid!important;grid-template-columns:286px minmax(0,1fr)!important;transition:grid-template-columns .22s ease!important;min-width:0!important}
+.reader-sidebar{display:flex!important;flex-direction:column!important;min-width:0!important;overflow:hidden auto!important;transition:opacity .18s ease,transform .22s ease,width .22s ease!important}
+.reader-main{grid-column:2!important;min-width:0!important;width:100%!important}
+.reader.sidebar-collapsed .reader-body{grid-template-columns:0 minmax(0,1fr)!important}
+.reader.sidebar-collapsed .reader-sidebar{width:0!important;min-width:0!important;max-width:0!important;padding:0!important;margin:0!important;border:0!important;opacity:0!important;overflow:hidden!important;pointer-events:none!important}
+.reader.sidebar-collapsed .reader-main{grid-column:1 / -1!important}
+.reader-sidebar-toggle{display:inline-flex!important;align-items:center!important;justify-content:center!important;gap:7px!important;cursor:pointer!important}
+.reader-sidebar-toggle:focus-visible{outline:2px solid var(--accent-bright,#8b9dff)!important;outline-offset:3px!important}
+@media(max-width:760px){
+ .reader-body{display:block!important;position:relative!important}
+ .reader-sidebar{display:flex!important;position:absolute!important;left:0!important;top:0!important;bottom:0!important;width:min(82vw,300px)!important;max-width:300px!important;z-index:20!important;transform:translateX(-110%)!important;opacity:0!important;pointer-events:none!important;background:var(--panel,#0b1020)!important;box-shadow:15px 0 45px rgba(0,0,0,.4)!important}
+ .reader.sidebar-open .reader-sidebar{transform:translateX(0)!important;opacity:1!important;pointer-events:auto!important}
+ .reader.sidebar-collapsed .reader-sidebar{width:min(82vw,300px)!important;max-width:300px!important;padding:initial!important;border-right:1px solid var(--border,rgba(255,255,255,.12))!important}
+ .reader-main,.reader.sidebar-collapsed .reader-main{grid-column:auto!important;width:100%!important}
+}
+
 /* ===== Final learning UX: compact hero, scroll-friendly course detail, collapsible reader ===== */
 .hero{min-height:0!important;grid-template-columns:minmax(0,1fr) minmax(190px,.42fr)!important;gap:20px!important;padding:clamp(18px,2.2vw,28px)!important;margin-bottom:20px!important;border-radius:22px!important}
 .hero h1{font-size:clamp(1.75rem,3vw,2.65rem)!important;line-height:1.04!important;letter-spacing:-.055em!important;max-width:560px!important;margin:0 0 9px!important}
@@ -1586,6 +1604,19 @@ footer{max-width:1540px;margin:0 auto;padding:25px clamp(18px,3.5vw,58px);paddin
 @media(max-width:1000px){.hero{grid-template-columns:minmax(0,1fr) minmax(160px,.4fr)!important}.reader-body{grid-template-columns:260px minmax(0,1fr)!important}}
 @media(max-width:760px){.hero{grid-template-columns:1fr!important;gap:12px!important;padding:18px!important}.hero h1{font-size:clamp(1.65rem,7vw,2.25rem)!important}.hero-highlights{grid-template-columns:repeat(3,minmax(0,1fr))!important}.hero-highlights span{font-size:.61rem!important}.detail-head{padding:16px!important}.detail-head .desc{font-size:.82rem!important;line-height:1.55!important}.tabs{top:calc(var(--nav-height) + 5px)!important}.reader-top{padding:0 10px!important;gap:6px!important}.reader-top-left{gap:6px!important}.reader-sidebar-toggle{font-size:.72rem!important;padding:8px!important}.reader-body{grid-template-columns:minmax(0,1fr)!important}.reader-sidebar{position:absolute!important;z-index:12!important;left:0!important;top:58px!important;bottom:0!important;width:min(82vw,290px)!important;max-width:290px!important;transform:translateX(-105%)!important;box-shadow:15px 0 45px rgba(0,0,0,.38)!important}.reader.sidebar-open .reader-sidebar{transform:translateX(0)!important;opacity:1!important;pointer-events:auto!important}.reader.sidebar-collapsed .reader-sidebar{transform:translateX(-105%)!important;width:min(82vw,290px)!important;min-width:0!important;padding:initial!important;border-right:1px solid var(--border)!important}.reader.sidebar-collapsed .reader-body{grid-template-columns:minmax(0,1fr)!important}.reader.sidebar-collapsed .reader-main{grid-column:1!important}.reader-main{grid-column:1!important}.article{padding:23px 17px!important}#readerCourseTitle{max-width:24vw!important}}
 @media(prefers-reduced-motion:reduce){.reader-body,.reader-sidebar{transition:none!important}}
+
+
+/* ===== Requested final behavior: only Topics & lessons heading sticks ===== */
+.detail-head{position:relative!important;top:auto!important;z-index:1!important;transform:none!important}
+.detail-head .desc{position:static!important;display:block!important;overflow:visible!important;max-height:none!important;-webkit-line-clamp:unset!important}
+/* Course tabs and description scroll away normally. */
+.tabs{position:relative!important;top:auto!important;z-index:2!important;backdrop-filter:none!important}
+/* Sticky topic/lesson title bar begins after the course intro has scrolled away. */
+.course-content-intro{position:sticky!important;top:calc(var(--nav-height,70px) + 8px)!important;z-index:50!important;display:flex!important;align-items:center!important;min-height:88px!important;margin:0 -2px 16px!important;padding:12px 2px 14px!important;background:linear-gradient(180deg,rgba(8,12,22,.98) 0%,rgba(8,12,22,.96) 86%,rgba(8,12,22,.88) 100%)!important;border-bottom:1px solid rgba(148,163,184,.16)!important;backdrop-filter:blur(18px) saturate(140%)!important;-webkit-backdrop-filter:blur(18px) saturate(140%)!important}
+.course-content-intro h3{margin:7px 0 3px!important;font-size:clamp(1.05rem,1.7vw,1.3rem)!important;line-height:1.25!important}
+.course-content-intro p{margin:0!important;font-size:.82rem!important}
+#blogsContent,.topic-block{scroll-margin-top:calc(var(--nav-height,70px) + 110px)!important}
+@media(max-width:760px){.course-content-intro{top:4px!important;min-height:78px!important;padding:10px 2px 11px!important}.course-content-intro .hero-badge{margin-bottom:4px!important}.course-content-intro h3{font-size:1.05rem!important}}
 
 </style>
 </head>
@@ -2944,9 +2975,15 @@ const LEARNING_API = "https://api.techoriam.com/api";
                 document.getElementById('blogOverlay');
 
             overlay.classList.add('show');
-            overlay.classList.remove('sidebar-collapsed', 'sidebar-open');
+            const isMobileReader = window.matchMedia('(max-width: 760px)').matches;
+            overlay.classList.toggle('sidebar-collapsed', isMobileReader);
+            overlay.classList.remove('sidebar-open');
             const sidebarToggle = document.getElementById('readerSidebarToggle');
-            if (sidebarToggle) { sidebarToggle.textContent = '☰ Hide lessons'; sidebarToggle.setAttribute('aria-expanded', 'true'); }
+            if (sidebarToggle) {
+                sidebarToggle.textContent = isMobileReader ? '☰ Show lessons' : '☰ Hide lessons';
+                sidebarToggle.setAttribute('aria-expanded', String(!isMobileReader));
+                sidebarToggle.title = isMobileReader ? 'Show lesson sidebar' : 'Hide lesson sidebar';
+            }
             document.body.classList.add('reader-open');
 
             document.getElementById(
@@ -3786,18 +3823,20 @@ async function completeCourseActivity() {
             const button = document.getElementById('readerSidebarToggle');
             if (!overlay || !button) return;
             const isMobile = window.matchMedia('(max-width: 760px)').matches;
+            const currentlyOpen = isMobile
+                ? overlay.classList.contains('sidebar-open')
+                : !overlay.classList.contains('sidebar-collapsed');
             if (isMobile) {
-                const isOpen = overlay.classList.toggle('sidebar-open');
-                overlay.classList.toggle('sidebar-collapsed', !isOpen);
-                button.textContent = isOpen ? '☰ Hide lessons' : '☰ Lessons';
-                button.setAttribute('aria-expanded', String(isOpen));
-                button.title = isOpen ? 'Hide lesson sidebar' : 'Show lesson sidebar';
+                overlay.classList.toggle('sidebar-open', !currentlyOpen);
+                overlay.classList.toggle('sidebar-collapsed', currentlyOpen);
             } else {
-                const isCollapsed = overlay.classList.toggle('sidebar-collapsed');
-                button.textContent = isCollapsed ? '☰ Show lessons' : '☰ Hide lessons';
-                button.setAttribute('aria-expanded', String(!isCollapsed));
-                button.title = isCollapsed ? 'Show lesson sidebar' : 'Hide lesson sidebar';
+                overlay.classList.toggle('sidebar-collapsed', currentlyOpen);
+                overlay.classList.remove('sidebar-open');
             }
+            const open = !currentlyOpen;
+            button.textContent = open ? '☰ Hide lessons' : '☰ Show lessons';
+            button.setAttribute('aria-expanded', String(open));
+            button.title = open ? 'Hide lesson sidebar' : 'Show lesson sidebar';
         }
 
         function closeBlogReader() {
