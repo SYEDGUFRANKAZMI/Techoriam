@@ -4467,6 +4467,17 @@ async function completeCourseActivity() {
             const apiTopics = Array.isArray(root) ? [] : (field(root,'topics','Topics') || []);
             if (Array.isArray(apiTopics)) apiTopics.forEach(registerTopic);
 
+            // Fallback topic order for the C Programming course when the API returns a flat
+            // blog list without Topic.Order and the course list omits nested Topics.
+            // Canonical order matches the topic Order stored in the database.
+            const knownTopicOrder = new Map([
+                ['introduction to c programming', 1],
+                ['variables, data types and input/output', 2],
+                ['operators and decision making', 3],
+                ['loops and iteration', 4],
+                ['functions, arrays and strings', 5],
+                ['pointers, structures and memory basics', 6]
+            ]);
             let sourceIndex = 0;
             const addBlogs = (items, topicFallback = '', topicOrderFallback = null, topicIdFallback = '') => {
                 if (!Array.isArray(items)) return;
@@ -4486,8 +4497,9 @@ async function completeCourseActivity() {
                     const rawTopicOrder = field(item,'topicOrder','TopicOrder','topicSortOrder','TopicSortOrder');
                     const rawBlogOrder = field(item,'order','Order','sortOrder','SortOrder','position','Position');
                     const blogOrder = rawBlogOrder !== undefined ? Number(rawBlogOrder) : sourceIndex + 1;
+                    const inferredTopicOrder = knownTopicOrder.get(String(topicName).trim().toLowerCase());
                     const topicOrder = rawTopicOrder !== undefined ? Number(rawTopicOrder)
-                        : (topicMeta?.order ?? topicOrderFallback ?? 999999);
+                        : (topicMeta?.order ?? topicOrderFallback ?? inferredTopicOrder ?? 999999);
                     blogs.push({
                         ...item,
                         id, title: String(title),
