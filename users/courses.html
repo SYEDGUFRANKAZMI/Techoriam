@@ -1282,6 +1282,62 @@
         .ti-icon{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:rgba(79,127,255,.1);border:1px solid rgba(79,127,255,.25);color:var(--accent-bright);font-size:24px;margin-bottom:16px}
         .ti-panel-body h3{color:var(--text);font-size:1.05rem;margin-bottom:6px}.ti-panel-body p{max-width:270px;font-size:.8rem;line-height:1.6}
 
+
+
+/* ===== Techoriam modern dynamic learning layout ===== */
+:root{--learn-surface:rgba(16,24,43,.76);--learn-border:rgba(148,163,184,.16);--learn-muted:#9aa9c4;--learn-glow:rgba(79,127,255,.18)}
+.main-content{max-width:1320px;margin-inline:auto}
+.hero{position:relative;overflow:hidden;border:1px solid var(--learn-border);border-radius:28px;padding:clamp(28px,5vw,56px);background:radial-gradient(ellipse at 85% 10%,rgba(87,112,255,.20),transparent 42%),linear-gradient(135deg,rgba(17,29,53,.96),rgba(12,17,33,.96));box-shadow:0 24px 80px rgba(0,0,0,.18)}
+.hero h1{letter-spacing:-.045em}
+.search-row{margin:24px 0;gap:14px}
+.grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:22px}
+.card{position:relative;overflow:hidden;border:1px solid var(--learn-border);border-radius:22px;background:linear-gradient(160deg,rgba(20,30,52,.96),rgba(11,17,31,.98));box-shadow:0 10px 35px rgba(0,0,0,.12);transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;cursor:pointer}
+.card:hover{transform:translateY(-5px);border-color:rgba(105,140,255,.55);box-shadow:0 20px 50px rgba(0,0,0,.25),0 0 0 1px rgba(105,140,255,.08)}
+.course-thumbnail{height:184px;margin:0 0 0;border-radius:0;position:relative;background:radial-gradient(circle at 15% 20%,rgba(89,117,255,.38),transparent 42%),linear-gradient(135deg,#101d36,#20153e 62%,#092b37);border:0;border-bottom:1px solid var(--learn-border)}
+.course-thumbnail:after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(0deg,rgba(8,13,25,.52),transparent 58%)}
+.course-thumbnail .thumbnail-fallback{position:absolute;inset:0;z-index:1}
+.course-thumbnail .thumbnail-icon{font-size:3.8rem;filter:drop-shadow(0 10px 20px rgba(0,0,0,.22))}
+.card .card-top,.card>h3,.card>p,.card .tag-row,.card .card-foot,.card .course-progress{margin-left:20px;margin-right:20px}
+.card .card-top{margin-top:17px}
+.card>h3{font-size:1.12rem;letter-spacing:-.02em;line-height:1.35;margin-top:15px}
+.card>p{line-height:1.65;color:var(--learn-muted);min-height:3.1em}
+.card .tag-row{display:flex;flex-wrap:wrap;gap:7px;margin-top:15px}
+.card .tag{border:1px solid var(--learn-border);background:rgba(148,163,184,.07);border-radius:999px;padding:5px 9px}
+.card .card-foot{padding:15px 0 18px;border-top:1px solid var(--learn-border);margin-top:18px}
+.detail-view{max-width:1160px;margin:0 auto}
+.back-link{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--learn-border);background:rgba(148,163,184,.06);border-radius:12px;padding:10px 14px;cursor:pointer;margin-bottom:20px}
+.detail-head{padding:clamp(22px,4vw,38px);border:1px solid var(--learn-border);border-radius:24px;background:radial-gradient(ellipse at 90% 0,rgba(79,127,255,.14),transparent 45%),var(--learn-surface);margin-bottom:22px}
+.detail-head h2{font-size:clamp(1.65rem,4vw,2.5rem);letter-spacing:-.04em}
+.detail-head .desc{max-width:760px;color:var(--learn-muted);line-height:1.75;margin-top:10px}
+.tabs{display:flex;gap:8px;padding:7px;background:rgba(148,163,184,.06);border:1px solid var(--learn-border);border-radius:15px;width:max-content;max-width:100%;margin-bottom:22px;flex-wrap:wrap}
+.tab{border-radius:10px;padding:10px 15px}
+#blogsContent{display:grid;gap:16px}
+.topic-block{border:1px solid var(--learn-border);border-radius:19px;overflow:hidden;background:linear-gradient(145deg,rgba(18,27,47,.92),rgba(12,18,32,.94));box-shadow:0 8px 26px rgba(0,0,0,.10)}
+.topic-title{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:17px 20px;background:rgba(105,130,255,.055);border-bottom:1px solid var(--learn-border);font-weight:750;letter-spacing:-.01em}
+.topic-title .topic-left{display:flex;align-items:center;gap:12px;min-width:0}
+.topic-title .topic-number{display:grid;place-items:center;width:34px;height:34px;flex:0 0 34px;border-radius:11px;background:var(--learn-glow);border:1px solid rgba(105,140,255,.2);color:#b9c8ff;font-size:.82rem}
+.topic-title .topic-name{overflow-wrap:anywhere}
+.topic-title .topic-count{font-size:.75rem;color:var(--learn-muted);font-weight:600;white-space:nowrap}
+.topic-toggle{border:0;background:transparent;color:inherit;cursor:pointer;display:flex;align-items:center;gap:10px;text-align:left;width:100%;font:inherit}
+.topic-blogs{padding:8px 12px 12px;display:grid;gap:7px}
+.blog-row{display:flex;align-items:flex-start;gap:14px;padding:15px;border-radius:14px;border:1px solid transparent;background:rgba(148,163,184,.035);cursor:pointer;transition:background .18s,border-color .18s,transform .18s}
+.blog-row:hover{background:rgba(79,127,255,.09);border-color:rgba(105,140,255,.22);transform:translateX(2px)}
+.blog-icon{display:grid;place-items:center;flex:0 0 42px;height:42px;border-radius:13px;background:rgba(105,130,255,.10);border:1px solid var(--learn-border);font-size:1.15rem}
+.blog-info{min-width:0;flex:1}.blog-info h4{font-size:.98rem;line-height:1.45;margin:1px 0 5px}.blog-info p{font-size:.83rem;color:var(--learn-muted);line-height:1.6;margin:0 0 10px;overflow-wrap:anywhere}
+.blog-meta{display:flex;flex-wrap:wrap;gap:9px 14px;align-items:center;color:var(--learn-muted);font-size:.74rem}.read-pill{margin-left:auto;color:#bdcaff;font-weight:700;white-space:nowrap}
+.reader{backdrop-filter:blur(16px)}
+.reader-body{max-width:1500px;margin-inline:auto}
+.reader-sidebar{background:rgba(10,16,29,.98);border-right:1px solid var(--learn-border)}
+.sidebar-course{padding:19px;border-bottom:1px solid var(--learn-border)}
+.sidebar-list{padding:10px}
+.sb-topic-head{border-radius:10px}
+.reader-item{border-radius:9px;margin:3px 0;line-height:1.45}
+.reader-main{min-width:0}
+.article{max-width:900px;margin:0 auto;padding:clamp(22px,4vw,54px)}
+.article img{max-width:100%;height:auto;border-radius:14px}
+@media(max-width:760px){.hero{border-radius:20px}.course-thumbnail{height:165px}.card .card-foot{align-items:flex-start;gap:12px;flex-wrap:wrap}.detail-head{border-radius:18px}.blog-row{padding:12px;gap:10px}.blog-icon{flex-basis:36px;height:36px}.read-pill{margin-left:0}.reader-sidebar{width:min(86vw,330px)}}
+@media(prefers-reduced-motion:reduce){.card,.blog-row,.course-thumbnail img{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -4006,6 +4062,144 @@ async function completeCourseActivity() {
             await openBlogReader(
                 blogId
             );
+        }
+
+
+        // Dynamic UI normalization: supports API camelCase/PascalCase responses.
+        function dynamicField(obj, ...keys) {
+            for (const key of keys) {
+                const value = obj?.[key];
+                if (value !== undefined && value !== null && String(value).trim() !== '') return value;
+            }
+            return '';
+        }
+        function dynamicCourseId(course) { return dynamicField(course,'id','Id','courseId','CourseId'); }
+        function dynamicCourseTitle(course) { return dynamicField(course,'title','Title','name','Name') || 'Untitled course'; }
+        function dynamicCourseTopics(course) {
+            const value = dynamicField(course,'topics','Topics');
+            return Array.isArray(value) ? [...value].sort((a,b)=>Number(dynamicField(a,'order','Order')||0)-Number(dynamicField(b,'order','Order')||0)) : [];
+        }
+        function normalizeArray(data) {
+            if (Array.isArray(data)) return data;
+            const root = data?.data ?? data?.Data ?? data;
+            for (const key of ['items','Items','results','Results','courses','Courses','data','Data']) {
+                if (Array.isArray(root?.[key])) return root[key];
+            }
+            return [];
+        }
+        function filterCourses() {
+            const query = (document.getElementById('searchInput')?.value || '').trim().toLowerCase();
+            const filtered = allCourses.filter(course => {
+                const topicNames = dynamicCourseTopics(course).map(t => typeof t === 'string' ? t : dynamicField(t,'title','Title','name','Name'));
+                const searchable = [dynamicCourseTitle(course), dynamicField(course,'description','Description','excerpt','Excerpt'), dynamicField(course,'difficulty','Difficulty','level','Level'), ...topicNames].join(' ').toLowerCase();
+                return searchable.includes(query);
+            });
+            setCount('courseCount', `${filtered.length} course${filtered.length===1?'':'s'}`);
+            renderCourses(filtered);
+            if (typeof applyEnrollmentState === 'function') applyEnrollmentState();
+        }
+        async function openCourse(id) {
+            const courseId = normalizeId(id);
+            const found = allCourses.find(c => normalizeId(dynamicCourseId(c)) === courseId);
+            if (!found) { showToast('Course could not be found.','error'); return; }
+            currentCourse = found;
+            courseBlogs = [];
+            currentBlogId = null;
+            document.getElementById('coursesView').style.display = 'none';
+            document.getElementById('courseDetailView').classList.add('active');
+            document.getElementById('detailTitle').textContent = dynamicCourseTitle(found);
+            document.getElementById('detailDesc').textContent = dynamicField(found,'description','Description','excerpt','Excerpt') || 'Explore the topics and lessons in this course.';
+            const blogContainer = document.getElementById('blogsContent');
+            blogContainer.innerHTML = `<div class="empty"><div class="skeleton skel-line" style="width:40%;margin:0 auto 12px"></div><p>Loading course topics and lessons…</p></div>`;
+            switchTab('blogs');
+            window.scrollTo({top:0,behavior:'smooth'});
+            await Promise.all([loadCourseContent(dynamicCourseId(found)), loadCourseProgress(dynamicCourseId(found)).catch(()=>{})]);
+            const icon = dynamicField(found,'icon','Icon','emoji','Emoji') || '📘';
+            document.getElementById('sidebarCourseTitle').textContent = dynamicCourseTitle(found);
+            document.getElementById('sidebarCourseIcon').textContent = icon;
+        }
+        function extractCourseBlogs(data) {
+            const root = data?.data ?? data?.Data ?? data;
+            const blogs = [];
+            const addBlogs = (items, topicFallback='General', topicOrder=0) => {
+                if (!Array.isArray(items)) return;
+                for (const item of items) {
+                    if (!item || typeof item !== 'object') continue;
+                    const id = dynamicField(item,'id','Id','blogId','BlogId');
+                    const title = dynamicField(item,'title','Title','name','Name');
+                    if (!id || !title) continue;
+                    const isPublished = dynamicField(item,'isPublished','IsPublished');
+                    if (isPublished === false || String(isPublished).toLowerCase()==='false') continue;
+                    const topic = dynamicField(item,'topicTitle','TopicTitle','topicName','TopicName','topic','Topic') || topicFallback;
+                    blogs.push({...item,
+                        id, title,
+                        content: dynamicField(item,'content','Content','body','Body','html','Html','blogContent','BlogContent') || '',
+                        excerpt: dynamicField(item,'excerpt','Excerpt','description','Description','summary','Summary') || '',
+                        description: dynamicField(item,'description','Description') || '',
+                        icon: dynamicField(item,'icon','Icon','emoji','Emoji') || '📄',
+                        author: dynamicField(item,'author','Author','authorName','AuthorName') || '',
+                        readTime: dynamicField(item,'readTime','ReadTime','readingTime','ReadingTime') || '5 min',
+                        date: dynamicField(item,'date','Date','createdAt','CreatedAt') || '',
+                        order: Number(dynamicField(item,'order','Order') || 0),
+                        topic, topicTitle: topic,
+                        topicId: dynamicField(item,'topicId','TopicId') || '',
+                        _topicOrder: Number(dynamicField(item,'topicOrder','TopicOrder') || topicOrder || 0)
+                    });
+                }
+            };
+            if (Array.isArray(root)) addBlogs(root);
+            else {
+                addBlogs(dynamicField(root,'blogs','Blogs'));
+                addBlogs(dynamicField(root,'items','Items'));
+                const topics = dynamicField(root,'topics','Topics');
+                if (Array.isArray(topics)) [...topics].sort((a,b)=>Number(dynamicField(a,'order','Order')||0)-Number(dynamicField(b,'order','Order')||0)).forEach((topic,index)=>{
+                    const name = dynamicField(topic,'title','Title','name','Name','topicTitle','TopicTitle') || `Topic ${index+1}`;
+                    const order = Number(dynamicField(topic,'order','Order') || index+1);
+                    addBlogs(dynamicField(topic,'blogs','Blogs') || dynamicField(topic,'items','Items') || dynamicField(topic,'contents','Contents') || dynamicField(topic,'articles','Articles'), name, order);
+                });
+                if (!blogs.length) addBlogs(dynamicField(root,'content','Content'));
+            }
+            const seen = new Set();
+            return blogs.filter(b=>{const k=normalizeId(b.id);if(!k||seen.has(k))return false;seen.add(k);return true;})
+                .sort((a,b)=>a._topicOrder-b._topicOrder || a.order-b.order || a.title.localeCompare(b.title));
+        }
+        function groupByTopic(items) {
+            const groups = new Map();
+            for (const item of items || []) {
+                const name = item.topicTitle || item.topic || item.topicName || 'General';
+                if (!groups.has(name)) groups.set(name, {items:[], order:Number(item._topicOrder||0)});
+                const group = groups.get(name); group.order = Math.min(group.order, Number(item._topicOrder||group.order||0)); group.items.push(item);
+            }
+            return [...groups.entries()].sort((a,b)=>a[1].order-b[1].order).map(([name,g])=>[name,g.items.sort((a,b)=>Number(a.order||0)-Number(b.order||0))]);
+        }
+        function renderBlogs(blogs) {
+            const container = document.getElementById('blogsContent');
+            if (!container) return;
+            setCount('blogCount', blogs.length);
+            if (!blogs.length) { container.innerHTML = `<div class="empty"><h4>No published lessons yet</h4><p>Lessons added to this course will appear here automatically.</p></div>`; return; }
+            const groups = groupByTopic(blogs);
+            container.innerHTML = `<div class="course-content-intro"><div><span class="hero-badge"><span class="dot"></span> COURSE CONTENT</span><h3 style="margin:12px 0 5px;font-size:1.3rem">Topics & lessons</h3><p style="color:var(--learn-muted);font-size:.86rem">${groups.length} topics · ${blogs.length} published lessons</p></div></div>` + groups.map(([topic,items],index)=>{
+                const topicKey = `topic-${index}`;
+                return `<section class="topic-block"><div class="topic-title"><button type="button" class="topic-toggle" aria-expanded="true" onclick="toggleDynamicTopic('${topicKey}',this)"><span class="topic-left"><span class="topic-number">${String(index+1).padStart(2,'0')}</span><span class="topic-name">${esc(topic)}</span></span><span style="display:flex;align-items:center;gap:12px"><span class="topic-count">${items.length} lesson${items.length===1?'':'s'}</span><span class="topic-chevron">⌄</span></span></button></div><div class="topic-blogs" id="${topicKey}">${items.map((blog,bi)=>`<article class="blog-row" role="button" tabindex="0" onclick="openBlogReader('${esc(blog.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openBlogReader('${esc(blog.id)}')}"><div class="blog-icon">${esc(blog.icon||'📄')}</div><div class="blog-info"><h4>${esc(blog.title)}</h4><p>${esc(blog.excerpt||blog.description||'Open this lesson to read the complete notes and examples.')}</p><div class="blog-meta"><span>◷ ${esc(blog.readTime||'5 min')}</span>${blog.author?`<span>✍ ${esc(blog.author)}</span>`:''}${blog.date?`<span>◷ ${esc(String(blog.date).slice(0,10))}</span>`:''}<span class="read-pill">Open lesson ↗</span></div></div></article>`).join('')}</div></section>`;
+            }).join('');
+        }
+        function toggleDynamicTopic(id,button) {
+            const panel = document.getElementById(id); if (!panel) return;
+            const collapsed = panel.hidden || panel.style.display==='none';
+            panel.hidden = !collapsed; panel.style.display = collapsed ? 'grid' : 'none';
+            button.setAttribute('aria-expanded', String(collapsed));
+            const chevron = button.querySelector('.topic-chevron'); if (chevron) chevron.textContent = collapsed ? '⌄' : '›';
+        }
+        function buildSidebar(blogs, activeId) {
+            const list = document.getElementById('readerSidebarList'); if (!list) return;
+            const filter = (document.getElementById('sidebarFilterInput')?.value||'').trim().toLowerCase();
+            const groups = groupByTopic(blogs||[]);
+            list.innerHTML = groups.map(([topic,items],index)=>{
+                const filtered = filter ? items.filter(b=>`${b.title} ${b.excerpt||''}`.toLowerCase().includes(filter)) : items;
+                if (!filtered.length) return '';
+                const collapsed = collapsedTopics.has(topic);
+                return `<section class="sb-group"><div class="sb-topic-head" role="button" tabindex="0" onclick="toggleTopicGroup('${esc(topic)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleTopicGroup('${esc(topic)}')}"><span class="name">${esc(topic)}</span><span class="cnt">${filtered.length}</span><span aria-hidden="true">${collapsed?'›':'⌄'}</span></div><div style="display:${collapsed?'none':'block'}">${filtered.map(blog=>`<div class="reader-item${normalizeId(blog.id)===normalizeId(activeId)?' active':''}" role="button" tabindex="0" onclick="loadBlogInReader('${esc(blog.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();loadBlogInReader('${esc(blog.id)}')}">${esc(blog.title)}</div>`).join('')}</div></section>`;
+            }).join('') || `<div style="padding:20px;color:var(--text-muted);font-size:.82rem">No matching lessons</div>`;
         }
 
         async function initializeLearningHub() {
