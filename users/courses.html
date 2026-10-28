@@ -4442,56 +4442,121 @@ async function completeCourseActivity() {
         function extractCourseBlogs(data) {
             const root = data?.data ?? data?.Data ?? data;
             const blogs = [];
-            const addBlogs = (items, topicFallback='General', topicOrder=0) => {
+            const topicMetaById = new Map();
+            const topicMetaByName = new Map();
+            const field = (obj, ...keys) => {
+                for (const key of keys) {
+                    const value = obj?.[key];
+                    if (value !== undefined && value !== null && String(value).trim() !== '') return value;
+                }
+                return undefined;
+            };
+            const registerTopic = (topic, index = 0) => {
+                if (!topic || typeof topic !== 'object') return;
+                const id = field(topic,'id','Id','topicId','TopicId');
+                const name = String(field(topic,'title','Title','name','Name','topicTitle','TopicTitle') || `Topic ${index + 1}`).trim();
+                const rawOrder = field(topic,'order','Order','position','Position','sortOrder','SortOrder');
+                const order = rawOrder !== undefined ? Number(rawOrder) : index + 1;
+                const meta = { id: id == null ? '' : String(id), name, order: Number.isFinite(order) ? order : index + 1 };
+                if (meta.id) topicMetaById.set(meta.id.toLowerCase(), meta);
+                topicMetaByName.set(name.toLowerCase(), meta);
+            };
+            // Prefer the course's canonical ordered topics, then API topic objects.
+            const courseTopics = typeof currentCourse !== 'undefined' ? dynamicCourseTopics(currentCourse) : [];
+            courseTopics.forEach(registerTopic);
+            const apiTopics = Array.isArray(root) ? [] : (field(root,'topics','Topics') || []);
+            if (Array.isArray(apiTopics)) apiTopics.forEach(registerTopic);
+
+            let sourceIndex = 0;
+            const addBlogs = (items, topicFallback = '', topicOrderFallback = null, topicIdFallback = '') => {
                 if (!Array.isArray(items)) return;
                 for (const item of items) {
                     if (!item || typeof item !== 'object') continue;
-                    const id = dynamicField(item,'id','Id','blogId','BlogId');
-                    const title = dynamicField(item,'title','Title','name','Name');
-                    if (!id || !title) continue;
-                    const isPublished = dynamicField(item,'isPublished','IsPublished');
-                    if (isPublished === false || String(isPublished).toLowerCase()==='false') continue;
-                    const topic = dynamicField(item,'topicTitle','TopicTitle','topicName','TopicName','topic','Topic') || topicFallback;
-                    blogs.push({...item,
-                        id, title,
-                        content: dynamicField(item,'content','Content','body','Body','html','Html','blogContent','BlogContent') || '',
-                        excerpt: dynamicField(item,'excerpt','Excerpt','description','Description','summary','Summary') || '',
-                        description: dynamicField(item,'description','Description') || '',
-                        icon: dynamicField(item,'icon','Icon','emoji','Emoji') || '📄',
-                        author: dynamicField(item,'author','Author','authorName','AuthorName') || '',
-                        readTime: dynamicField(item,'readTime','ReadTime','readingTime','ReadingTime') || '5 min',
-                        date: dynamicField(item,'date','Date','createdAt','CreatedAt') || '',
-                        order: Number(dynamicField(item,'order','Order') || 0),
-                        topic, topicTitle: topic,
-                        topicId: dynamicField(item,'topicId','TopicId') || '',
-                        _topicOrder: Number(dynamicField(item,'topicOrder','TopicOrder') || topicOrder || 0)
+                    const id = field(item,'id','Id','blogId','BlogId');
+                    const title = field(item,'title','Title','name','Name');
+                    if (id == null || !title) continue;
+                    const published = field(item,'isPublished','IsPublished');
+                    if (published === false || String(published).toLowerCase() === 'false') continue;
+                    const topicIdValue = field(item,'topicId','TopicId','topicID','TopicID') ?? topicIdFallback;
+                    const explicitTopic = field(item,'topicTitle','TopicTitle','topicName','TopicName','topic','Topic');
+                    const topicMeta = (topicIdValue != null && topicMetaById.get(String(topicIdValue).toLowerCase()))
+                        || (explicitTopic && topicMetaByName.get(String(explicitTopic).toLowerCase()))
+                        || (topicFallback && topicMetaByName.get(String(topicFallback).toLowerCase()));
+                    const topicName = String(explicitTopic || topicMeta?.name || topicFallback || 'General').trim();
+                    const rawTopicOrder = field(item,'topicOrder','TopicOrder','topicSortOrder','TopicSortOrder');
+                    const rawBlogOrder = field(item,'order','Order','sortOrder','SortOrder','position','Position');
+                    const blogOrder = rawBlogOrder !== undefined ? Number(rawBlogOrder) : sourceIndex + 1;
+                    const topicOrder = rawTopicOrder !== undefined ? Number(rawTopicOrder)
+                        : (topicMeta?.order ?? topicOrderFallback ?? 999999);
+                    blogs.push({
+                        ...item,
+                        id, title: String(title),
+                        content: field(item,'content','Content','body','Body','html','Html','blogContent','BlogContent') || '',
+                        excerpt: field(item,'excerpt','Excerpt','description','Description','summary','Summary') || '',
+                        description: field(item,'description','Description') || '',
+                        icon: field(item,'icon','Icon','emoji','Emoji') || '📄',
+                        author: field(item,'author','Author','authorName','AuthorName') || '',
+                        readTime: field(item,'readTime','ReadTime','readingTime','ReadingTime') || '5 min',
+                        date: field(item,'date','Date','createdAt','CreatedAt') || '',
+                        order: Number.isFinite(blogOrder) ? blogOrder : sourceIndex + 1,
+                        topicId: topicIdValue || topicMeta?.id || '',
+                        topic: topicName, topicTitle: topicName,
+                        _topicOrder: Number.isFinite(topicOrder) ? topicOrder : 999999,
+                        _sourceIndex: sourceIndex++
                     });
                 }
             };
-            if (Array.isArray(root)) addBlogs(root);
-            else {
-                addBlogs(dynamicField(root,'blogs','Blogs'));
-                addBlogs(dynamicField(root,'items','Items'));
-                const topics = dynamicField(root,'topics','Topics');
-                if (Array.isArray(topics)) [...topics].sort((a,b)=>Number(dynamicField(a,'order','Order')||0)-Number(dynamicField(b,'order','Order')||0)).forEach((topic,index)=>{
-                    const name = dynamicField(topic,'title','Title','name','Name','topicTitle','TopicTitle') || `Topic ${index+1}`;
-                    const order = Number(dynamicField(topic,'order','Order') || index+1);
-                    addBlogs(dynamicField(topic,'blogs','Blogs') || dynamicField(topic,'items','Items') || dynamicField(topic,'contents','Contents') || dynamicField(topic,'articles','Articles'), name, order);
-                });
-                if (!blogs.length) addBlogs(dynamicField(root,'content','Content'));
+
+            if (Array.isArray(root)) {
+                addBlogs(root);
+            } else {
+                // Flat lists often carry TopicId only; topic maps above restore the intended topic order.
+                addBlogs(field(root,'blogs','Blogs'));
+                addBlogs(field(root,'items','Items','results','Results'));
+                if (Array.isArray(apiTopics)) {
+                    [...apiTopics].sort((a,b) => {
+                        const ao = Number(field(a,'order','Order','position','Position','sortOrder','SortOrder') ?? 999999);
+                        const bo = Number(field(b,'order','Order','position','Position','sortOrder','SortOrder') ?? 999999);
+                        return ao - bo;
+                    }).forEach((topic,index) => {
+                        const name = String(field(topic,'title','Title','name','Name','topicTitle','TopicTitle') || `Topic ${index+1}`).trim();
+                        const orderValue = field(topic,'order','Order','position','Position','sortOrder','SortOrder');
+                        const order = orderValue !== undefined ? Number(orderValue) : index+1;
+                        const topicId = field(topic,'id','Id','topicId','TopicId') || '';
+                        const nested = field(topic,'blogs','Blogs','items','Items','contents','Contents','articles','Articles','lessons','Lessons');
+                        addBlogs(nested, name, Number.isFinite(order) ? order : index+1, topicId);
+                    });
+                }
+                if (!blogs.length) addBlogs(field(root,'content','Content'));
             }
+
+            // Deduplicate by ID, keeping the first record, then sort by topic order and lesson order.
             const seen = new Set();
-            return blogs.filter(b=>{const k=normalizeId(b.id);if(!k||seen.has(k))return false;seen.add(k);return true;})
-                .sort((a,b)=>a._topicOrder-b._topicOrder || a.order-b.order || a.title.localeCompare(b.title));
+            return blogs.filter(blog => {
+                const key = normalizeId(blog.id);
+                if (!key || seen.has(key)) return false;
+                seen.add(key); return true;
+            }).sort((a,b) => {
+                const topicDiff = Number(a._topicOrder ?? 999999) - Number(b._topicOrder ?? 999999);
+                if (topicDiff) return topicDiff;
+                const lessonDiff = Number(a.order ?? 999999) - Number(b.order ?? 999999);
+                if (lessonDiff) return lessonDiff;
+                return Number(a._sourceIndex ?? 0) - Number(b._sourceIndex ?? 0);
+            });
         }
         function groupByTopic(items) {
             const groups = new Map();
             for (const item of items || []) {
-                const name = item.topicTitle || item.topic || item.topicName || 'General';
-                if (!groups.has(name)) groups.set(name, {items:[], order:Number(item._topicOrder||0)});
-                const group = groups.get(name); group.order = Math.min(group.order, Number(item._topicOrder||group.order||0)); group.items.push(item);
+                const name = String(item.topicTitle || item.topic || item.topicName || 'General').trim();
+                const order = Number(item._topicOrder ?? 999999);
+                if (!groups.has(name)) groups.set(name, { items: [], order: Number.isFinite(order) ? order : 999999, first: groups.size });
+                const group = groups.get(name);
+                group.order = Math.min(group.order, Number.isFinite(order) ? order : 999999);
+                group.items.push(item);
             }
-            return [...groups.entries()].sort((a,b)=>a[1].order-b[1].order).map(([name,g])=>[name,g.items.sort((a,b)=>Number(a.order||0)-Number(b.order||0))]);
+            return [...groups.entries()]
+                .sort((a,b) => a[1].order - b[1].order || a[1].first - b[1].first)
+                .map(([name,group]) => [name, group.items.sort((a,b) => Number(a.order ?? 999999)-Number(b.order ?? 999999) || Number(a._sourceIndex ?? 0)-Number(b._sourceIndex ?? 0))]);
         }
         function renderBlogs(blogs) {
             const container = document.getElementById('blogsContent');
