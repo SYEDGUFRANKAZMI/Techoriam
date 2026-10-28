@@ -1556,6 +1556,37 @@ footer{max-width:1540px;margin:0 auto;padding:25px clamp(18px,3.5vw,58px);paddin
 @media(max-width:760px){.hero{grid-template-columns:1fr!important;min-height:0!important;padding:22px 18px!important;gap:14px!important}.hero h1{font-size:clamp(2rem,8vw,3rem)!important;line-height:1.06!important}.hero-highlights{grid-template-columns:repeat(3,minmax(0,1fr))!important}.hero-highlights span{font-size:.65rem!important}.detail-view{padding:10px!important}.detail-head{top:calc(var(--nav-height) + 45px)!important;padding:15px!important}.detail-head .desc{-webkit-line-clamp:2!important;font-size:.8rem!important}.tabs{top:calc(var(--nav-height) + 145px)!important}.reader-body{grid-template-columns:minmax(0,1fr)!important}.reader-sidebar{width:min(82vw,290px)!important;max-width:290px!important}.article{padding:24px 17px!important}.reader-main{grid-column:1!important}}
 @media(prefers-reduced-motion:reduce){.hero,.detail-head,.tabs{scroll-behavior:auto!important;transition:none!important}}
 
+
+
+/* ===== Final learning UX: compact hero, scroll-friendly course detail, collapsible reader ===== */
+.hero{min-height:0!important;grid-template-columns:minmax(0,1fr) minmax(190px,.42fr)!important;gap:20px!important;padding:clamp(18px,2.2vw,28px)!important;margin-bottom:20px!important;border-radius:22px!important}
+.hero h1{font-size:clamp(1.75rem,3vw,2.65rem)!important;line-height:1.04!important;letter-spacing:-.055em!important;max-width:560px!important;margin:0 0 9px!important}
+.hero>p,.hero p{font-size:clamp(.82rem,1vw,.94rem)!important;line-height:1.55!important;max-width:680px!important;margin:0!important}
+.hero-badge{font-size:.62rem!important;margin-bottom:9px!important;letter-spacing:.09em!important}
+.hero-highlights{padding:11px!important;gap:7px!important;align-content:center!important}
+.hero-highlights span{font-size:.66rem!important;line-height:1.35!important}
+/* Description scrolls away naturally; only the lesson navigation tabs remain sticky. */
+.detail-view{overflow:visible!important}
+.detail-view .back-link{position:relative!important;top:auto!important;margin-bottom:14px!important}
+.detail-head{position:relative!important;top:auto!important;z-index:1!important;box-shadow:none!important;margin-bottom:18px!important;background:linear-gradient(135deg,rgba(22,31,56,.96),rgba(12,18,32,.96))!important}
+.detail-head .desc{display:block!important;-webkit-line-clamp:unset!important;overflow:visible!important;max-width:1050px!important}
+.tabs{position:sticky!important;top:calc(var(--nav-height) + 8px)!important;z-index:55!important;margin:0 0 18px!important;width:max-content!important;max-width:100%!important}
+#blogsContent,.topic-block{scroll-margin-top:calc(var(--nav-height) + 90px)!important}
+.reader-top{display:flex!important;align-items:center!important;gap:12px!important}
+.reader-top-left{min-width:0!important;display:flex!important;align-items:center!important;gap:9px!important}
+#readerCourseTitle{overflow:hidden!important;text-overflow:ellipsis!important;white-space:nowrap!important;max-width:min(42vw,520px)!important}
+.reader-sidebar-toggle{white-space:nowrap!important;flex-shrink:0!important}
+.reader-body{grid-template-columns:286px minmax(0,1fr)!important;transition:grid-template-columns .22s ease!important}
+.reader-sidebar{min-width:0!important;opacity:1!important;transition:opacity .18s ease,transform .22s ease!important}
+.reader.sidebar-collapsed .reader-body{grid-template-columns:0 minmax(0,1fr)!important}
+.reader.sidebar-collapsed .reader-sidebar{width:0!important;min-width:0!important;padding:0!important;border:0!important;overflow:hidden!important;opacity:0!important;pointer-events:none!important}
+.reader.sidebar-collapsed .reader-main{grid-column:2!important}
+.reader-main{min-width:0!important}
+.article{max-width:1000px!important;margin-inline:auto!important}
+@media(max-width:1000px){.hero{grid-template-columns:minmax(0,1fr) minmax(160px,.4fr)!important}.reader-body{grid-template-columns:260px minmax(0,1fr)!important}}
+@media(max-width:760px){.hero{grid-template-columns:1fr!important;gap:12px!important;padding:18px!important}.hero h1{font-size:clamp(1.65rem,7vw,2.25rem)!important}.hero-highlights{grid-template-columns:repeat(3,minmax(0,1fr))!important}.hero-highlights span{font-size:.61rem!important}.detail-head{padding:16px!important}.detail-head .desc{font-size:.82rem!important;line-height:1.55!important}.tabs{top:calc(var(--nav-height) + 5px)!important}.reader-top{padding:0 10px!important;gap:6px!important}.reader-top-left{gap:6px!important}.reader-sidebar-toggle{font-size:.72rem!important;padding:8px!important}.reader-body{grid-template-columns:minmax(0,1fr)!important}.reader-sidebar{position:absolute!important;z-index:12!important;left:0!important;top:58px!important;bottom:0!important;width:min(82vw,290px)!important;max-width:290px!important;transform:translateX(-105%)!important;box-shadow:15px 0 45px rgba(0,0,0,.38)!important}.reader.sidebar-open .reader-sidebar{transform:translateX(0)!important;opacity:1!important;pointer-events:auto!important}.reader.sidebar-collapsed .reader-sidebar{transform:translateX(-105%)!important;width:min(82vw,290px)!important;min-width:0!important;padding:initial!important;border-right:1px solid var(--border)!important}.reader.sidebar-collapsed .reader-body{grid-template-columns:minmax(0,1fr)!important}.reader.sidebar-collapsed .reader-main{grid-column:1!important}.reader-main{grid-column:1!important}.article{padding:23px 17px!important}#readerCourseTitle{max-width:24vw!important}}
+@media(prefers-reduced-motion:reduce){.reader-body,.reader-sidebar{transition:none!important}}
+
 </style>
 </head>
 <body>
@@ -1654,6 +1685,7 @@ footer{max-width:1540px;margin:0 auto;padding:25px clamp(18px,3.5vw,58px);paddin
         <div class="reader-top">
             <div class="reader-top-left">
                 <button class="icon-btn" onclick="closeBlogReader()">✕ Close</button>
+                <button class="icon-btn reader-sidebar-toggle" id="readerSidebarToggle" onclick="toggleReaderSidebar()" aria-expanded="true" title="Hide lesson sidebar">☰ Hide lessons</button>
                 <span id="readerCourseTitle" style="color:var(--text-muted);font-size:.82rem"></span>
             </div>
             <div class="reader-top-right">
@@ -2912,6 +2944,9 @@ const LEARNING_API = "https://api.techoriam.com/api";
                 document.getElementById('blogOverlay');
 
             overlay.classList.add('show');
+            overlay.classList.remove('sidebar-collapsed', 'sidebar-open');
+            const sidebarToggle = document.getElementById('readerSidebarToggle');
+            if (sidebarToggle) { sidebarToggle.textContent = '☰ Hide lessons'; sidebarToggle.setAttribute('aria-expanded', 'true'); }
             document.body.classList.add('reader-open');
 
             document.getElementById(
@@ -3744,6 +3779,25 @@ async function completeCourseActivity() {
             requestAnimationFrame(
                 () => checkProgress()
             );
+        }
+
+        function toggleReaderSidebar() {
+            const overlay = document.getElementById('blogOverlay');
+            const button = document.getElementById('readerSidebarToggle');
+            if (!overlay || !button) return;
+            const isMobile = window.matchMedia('(max-width: 760px)').matches;
+            if (isMobile) {
+                const isOpen = overlay.classList.toggle('sidebar-open');
+                overlay.classList.toggle('sidebar-collapsed', !isOpen);
+                button.textContent = isOpen ? '☰ Hide lessons' : '☰ Lessons';
+                button.setAttribute('aria-expanded', String(isOpen));
+                button.title = isOpen ? 'Hide lesson sidebar' : 'Show lesson sidebar';
+            } else {
+                const isCollapsed = overlay.classList.toggle('sidebar-collapsed');
+                button.textContent = isCollapsed ? '☰ Show lessons' : '☰ Hide lessons';
+                button.setAttribute('aria-expanded', String(!isCollapsed));
+                button.title = isCollapsed ? 'Show lesson sidebar' : 'Hide lesson sidebar';
+            }
         }
 
         function closeBlogReader() {
