@@ -1517,6 +1517,45 @@ footer{max-width:1540px;margin:0 auto;padding:25px clamp(18px,3.5vw,58px);paddin
 @media(max-width:390px){.user-chip{display:none}.hero h1{font-size:2.35rem}.catalog-heading h2{font-size:1.22rem}.catalog-heading p{max-width:205px}.sort-control select{max-width:105px}.ti-float{min-height:160px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 
+
+
+/* ===== UX refinement: compact hero, sticky course context, balanced reader ===== */
+.hero{min-height:205px!important;grid-template-columns:minmax(0,1.35fr) minmax(210px,.65fr)!important;gap:clamp(16px,2.5vw,34px)!important;padding:clamp(22px,3vw,36px)!important;margin-bottom:25px!important;border-radius:24px!important}
+.hero h1{font-size:clamp(2.15rem,4vw,3.65rem)!important;line-height:1.02!important;max-width:650px!important;margin-bottom:12px!important;letter-spacing:-.065em!important}
+.hero>p,.hero p{font-size:clamp(.88rem,1.25vw,1rem)!important;line-height:1.65!important;max-width:700px}
+.hero-badge{font-size:.68rem!important;margin-bottom:13px!important}
+.hero-highlights{gap:8px!important;padding:14px!important}
+.hero-highlights span{font-size:.72rem!important}
+.main-content{padding-top:calc(var(--nav-height) + 24px)!important}
+/* Keep course identity visible while browsing lessons without covering the whole screen. */
+.detail-view{max-width:1280px!important;padding:clamp(12px,2vw,24px)!important;overflow:visible!important}
+.detail-view .back-link{top:calc(var(--nav-height) + 8px)!important;margin-bottom:14px!important}
+.detail-head{position:sticky!important;top:calc(var(--nav-height) + 54px)!important;z-index:65!important;padding:18px 22px!important;margin-bottom:12px!important;border-radius:18px!important;background:rgba(12,18,32,.94)!important;backdrop-filter:blur(22px) saturate(145%)!important;box-shadow:0 12px 35px rgba(0,0,0,.24)!important}
+.detail-head h2{font-size:clamp(1.35rem,2.5vw,2rem)!important;line-height:1.18!important}
+.detail-head .desc{display:-webkit-box!important;-webkit-line-clamp:3!important;-webkit-box-orient:vertical!important;overflow:hidden!important;max-width:100%!important;margin-top:7px!important;font-size:.88rem!important;line-height:1.55!important}
+.tabs{position:sticky!important;top:calc(var(--nav-height) + 54px + 120px)!important;z-index:64!important;width:max-content!important;max-width:100%!important;margin:0 0 18px!important;padding:6px!important;background:rgba(10,15,27,.96)!important;backdrop-filter:blur(20px)!important;box-shadow:0 10px 26px rgba(0,0,0,.16)!important}
+#blogsContent{scroll-margin-top:calc(var(--nav-height) + 220px)}
+.topic-block{scroll-margin-top:calc(var(--nav-height) + 225px)}
+/* Reader columns: reclaim left-side width and prevent long lesson content from widening the viewport. */
+.reader{overflow:hidden!important}
+.reader-body{width:100%!important;max-width:none!important;grid-template-columns:286px minmax(0,1fr)!important;overflow:hidden!important}
+.reader-sidebar{width:auto!important;min-width:0!important;max-width:none!important;overflow-x:hidden!important;overflow-y:auto!important;scrollbar-gutter:stable!important}
+.sidebar-course{padding:16px 15px!important}
+.sidebar-filter{padding:10px 12px!important}
+.sidebar-list{padding:8px 9px 22px!important}
+.reader-main{min-width:0!important;width:100%!important;overflow-x:hidden!important;overflow-y:auto!important;overscroll-behavior:contain!important}
+.article{box-sizing:border-box!important;width:100%!important;max-width:980px!important;min-width:0!important;padding:clamp(22px,3.8vw,54px)!important;overflow-wrap:anywhere!important;word-break:normal!important}
+.article img,.article video,.article iframe{max-width:100%!important}
+.article pre,.article table,.article .mermaid,.article svg{max-width:100%!important}
+.article pre,.article table{overflow:auto!important}
+.article *{max-width:100%}
+.reader-item{overflow-wrap:anywhere!important}
+.reader-top{position:relative!important;z-index:8!important}
+.reader-progress{position:absolute!important;top:0;left:0;right:0;z-index:10}
+@media(max-width:1000px){.hero{grid-template-columns:minmax(0,1fr) 200px!important}.reader-body{grid-template-columns:260px minmax(0,1fr)!important}.detail-head{top:calc(var(--nav-height) + 46px)!important}.tabs{top:calc(var(--nav-height) + 160px)!important}}
+@media(max-width:760px){.hero{grid-template-columns:1fr!important;min-height:0!important;padding:22px 18px!important;gap:14px!important}.hero h1{font-size:clamp(2rem,8vw,3rem)!important;line-height:1.06!important}.hero-highlights{grid-template-columns:repeat(3,minmax(0,1fr))!important}.hero-highlights span{font-size:.65rem!important}.detail-view{padding:10px!important}.detail-head{top:calc(var(--nav-height) + 45px)!important;padding:15px!important}.detail-head .desc{-webkit-line-clamp:2!important;font-size:.8rem!important}.tabs{top:calc(var(--nav-height) + 145px)!important}.reader-body{grid-template-columns:minmax(0,1fr)!important}.reader-sidebar{width:min(82vw,290px)!important;max-width:290px!important}.article{padding:24px 17px!important}.reader-main{grid-column:1!important}}
+@media(prefers-reduced-motion:reduce){.hero,.detail-head,.tabs{scroll-behavior:auto!important;transition:none!important}}
+
 </style>
 </head>
 <body>
