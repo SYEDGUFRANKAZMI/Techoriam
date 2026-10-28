@@ -1862,6 +1862,232 @@ footer{max-width:1540px;margin:0 auto;padding:25px clamp(18px,3.5vw,58px);paddin
         font-size:.6rem !important;
     }
 }
+
+/* ===== Final mobile polish: catalogue + full-height, independently scrolling reader ===== */
+html {
+    min-height: 100%;
+    overflow-x: clip;
+    -webkit-text-size-adjust: 100%;
+}
+body {
+    min-height: 100%;
+    overflow-x: clip;
+}
+.main-content, #coursesView, #courseDetailView {
+    min-width: 0;
+    max-width: 100%;
+}
+.grid, .launch-grid {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 290px), 1fr));
+}
+.card {
+    min-width: 0;
+    overflow-wrap: anywhere;
+}
+.catalog-toolbar {
+    max-width: 100%;
+}
+@media (max-width: 760px) {
+    html, body {
+        width: 100%;
+        max-width: 100%;
+        overflow-x: clip !important;
+    }
+    body.reader-open {
+        position: fixed;
+        width: 100%;
+        overflow: hidden !important;
+        overscroll-behavior: none;
+    }
+    .main-content {
+        width: 100%;
+        max-width: 100%;
+        padding-left: max(12px, env(safe-area-inset-left));
+        padding-right: max(12px, env(safe-area-inset-right));
+    }
+    .catalog-toolbar {
+        position: relative;
+        top: auto;
+        z-index: 2;
+    }
+    .grid, .launch-grid {
+        grid-template-columns: minmax(0, 1fr);
+    }
+    .card {
+        width: 100%;
+        max-width: 100%;
+        min-height: 0;
+    }
+
+    /* The reader owns the whole visible phone viewport. Only its article scrolls. */
+    #blogOverlay.reader,
+    #blogOverlay.reader.show {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100% !important;
+        height: 100vh !important;
+        height: 100dvh !important;
+        min-height: 0 !important;
+        max-height: 100dvh !important;
+        overflow: hidden !important;
+        padding-bottom: env(safe-area-inset-bottom);
+        box-sizing: border-box !important;
+        z-index: 2000 !important;
+    }
+    #blogOverlay .reader-progress,
+    #blogOverlay .reader-top {
+        flex: 0 0 auto;
+    }
+    #blogOverlay .reader-body {
+        display: flex !important;
+        flex: 1 1 auto !important;
+        width: 100%;
+        min-width: 0;
+        min-height: 0 !important;
+        height: 0;
+        overflow: hidden !important;
+        position: relative;
+    }
+    #blogOverlay .reader-main {
+        display: block !important;
+        flex: 1 1 100% !important;
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 0 !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
+        touch-action: pan-y;
+        scrollbar-gutter: stable;
+        padding: 0 !important;
+    }
+    #blogOverlay .article {
+        width: 100%;
+        max-width: 760px;
+        min-width: 0;
+        margin: 0 auto;
+        box-sizing: border-box;
+        padding: 26px 48px calc(110px + env(safe-area-inset-bottom)) 17px !important;
+        overflow-wrap: anywhere;
+    }
+    #blogOverlay .article h1 {
+        font-size: clamp(1.55rem, 6.4vw, 2rem);
+        line-height: 1.16;
+        letter-spacing: -.035em;
+        overflow-wrap: anywhere;
+    }
+    #blogOverlay .article-content {
+        max-width: 100%;
+        min-width: 0;
+        overflow-wrap: anywhere;
+        word-break: normal;
+    }
+    #blogOverlay .article-content pre,
+    #blogOverlay .article-content table {
+        display: block;
+        max-width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    #blogOverlay .article-content img,
+    #blogOverlay .article-images img,
+    #blogOverlay video,
+    #blogOverlay iframe {
+        max-width: 100% !important;
+    }
+
+    /* Sidebar is an overlay, never part of the article's vertical flow. */
+    #blogOverlay .reader-sidebar {
+        position: absolute !important;
+        inset: 0 auto 0 0 !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
+        z-index: 12 !important;
+    }
+    #blogOverlay .reader-sidebar-list,
+    #blogOverlay #readerSidebarList {
+        min-height: 0;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior: contain;
+    }
+
+    /* Intelligence stays attached to the reader edge and never covers the reading column. */
+    #blogOverlay.show .ti-float {
+        position: absolute !important;
+        right: 0 !important;
+        left: auto !important;
+        top: 40% !important;
+        bottom: auto !important;
+        width: 30px !important;
+        min-width: 30px !important;
+        max-width: 30px !important;
+        min-height: 132px !important;
+        height: auto !important;
+        padding: 9px 4px !important;
+        z-index: 40 !important;
+        border-radius: 10px 0 0 10px !important;
+        writing-mode: vertical-rl !important;
+        font-size: .58rem !important;
+        gap: 7px !important;
+    }
+    #blogOverlay.show .article {
+        padding-right: 43px !important;
+    }
+    #blogOverlay.show .ti-panel {
+        position: absolute !important;
+        inset: 0 0 0 auto !important;
+        width: min(88vw, 360px) !important;
+        max-width: 100% !important;
+        height: 100% !important;
+        max-height: 100% !important;
+        overflow: hidden !important;
+        z-index: 50 !important;
+        padding-bottom: env(safe-area-inset-bottom);
+        box-sizing: border-box;
+    }
+    #blogOverlay .ti-panel-body {
+        min-height: 0;
+        overflow-y: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+@media (max-width: 390px) {
+    #blogOverlay .article {
+        padding-left: 14px !important;
+        padding-right: 42px !important;
+        padding-top: 22px !important;
+    }
+    #blogOverlay.show .article {
+        padding-right: 42px !important;
+    }
+    #blogOverlay .reader-top {
+        padding-top: max(8px, env(safe-area-inset-top));
+    }
+    #blogOverlay .article-meta {
+        overflow-wrap: anywhere;
+    }
+}
+@media (max-width: 350px) {
+    #blogOverlay .article {
+        padding-left: 12px !important;
+        padding-right: 39px !important;
+    }
+    #blogOverlay.show .article {
+        padding-right: 39px !important;
+    }
+    #blogOverlay.show .ti-float {
+        width: 27px !important;
+        min-width: 27px !important;
+        max-width: 27px !important;
+        font-size: .54rem !important;
+    }
+}
+
 </style>
 </head>
 <body>
