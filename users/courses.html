@@ -2255,6 +2255,56 @@ body {
   #coursesGrid .card h3 { font-size: 1rem !important; }
   #coursesGrid .card p { -webkit-line-clamp: 2 !important; min-height: 0 !important; }
 }
+
+
+/* ===== Scrollbar fix: the reader is the only page-level scroll surface ===== */
+html.reader-open,
+html.reader-open body,
+body.reader-open {
+    overflow: hidden !important;
+    overscroll-behavior: none !important;
+}
+#blogOverlay.reader,
+#blogOverlay.reader.show {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100vh !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    overflow: hidden !important;
+}
+#blogOverlay .reader-body {
+    min-height: 0 !important;
+    overflow: hidden !important;
+}
+#blogOverlay .reader-main {
+    min-height: 0 !important;
+    min-width: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior-y: contain !important;
+}
+#blogOverlay .reader-sidebar {
+    min-height: 0 !important;
+}
+#blogOverlay #readerSidebarList {
+    min-height: 0 !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior-y: contain !important;
+}
+/* On phones the lesson list is a drawer; when closed it must not create a second scroll track. */
+@media (max-width: 760px) {
+    #blogOverlay.sidebar-collapsed #readerSidebarList,
+    #blogOverlay:not(.sidebar-open) #readerSidebarList {
+        overflow: hidden !important;
+    }
+    #blogOverlay .reader-main {
+        scrollbar-gutter: auto !important;
+    }
+}
+
 </style>
 
 </head>
@@ -3626,6 +3676,10 @@ const LEARNING_API = "https://api.techoriam.com/api";
                 sidebarToggle.title = isMobileReader ? 'Show lesson sidebar' : 'Hide lesson sidebar';
             }
             document.body.classList.add('reader-open');
+            // Lock both the document and body while the fixed reader is open.
+            // Otherwise the page behind the reader can keep its own scrollbar.
+            document.documentElement.classList.add('reader-open');
+            document.documentElement.style.overflow = 'hidden';
 
             document.getElementById(
                 'readerCourseTitle'
@@ -4494,6 +4548,8 @@ async function completeCourseActivity() {
 
             overlay.classList.remove('show');
             document.body.classList.remove('reader-open');
+            document.documentElement.classList.remove('reader-open');
+            document.documentElement.style.overflow = '';
 
             // Intelligence belongs to the blog reader only: close it with the reader.
             const intelligenceBackdrop = document.getElementById('tiPanelBackdrop');
