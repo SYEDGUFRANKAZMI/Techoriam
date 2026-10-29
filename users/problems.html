@@ -40,7 +40,7 @@
             box-sizing: border-box;
         }
 
-        body.auth-pending { visibility: hidden; }
+        body.auth-pending { visibility: visible; }
         body.auth-ready { visibility: visible; }
 
         body {
@@ -1309,6 +1309,41 @@
             }
         }
 
+
+        /* Course-catalog-inspired responsive problem cards */
+        .problems-hero { margin-bottom: 30px; }
+        .hero-badge { display:inline-flex; align-items:center; gap:8px; padding:7px 12px; margin-bottom:15px; border:1px solid rgba(79,127,255,.2); border-radius:999px; background:rgba(79,127,255,.07); color:var(--accent-bright); font-size:.72rem; font-weight:700; letter-spacing:.04em; }
+        .hero-live-dot { display:inline-block; width:7px; height:7px; border-radius:50%; background:#10b981; box-shadow:0 0 10px rgba(16,185,129,.55); flex-shrink:0; }
+        .problems-section { margin-top:6px; }
+        .problems-section-head { display:flex; justify-content:space-between; align-items:center; gap:16px; margin:0 0 16px; }
+        .problems-section-head h2 { font-size:1.08rem; font-weight:750; letter-spacing:-.02em; margin-bottom:5px; }
+        .problems-section-head p { color:var(--text-muted); font-size:.8rem; line-height:1.5; }
+        .catalog-live { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; border:1px solid var(--glass-border); background:var(--glass); padding:8px 11px; border-radius:999px; color:var(--text-muted); font-size:.7rem; font-weight:650; }
+        .problems-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; }
+        .problem-card { min-width:0; display:flex; flex-direction:column; gap:14px; padding:20px; border-radius:15px; border:1px solid rgba(42,64,101,.42); background:linear-gradient(145deg,rgba(15,27,50,.62),rgba(8,12,23,.82)); box-shadow:0 12px 30px rgba(0,0,0,.13); transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease; isolation:isolate; }
+        .problem-card:hover { transform:translateY(-3px); border-color:rgba(79,127,255,.45); box-shadow:0 18px 38px rgba(0,0,0,.24); }
+        .problem-card:focus-within { outline:2px solid rgba(143,180,255,.65); outline-offset:3px; }
+        .problem-card-top,.problem-card-meta,.problem-card-bottom { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+        .problem-number { display:inline-flex; align-items:center; gap:7px; color:var(--text-dim); font-size:.69rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; }
+        .problem-card h3 { color:var(--text); font-size:1rem; line-height:1.4; font-weight:750; letter-spacing:-.02em; overflow-wrap:anywhere; }
+        .problem-card-description { min-height:38px; color:var(--text-muted); font-size:.78rem; line-height:1.6; overflow-wrap:anywhere; }
+        .problem-card-meta { justify-content:flex-start; flex-wrap:wrap; }
+        .problem-card-bottom { border-top:1px solid var(--glass-border); padding-top:13px; margin-top:auto; }
+        .problem-xp { color:var(--text-dim); font-size:.72rem; font-weight:600; }
+        .problem-solve-link { display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:9px 12px; border-radius:9px; color:#fff; font-size:.73rem; font-weight:750; background:linear-gradient(135deg,var(--accent),var(--accent2)); box-shadow:0 4px 14px rgba(79,127,255,.16); transition:filter .2s,transform .2s; }
+        .problem-solve-link:hover { filter:brightness(1.1); transform:translateY(-1px); }
+        .problem-solve-link.is-solved { background:rgba(16,185,129,.11); color:#53d8aa; border:1px solid rgba(16,185,129,.25); box-shadow:none; }
+        .problem-solve-link:focus-visible,.filter-btn:focus-visible { outline:2px solid var(--accent-bright); outline-offset:3px; }
+        .difficulty-badge { text-transform:capitalize; }
+        .skeleton-card { pointer-events:none; }
+        .skeleton { display:block; height:10px; border-radius:7px; background:linear-gradient(90deg,rgba(255,255,255,.035),rgba(255,255,255,.09),rgba(255,255,255,.035)); background-size:200% 100%; animation:problemShimmer 1.35s linear infinite; }
+        .skel-short { width:28%; height:12px; } .skel-title { width:72%; height:19px; margin:4px 0; } .skel-medium { width:55%; }
+        @keyframes problemShimmer { to { background-position:-200% 0; } }
+        .problems-error .btn { margin-top:16px; }
+        @media(max-width:980px) { .problems-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .stats-row { grid-template-columns:repeat(5,minmax(0,1fr)); } }
+        @media(max-width:680px) { .problems-grid { grid-template-columns:1fr; } .problem-card { padding:17px; } .problems-section-head { align-items:flex-start; } .catalog-live { font-size:0; padding:8px; } .catalog-live .hero-live-dot { width:8px;height:8px; } .stats-row { grid-template-columns:repeat(2,minmax(0,1fr)); } .stats-row .stat-card:last-child { grid-column:span 2; } .toolbar { align-items:stretch; } .search-box { min-width:100%; } }
+        @media(prefers-reduced-motion:reduce) { .problem-card,.skeleton { animation:none!important; transition:none!important; } }
+
     </style>
 </head>
 <body class="auth-pending">
@@ -1344,9 +1379,10 @@
     </nav>
 
     <main class="main-content">
-        <div class="page-hero">
+        <div class="page-hero problems-hero">
+            <div class="hero-badge"><span class="hero-live-dot"></span> Coding Arena</div>
             <h1>Solve Problems</h1>
-            <p>Pick a challenge, write your solution, and test it against test cases. Sharpen your coding skills one problem at a time.</p>
+            <p>Explore coding challenges, practise your problem-solving skills, and track your progress — one accepted solution at a time.</p>
         </div>
 
         <div class="stats-row" id="statsRow">
@@ -1372,25 +1408,24 @@
             </div>
         </div>
 
-        <div class="problems-table-wrap">
-            <table id="problemsTable" style="display:none">
-                <thead>
-                    <tr>
-                        <th style="width:40px"></th>
-                        <th>Title</th>
-                        <th style="width:110px">Difficulty</th>
-                        <th>Topics</th>
-                        <th style="width:100px">Acceptance</th>
-                    </tr>
-                </thead>
-                <tbody id="problemsTableBody"></tbody>
-            </table>
-            <div class="empty-state" id="emptyState">
-                <div class="icon">🧩</div>
-                <h4>No problems yet</h4>
-                <p>Problems will show up here once they're added from the admin panel.</p>
+        <section class="problems-section" aria-labelledby="problemListTitle">
+            <div class="problems-section-head">
+                <div><h2 id="problemListTitle">Practice problems</h2><p id="problemListSubtitle">Choose a challenge that matches your level.</p></div>
+                <span class="catalog-live"><span class="hero-live-dot"></span> Live catalogue</span>
             </div>
-        </div>
+            <div id="problemsLoading" class="problems-grid" aria-live="polite">
+                <div class="problem-card skeleton-card"><div class="skeleton skel-line skel-short"></div><div class="skeleton skel-line skel-title"></div><div class="skeleton skel-line"></div><div class="skeleton skel-line skel-medium"></div></div>
+                <div class="problem-card skeleton-card"><div class="skeleton skel-line skel-short"></div><div class="skeleton skel-line skel-title"></div><div class="skeleton skel-line"></div><div class="skeleton skel-line skel-medium"></div></div>
+                <div class="problem-card skeleton-card"><div class="skeleton skel-line skel-short"></div><div class="skeleton skel-line skel-title"></div><div class="skeleton skel-line"></div><div class="skeleton skel-line skel-medium"></div></div>
+            </div>
+            <div class="problems-grid" id="problemsGrid" style="display:none"></div>
+            <div class="empty-state" id="emptyState" style="display:none">
+                <div class="icon">🧩</div><h4>No matching problems</h4><p>Try another search term or difficulty filter.</p>
+            </div>
+            <div class="empty-state problems-error" id="problemsError" style="display:none">
+                <div class="icon">⚡</div><h4>Problems couldn't load</h4><p id="problemsErrorMessage">Check your connection and try again.</p><button class="btn btn-primary" type="button" onclick="fetchProblems()">Try again</button>
+            </div>
+        </section>
     </main>
 <footer class="problems-footer">
     <a href="index.html" class="problems-footer-brand"><span class="problems-footer-mark">T</span> Techoriam</a>
@@ -1534,6 +1569,7 @@ const PROBLEMS_API = "https://api.techoriam.com/api";
         let currentProblem = null;
         let selectedTestCase = 0;
         let fontSize = 14;
+        let problemsLoading = false;
 
         function getToken() {
             return localStorage.getItem('techoriam_token') ||
@@ -1866,35 +1902,53 @@ const PROBLEMS_API = "https://api.techoriam.com/api";
         }
 
         async function fetchProblems() {
+            if (problemsLoading) return;
+            problemsLoading = true;
+            const loading = document.getElementById('problemsLoading');
+            const grid = document.getElementById('problemsGrid');
+            const empty = document.getElementById('emptyState');
+            const errorBox = document.getElementById('problemsError');
+            const errorMessage = document.getElementById('problemsErrorMessage');
+            if (loading) loading.style.display = 'grid';
+            if (grid) grid.style.display = 'none';
+            if (empty) empty.style.display = 'none';
+            if (errorBox) errorBox.style.display = 'none';
             try {
-                const [problemResponse, solvedIds] = await Promise.all([
-                    problemsServiceFetch('/problems'),
-                    fetchSolvedProblemIds()
-                ]);
-
+                // Render the catalogue as soon as the core problems endpoint responds.
+                // Submission history is secondary and must not delay the first paint.
+                const problemResponse = await problemsServiceFetch('/problems');
                 const data = await parseApiResponse(problemResponse);
                 const raw = Array.isArray(data) ? data : (data?.items || data?.$values || []);
-
-                allProblems = raw
-                    .filter(p => p)
-                    .map(p => ({
-                        id: p.id,
-                        title: p.title || 'Untitled',
-                        slug: p.slug || '',
-                        difficulty: p.difficulty || 'Easy',
-                        category: p.category || '',
-                        acceptanceRate: Number.isFinite(Number(p.acceptanceRate)) ? Number(p.acceptanceRate) : null,
-                        solved: solvedIds.has(String(p.id)),
-                        xpReward: Number(p.xpReward || 0),
-                        orderIndex: Number(p.orderIndex || 0),
-                        isPublished: p.isPublished !== false
-                    }));
-
+                allProblems = raw.filter(p => p && p.isPublished !== false && p.IsPublished !== false).map(p => ({
+                    id: p.id ?? p.Id,
+                    title: p.title || p.Title || 'Untitled',
+                    slug: p.slug || p.Slug || '',
+                    description: p.shortDescription || p.ShortDescription || p.description || p.Description || '',
+                    difficulty: p.difficulty || p.Difficulty || 'Easy',
+                    category: p.category || p.Category || p.topic || p.Topic || '',
+                    acceptanceRate: Number.isFinite(Number(p.acceptanceRate ?? p.AcceptanceRate)) && (p.acceptanceRate ?? p.AcceptanceRate) != null ? Number(p.acceptanceRate ?? p.AcceptanceRate) : null,
+                    solved: false,
+                    xpReward: Number(p.xpReward ?? p.XpReward ?? 0),
+                    orderIndex: Number(p.orderIndex ?? p.OrderIndex ?? 0),
+                    isPublished: true
+                })).filter(p => p.id != null).sort((a,b) => a.orderIndex - b.orderIndex || a.title.localeCompare(b.title));
                 updateStats();
                 renderProblems();
+
+                // Refresh solved badges after the cards are already visible.
+                fetchSolvedProblemIds().then(solvedIds => {
+                    allProblems.forEach(problem => { problem.solved = solvedIds.has(String(problem.id)); });
+                    updateStats();
+                    renderProblems();
+                }).catch(error => console.warn('Could not refresh solved status:', error));
             } catch (error) {
                 console.error('Could not load problems:', error);
+                if (errorMessage) errorMessage.textContent = error.message || 'Check your connection and try again.';
+                if (errorBox) errorBox.style.display = 'block';
                 showToast(error.message || 'Could not load problems.', 'error');
+            } finally {
+                problemsLoading = false;
+                if (loading) loading.style.display = 'none';
             }
         }
 
@@ -1937,34 +1991,39 @@ const PROBLEMS_API = "https://api.techoriam.com/api";
 
         function renderProblems() {
             const list = getFilteredProblems();
-            const table = document.getElementById('problemsTable');
-            const body = document.getElementById('problemsTableBody');
+            const grid = document.getElementById('problemsGrid');
             const empty = document.getElementById('emptyState');
-            if (!table || !body || !empty) return;
-
-            if (list.length === 0) {
-                table.style.display = 'none';
+            const loading = document.getElementById('problemsLoading');
+            const errorBox = document.getElementById('problemsError');
+            const subtitle = document.getElementById('problemListSubtitle');
+            if (!grid || !empty) return;
+            if (loading && loading.style.display !== 'none') loading.style.display = 'none';
+            if (errorBox) errorBox.style.display = 'none';
+            if (subtitle) subtitle.textContent = `${list.length} ${list.length === 1 ? 'challenge' : 'challenges'}${currentDiffFilter !== 'all' ? ` · ${currentDiffFilter}` : ''} available`;
+            if (!list.length) {
+                grid.style.display = 'none';
                 empty.style.display = 'block';
+                const title = empty.querySelector('h4');
+                const description = empty.querySelector('p');
+                if (title) title.textContent = allProblems.length ? 'No matching problems' : 'No problems published yet';
+                if (description) description.textContent = allProblems.length ? 'Try another search term or difficulty filter.' : 'New challenges will appear here once they are published from the admin panel.';
                 return;
             }
-
-            table.style.display = 'table';
             empty.style.display = 'none';
-
-            body.innerHTML = list.map(p => {
-                const diffClass = normalizeDifficulty(p.difficulty);
-                const acceptance = Number.isFinite(p.acceptanceRate) ? p.acceptanceRate.toFixed(1) + '%' : '';
-                const status = p.solved
-                    ? `<span class="problem-status solved-status"><span class="accepted-badge">✓ Accepted</span><span class="solved-label">Solved</span></span>`
-                    : '<span class="solve-badge">Solve Problem</span>';
-
-                return `<tr class="${p.solved ? 'solved-row' : ''}" onclick="openProblem('${esc(p.id)}')">
-                    <td><span class="status-dot ${p.solved ? 'solved' : ''}"></span></td>
-                    <td><div class="problem-title-cell"><span>${esc(p.title)}</span></div></td>
-                    <td><span class="difficulty-badge ${diffClass}">${esc(p.difficulty)}</span></td>
-                    <td>${p.category ? `<span class="tag">${esc(p.category)}</span>` : ''}</td>
-                    <td><div class="acceptance-cell">${acceptance ? `<span class="acceptance-rate">${acceptance}</span>` : ''}<div class="acceptance-status">${status}</div></div></td>
-                </tr>`;
+            grid.style.display = 'grid';
+            grid.innerHTML = list.map((p, index) => {
+                const diffClass = ['easy','medium','hard'].includes(normalizeDifficulty(p.difficulty)) ? normalizeDifficulty(p.difficulty) : 'easy';
+                const acceptance = Number.isFinite(p.acceptanceRate) ? `${p.acceptanceRate.toFixed(1)}% acceptance` : '';
+                const description = String(p.description || '').trim();
+                const category = p.category ? `<span class="tag">${esc(p.category)}</span>` : '<span class="tag">General</span>';
+                const solved = p.solved;
+                return `<article class="problem-card" tabindex="0" role="link" aria-label="Solve ${esc(p.title)}" onclick="openProblem('${esc(p.id)}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openProblem('${esc(p.id)}')}">
+                    <div class="problem-card-top"><span class="problem-number"><span class="status-dot ${solved ? 'solved' : ''}"></span> Challenge ${String(index + 1).padStart(2,'0')}</span><span class="difficulty-badge ${diffClass}">${esc(p.difficulty)}</span></div>
+                    <h3>${esc(p.title)}</h3>
+                    <p class="problem-card-description">${description ? esc(description.length > 115 ? description.slice(0,112) + '…' : description) : 'Read the problem statement, write your solution, and test it against the available cases.'}</p>
+                    <div class="problem-card-meta">${category}${acceptance ? `<span class="tag">${esc(acceptance)}</span>` : ''}</div>
+                    <div class="problem-card-bottom"><span class="problem-xp">${p.xpReward > 0 ? `✦ ${p.xpReward} XP` : solved ? '✓ Completed' : 'Build your skills'}</span><span class="problem-solve-link ${solved ? 'is-solved' : ''}">${solved ? '✓ Solved' : 'Solve problem'} <span aria-hidden="true">↗</span></span></div>
+                </article>`;
             }).join('');
         }
 
