@@ -2160,6 +2160,103 @@ body {
 }
 @media (prefers-reduced-motion:reduce) { #coursesGrid .card, #coursesGrid .course-thumbnail img { transition:none !important; } }
 </style>
+
+<style id="techoriam-compact-first-viewport">
+/* Compact first viewport: keep the intro, catalog controls and first course visible together. */
+@media (min-width: 761px) {
+  .main-content {
+    max-width: 1480px !important;
+    padding-top: calc(var(--nav-height) + 10px) !important;
+    padding-bottom: 24px !important;
+  }
+  .hero {
+    min-height: 0 !important;
+    grid-template-columns: minmax(0, 1fr) minmax(190px, 250px) !important;
+    gap: 18px !important;
+    padding: 15px 24px !important;
+    margin: 0 0 12px !important;
+    border-radius: 19px !important;
+  }
+  .hero-copy { display: grid !important; grid-template-columns: minmax(0, 1fr); align-content: center !important; }
+  .hero-copy .hero-badge { margin: 0 0 7px !important; padding: 5px 10px !important; font-size: .58rem !important; }
+  .hero-copy h1 { font-size: clamp(1.6rem, 2.5vw, 2.35rem) !important; line-height: 1 !important; margin: 0 0 7px !important; letter-spacing: -.055em !important; }
+  .hero-copy p { max-width: 760px !important; font-size: .83rem !important; line-height: 1.42 !important; margin: 0 !important; }
+  .hero-highlights { padding: 9px 12px !important; gap: 5px !important; border-radius: 14px !important; }
+  .hero-highlights span { font-size: .64rem !important; gap: 8px !important; }
+  .hero-highlights i { width: 19px !important; height: 19px !important; border-radius: 6px !important; }
+  .catalog-toolbar {
+    position: relative !important; top: auto !important;
+    padding: 12px 15px !important; margin: 0 0 12px !important;
+    border-radius: 17px !important;
+  }
+  .catalog-heading { margin-bottom: 9px !important; gap: 10px !important; }
+  .catalog-heading h2 { font-size: clamp(1.25rem, 1.9vw, 1.65rem) !important; line-height: 1.05 !important; }
+  .catalog-heading p { margin-top: 3px !important; font-size: .78rem !important; line-height: 1.3 !important; }
+  .catalog-kicker { font-size: .61rem !important; line-height: 1.2 !important; }
+  .catalog-live { padding: 8px 11px !important; font-size: .7rem !important; }
+  .catalog-controls { gap: 8px !important; }
+  .search-box { min-height: 42px !important; }
+  .sort-control, .count-pill { min-height: 42px !important; }
+  .grid#coursesGrid { grid-template-columns: minmax(0, 1fr) !important; gap: 10px !important; }
+  #coursesGrid .card {
+    display: grid !important;
+    grid-template-columns: minmax(210px, 29%) minmax(0, 1fr) !important;
+    grid-template-rows: auto 1fr auto !important;
+    column-gap: 0 !important;
+    align-content: stretch !important;
+    overflow: hidden !important;
+    min-height: 0 !important;
+    border-radius: 17px !important;
+  }
+  #coursesGrid .course-thumbnail {
+    grid-column: 1 !important; grid-row: 1 / 4 !important;
+    height: 100% !important; min-height: 0 !important; margin: 0 !important;
+    border-right: 1px solid rgba(149,169,224,.13) !important;
+    border-bottom: 0 !important;
+  }
+  #coursesGrid .course-thumbnail img { object-fit: contain !important; }
+  #coursesGrid .card-top { grid-column: 2 !important; grid-row: 1 !important; padding: 12px 17px 0 !important; }
+  #coursesGrid .card > h3 { grid-column: 2 !important; grid-row: 2 !important; margin: 7px 17px 5px !important; font-size: 1.08rem !important; line-height: 1.25 !important; }
+  #coursesGrid .card > p { grid-column: 2 !important; grid-row: 3 !important; margin: 0 17px 8px !important; min-height: 0 !important; -webkit-line-clamp: 2 !important; font-size: .8rem !important; line-height: 1.4 !important; }
+  #coursesGrid .tag-row { grid-column: 2 !important; padding: 0 17px 8px !important; }
+  #coursesGrid .card-foot { grid-column: 2 !important; padding: 9px 17px 12px !important; margin-top: 0 !important; }
+  #coursesGrid .course-progress { grid-column: 2 !important; margin: 0 17px 10px !important; }
+}
+@media (min-width: 761px) and (max-height: 850px) {
+  .main-content { padding-top: calc(var(--nav-height) + 5px) !important; }
+  .hero { padding: 11px 20px !important; margin-bottom: 9px !important; }
+  .hero-copy .hero-badge { margin-bottom: 5px !important; }
+  .hero-copy h1 { font-size: clamp(1.45rem, 2.3vw, 2rem) !important; margin-bottom: 5px !important; }
+  .hero-copy p { font-size: .78rem !important; }
+  .hero-highlights { padding: 7px 10px !important; gap: 4px !important; }
+  .catalog-toolbar { padding: 9px 13px !important; margin-bottom: 9px !important; }
+  .catalog-heading { margin-bottom: 6px !important; }
+  .catalog-heading p { font-size: .72rem !important; }
+  .search-box, .sort-control, .count-pill { min-height: 38px !important; }
+  #coursesGrid .course-thumbnail { min-height: 0 !important; }
+  #coursesGrid .card-top { padding-top: 9px !important; }
+  #coursesGrid .card-foot { padding-top: 6px !important; padding-bottom: 8px !important; }
+}
+@media (max-width: 760px) {
+  .main-content { padding-top: calc(var(--nav-height) + 8px) !important; padding-bottom: 28px !important; }
+  .hero { padding: 15px 15px !important; gap: 10px !important; margin-bottom: 10px !important; }
+  .hero-copy .hero-badge { margin-bottom: 6px !important; }
+  .hero-copy h1 { font-size: clamp(1.65rem, 7.5vw, 2.3rem) !important; margin-bottom: 6px !important; }
+  .hero-copy p { font-size: .82rem !important; line-height: 1.45 !important; }
+  .hero-highlights { padding: 9px !important; gap: 6px !important; }
+  .hero-highlights span { font-size: .62rem !important; }
+  .catalog-toolbar { padding: 11px !important; margin-bottom: 10px !important; }
+  .catalog-heading { margin-bottom: 8px !important; }
+  .catalog-heading h2 { font-size: 1.25rem !important; }
+  .catalog-heading p { font-size: .73rem !important; line-height: 1.35 !important; }
+  .catalog-controls { gap: 7px !important; }
+  .grid#coursesGrid { grid-template-columns: minmax(0,1fr) !important; gap: 12px !important; }
+  #coursesGrid .course-thumbnail { height: clamp(105px, 30vw, 150px) !important; }
+  #coursesGrid .card h3 { font-size: 1rem !important; }
+  #coursesGrid .card p { -webkit-line-clamp: 2 !important; min-height: 0 !important; }
+}
+</style>
+
 </head>
 <body>
     <nav class="navbar" id="navbar">
