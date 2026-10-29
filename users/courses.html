@@ -2103,6 +2103,63 @@ body {
     <meta name="twitter:card" content="summary">
     <meta name="twitter:title" content="Programming Courses &amp; Learning Paths | Techoriam">
     <meta name="twitter:description" content="Explore programming courses and structured learning paths on Techoriam. Learn software development concepts and strengthen practical coding skills.">
+
+<style id="courses-dynamic-layout-fix">
+/* Course catalogue layout polish: prevent hero children from occupying the wrong grid cells. */
+.main-content { width:min(100%, 1480px); padding-top:calc(var(--nav-height) + 22px); }
+.hero {
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) minmax(220px,300px) !important;
+  grid-template-areas:"copy highlights" !important;
+  align-items:center !important;
+  gap:clamp(18px,3vw,38px) !important;
+  min-height:0 !important;
+  padding:clamp(22px,3vw,36px) !important;
+  margin-bottom:22px !important;
+  border-radius:24px !important;
+}
+.hero-copy { grid-area:copy; min-width:0; position:relative; z-index:1; }
+.hero-copy .hero-badge { margin-bottom:14px !important; }
+.hero-copy h1 { margin:0 0 12px !important; max-width:760px !important; font-size:clamp(2rem,4.4vw,3.8rem) !important; line-height:1.02 !important; letter-spacing:-.065em !important; }
+.hero-copy p { max-width:700px !important; margin:0 !important; font-size:clamp(.9rem,1.2vw,1.03rem) !important; line-height:1.65 !important; }
+.hero-highlights { grid-area:highlights; justify-self:stretch !important; align-self:center !important; min-width:0 !important; width:100%; padding:17px 18px !important; gap:10px !important; }
+.hero-highlights span { white-space:normal !important; line-height:1.4; }
+.catalog-toolbar { position:relative !important; top:auto !important; z-index:3; padding:22px !important; margin-bottom:24px !important; border-radius:22px !important; }
+.catalog-heading { align-items:center !important; gap:16px !important; margin-bottom:17px !important; }
+.catalog-heading h2 { font-size:clamp(1.5rem,2.4vw,2rem) !important; line-height:1.12 !important; }
+.catalog-heading p { margin-top:6px !important; }
+.catalog-controls { gap:10px !important; }
+.search-box { min-width:0; }
+.grid#coursesGrid { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; align-items:stretch; gap:20px !important; }
+#coursesGrid .card { min-width:0; height:100%; }
+#coursesGrid .course-thumbnail { height:clamp(135px,15vw,190px) !important; min-height:0 !important; background-color:#080d18 !important; overflow:hidden !important; }
+/* Course artwork may contain text/diagrams: show the whole image instead of cropping the material. */
+#coursesGrid .course-thumbnail img { position:relative !important; inset:auto !important; display:block; width:100% !important; height:100% !important; object-fit:contain !important; object-position:center !important; background:#080d18; }
+#coursesGrid .course-thumbnail::after { pointer-events:none; }
+#coursesGrid .card-top { padding-top:15px !important; }
+#coursesGrid .card h3 { margin-top:12px !important; margin-bottom:7px !important; font-size:1.08rem !important; line-height:1.35 !important; }
+#coursesGrid .card p { margin-top:0 !important; margin-bottom:12px !important; display:-webkit-box; -webkit-box-orient:vertical; -webkit-line-clamp:3; overflow:hidden; min-height:4.05em; }
+#coursesGrid .tag-row { display:flex; flex-wrap:wrap; gap:6px; }
+#coursesGrid .card-foot { margin-top:auto !important; }
+@media (max-width:1050px) {
+  .grid#coursesGrid { grid-template-columns:repeat(2,minmax(0,1fr)) !important; }
+  .hero { grid-template-columns:minmax(0,1fr) minmax(190px,240px) !important; }
+}
+@media (max-width:760px) {
+  .main-content { padding-top:calc(var(--nav-height) + 14px) !important; }
+  .hero { grid-template-columns:minmax(0,1fr) !important; grid-template-areas:"copy" "highlights" !important; gap:15px !important; padding:20px 18px !important; margin-bottom:16px !important; }
+  .hero-copy h1 { font-size:clamp(1.9rem,8.5vw,2.8rem) !important; }
+  .hero-highlights { display:grid !important; grid-template-columns:repeat(3,minmax(0,1fr)) !important; padding:12px !important; gap:8px !important; }
+  .hero-highlights span { align-items:flex-start; font-size:.68rem !important; }
+  .hero-highlights i { flex-shrink:0; }
+  .catalog-toolbar { padding:16px 14px !important; margin-bottom:16px !important; }
+  .catalog-heading { align-items:flex-start !important; }
+  .catalog-heading p { max-width:100%; }
+  .grid#coursesGrid { grid-template-columns:minmax(0,1fr) !important; gap:14px !important; }
+  #coursesGrid .course-thumbnail { height:clamp(145px,48vw,220px) !important; }
+}
+@media (prefers-reduced-motion:reduce) { #coursesGrid .card, #coursesGrid .course-thumbnail img { transition:none !important; } }
+</style>
 </head>
 <body>
     <nav class="navbar" id="navbar">
@@ -2125,9 +2182,11 @@ body {
     <main class="main-content">
         <div id="coursesView">
             <section class="hero" aria-labelledby="learningHeroTitle">
-                <div class="hero-badge"><span class="dot"></span> Techoriam Learning Hub</div>
-                <h1 id="learningHeroTitle">Learn. Build. <span class="hero-gradient-word">Grow.</span></h1>
-                <p>Explore practical courses, follow structured topics, and learn one lesson at a time. Your next skill starts here.</p>
+                <div class="hero-copy">
+                    <div class="hero-badge"><span class="dot"></span> Techoriam Learning Hub</div>
+                    <h1 id="learningHeroTitle">Learn. Build. <span class="hero-gradient-word">Grow.</span></h1>
+                    <p>Explore practical courses, follow structured topics, and learn one lesson at a time. Your next skill starts here.</p>
+                </div>
                 <div class="hero-highlights" aria-label="Learning platform features">
                     <span><i>✓</i> Structured lessons</span><span><i>✓</i> Learn at your pace</span><span><i>✓</i> Developer-focused</span>
                 </div>
